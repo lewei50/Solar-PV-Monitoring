@@ -31,13 +31,11 @@ https://leweidoc.oss-cn-hangzhou.aliyuncs.com/openPV/Solar%20System-13295.json
 
 ## step 3 use InfluxDB for storage of Home Assistant
 
-
+Replace the Default storage to InfluxDB
 
 ## step 4 show the data in Garafana
 
 [Garafana ID 13295](https://grafana.com/grafana/dashboards/13295?src=twitter.com&mdm=social&cnt=buffera6a03&camp=buffer&pg=prod-ent&plcmt=contact-banner)
-
-![Wiring 1](https://leweidoc.oss-cn-hangzhou.aliyuncs.com/lewei50/img/lwkits/YNM3000image)
 
 
 
