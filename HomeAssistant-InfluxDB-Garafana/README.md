@@ -31,7 +31,7 @@ https://www.home-assistant.io/integrations/iammeter/
 
 ## Step 3: use InfluxDB for storage of Home Assistant
 
-Replace the Default storage to InfluxDB
+Replace the Default storage to InfluxDB,Full details of the Home Assistant integration can be found here:[https://www.home-assistant.io/components/influxdb/]
 
 ## Step 4: show the data in Garafana
 
