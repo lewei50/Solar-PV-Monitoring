@@ -25,7 +25,7 @@ https://www.home-assistant.io/integrations/iammeter/
 
 ## Step 2: Calculate the extra parameter by Home Assistant
 
-https://leweidoc.oss-cn-hangzhou.aliyuncs.com/openPV/Solar%20System-13295.json
+[solariammeter.yaml](solariammeter.yaml)
 
 ![image-20201102094612014](https://leweidoc.oss-cn-hangzhou.aliyuncs.com/lewei50/img/iammeter/tmpliu/tmpimage-20201102094612014.png)
 

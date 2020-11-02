@@ -1,0 +1,92 @@
+sensor:
+#-----SolarMeter-----
+  - platform: iammeter
+    host: 192.168.12.55
+    name: metert
+#-----SolarPVSystem-----
+  - platform: template
+    sensors:
+      inverter_power:
+        unit_of_measurement: 'W'
+        value_template: "{{ states('sensor.metert_power_a') }}"   
+      feedin_power:
+        unit_of_measurement: 'W'
+        value_template: "{{ -states('sensor.metert_power_b') }}"
+      load_power:
+        unit_of_measurement: 'W'
+        value_template: "{{ states('sensor.metert_power_a')|float + states('sensor.metert_power_b')|float }}" 
+
+      grid_consumption_energy:
+        unit_of_measurement: 'kWh'
+        value_template: "{{ states('sensor.metert_importenergy_b') }}" 
+      exported_energy:
+        unit_of_measurement: 'kWh'
+        value_template: "{{ states('sensor.metert_exportgrid_b') }}"
+      yield_energy:
+        unit_of_measurement: 'kWh'
+        value_template: "{{ states('sensor.metert_importenergy_a') }}"
+        
+      selfuse_energy:
+        unit_of_measurement: 'kWh'
+        value_template: "{{ states('sensor.yield_energy')|float - states('sensor.exported_energy')|float }}" 
+      load_energy:
+        unit_of_measurement: 'kWh'
+        value_template: "{{ states('sensor.grid_consumption_energy')|float + states('sensor.yield_energy')|float - states('sensor.exported_energy')|float }}"
+
+      self_consumption_rate_daily:
+        unit_of_measurement: '%'
+        value_template: "{{ states('sensor.selfuse_energy_daily')|float / states('sensor.yield_energy_daily')|float }}"
+      self_consumption_rate_monthly:
+        unit_of_measurement: '%'
+        value_template: "{{ states('sensor.selfuse_energy_monthly')|float / states('sensor.yield_energy_monthly')|float }}"
+
+utility_meter:
+  grid_consumption_energy_hourly:
+    source: sensor.grid_consumption_energy
+    cycle: hourly
+  grid_consumption_energy_daily:
+    source: sensor.grid_consumption_energy
+    cycle: daily
+  grid_consumption_energy_monthly:
+    source: sensor.grid_consumption_energy
+    cycle: monthly
+    
+  exported_energy_hourly:
+    source: sensor.exported_energy
+    cycle: hourly
+  exported_energy_daily:
+    source: sensor.exported_energy
+    cycle: daily
+  exported_energy_monthly:
+    source: sensor.exported_energy
+    cycle: monthly
+    
+  yield_energy_hourly:
+    source: sensor.yield_energy
+    cycle: hourly
+  yield_energy_daily:
+    source: sensor.yield_energy
+    cycle: daily
+  yield_energy_monthly:
+    source: sensor.yield_energy
+    cycle: monthly
+    
+  selfuse_energy_hourly:
+    source: sensor.selfuse_energy
+    cycle: hourly
+  selfuse_energy_daily:
+    source: sensor.selfuse_energy
+    cycle: daily
+  selfuse_energy_monthly:
+    source: sensor.selfuse_energy
+    cycle: monthly
+
+  load_energy_hourly:
+    source: sensor.load_energy
+    cycle: hourly
+  load_energy_daily:
+    source: sensor.load_energy
+    cycle: daily
+  load_energy_monthly:
+    source: sensor.load_energy
+    cycle: monthly
