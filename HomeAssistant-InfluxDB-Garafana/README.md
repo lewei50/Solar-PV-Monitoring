@@ -19,21 +19,21 @@ There are four steps
 
 ![garafana_influx_HA_1](https://leweidoc.oss-cn-hangzhou.aliyuncs.com/lewei50/img/iammeter/tmpliu/tmpgarafana_influx_HA_1.png)
 
-## step 1  A bi-directional Wi-Fi energy meter
+## Step 1:  A bi-directional Wi-Fi energy meter
 
 https://www.home-assistant.io/integrations/iammeter/
 
-## step 2 Calculate the extra parameter by Home Assistant
+## Step 2: Calculate the extra parameter by Home Assistant
 
 https://leweidoc.oss-cn-hangzhou.aliyuncs.com/openPV/Solar%20System-13295.json
 
 ![image-20201102094612014](https://leweidoc.oss-cn-hangzhou.aliyuncs.com/lewei50/img/iammeter/tmpliu/tmpimage-20201102094612014.png)
 
-## step 3 use InfluxDB for storage of Home Assistant
+## Step 3: use InfluxDB for storage of Home Assistant
 
 Replace the Default storage to InfluxDB
 
-## step 4 show the data in Garafana
+## Step 4: show the data in Garafana
 
 [Garafana ID 13295](https://grafana.com/grafana/dashboards/13295?src=twitter.com&mdm=social&cnt=buffera6a03&camp=buffer&pg=prod-ent&plcmt=contact-banner)
 
