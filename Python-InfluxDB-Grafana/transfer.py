@@ -197,6 +197,6 @@ checkValuePoint('load_energy', yield_energy + grid_consumption_energy - exported
 
 checkValuePoint('grid_consumption_energy', grid_consumption_energy, 'meter_importenergy','monthly')
 checkValuePoint('exported_energy', exported_energy, 'exported_energy','monthly')
-checkValuePoint('yield_energy', yield_energy, 'yield_energy','hourly')
+checkValuePoint('yield_energy', yield_energy, 'yield_energy','monthly')
 checkValuePoint('selfuse_energy', yield_energy - exported_energy, 'selfuse_energy','monthly')
 checkValuePoint('load_energy', yield_energy + grid_consumption_energy - exported_energy, 'load_energy','monthly')
