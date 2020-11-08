@@ -1,3 +1,7 @@
+![image-20201108094809177](https://leweidoc.oss-cn-hangzhou.aliyuncs.com/lewei50/img/iammeter/tmpliu/tmpimage-20201108094809177.png)
+
+
+
 
 
 |                      | unit | Description                                                  | how to get    | formula                        |
@@ -10,3 +14,5 @@
 | exported energy      | Kwh  |                                                              | read directly |                                |
 | self use energy      | Kwh  |                                                              | calculate     | yield energy - exported energy |
 | self-sufficient rate | %    |                                                              | calculate     |                                |
+
+![WEM3080T in solar pv monitoring system](https://leweidoc.oss-cn-hangzhou.aliyuncs.com/lewei50/img/iammetermanual-20190401-L2.jpg)
