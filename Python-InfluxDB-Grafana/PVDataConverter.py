@@ -48,36 +48,50 @@ class PVDataConverter(object):
 
     def checkValuePoint(self, valueName,currentValue,meterType,refreshType):
         global yieldEnergyTemp, selfUseEnergyTemp
-        currentHourlyTimeStamp = time.strftime("%Y%m%d%H0000", time.localtime())
+        currentPeriodTimeStamp = time.strftime("%Y%m%d%H0000", time.localtime())
+        timeUnit = 'h'
         if(refreshType == 'daily'):
-            currentHourlyTimeStamp = time.strftime("%Y%m%d000000", time.localtime())
+            currentPeriodTimeStamp = time.strftime("%Y%m%d000000", time.localtime())
+            timeUnit = 'd'
         elif(refreshType == 'monthly'):
-            currentHourlyTimeStamp = time.strftime("%Y%m00000000", time.localtime())
-        qry = ('SELECT * FROM "kWh" WHERE "last_reset"=\'{}\' AND "entity_id"=\'{}_{}\' GROUP BY * ORDER BY ASC LIMIT 1').format(currentHourlyTimeStamp,valueName,refreshType)
+            currentPeriodTimeStamp = time.strftime("%Y%m00000000", time.localtime())
+            timeUnit = 'm'
+        qry = ('SELECT * FROM "kWh" WHERE "last_reset"=\'{}\' AND "entity_id"=\'{}_{}\' GROUP BY * ORDER BY ASC LIMIT 1').format(currentPeriodTimeStamp,valueName,refreshType)
         # print(qry)
         qResult = self.client.query(qry)
         points = list(qResult.get_points())
         pointLastPeriod = 0.0
         pointLastReset = ''
-        pointLastResetStr = ''
+        # pointLastResetStr = ''
         pointValue = 0.0
-        needReset = False
         firstValue = currentValue
         try:
             #print("Result: {0}".format(points[0]['time']))
-            pointLastPeriod = float(points[0]['last_period'])
+            # pointLastPeriod = float(points[0]['last_period'])
             pointLastReset = points[0]['last_reset']
-            pointLastResetStr = points[0]['last_reset_str']
+            # pointLastResetStr = points[0]['last_reset_str']
             pointValue = float(points[0]['value'])
             firstValue = float(points[0]['first_value'])
         except:
             print("no record",valueName,meterType,refreshType)
 
-        if pointLastReset != currentHourlyTimeStamp:
+        if pointLastReset != currentPeriodTimeStamp:
             print("need to reset time")
-            pointLastReset = currentHourlyTimeStamp
-            needReset = True
-            pointValue = 0.0
+            #查询上一个周期内的数据是否存在，不存在则忽略以前记录，以当前记录值为最新值
+            qry = ('SELECT * FROM "kWh" WHERE "entity_id"=\'{}_{}\' AND time > now() -1{} GROUP BY * ORDER BY DESC LIMIT 1').format(valueName,refreshType, timeUnit)
+            # print(qry)
+            qLastPeriodResult = self.client.query(qry)
+            lastPoint = list(qLastPeriodResult.get_points())
+            try:
+                print("get last period data")
+                lastCurrentValue = float(lastPoint[0]['current_value'])
+                pointValue = "{:.2f}".format(currentValue - lastCurrentValue)
+                firstValue = lastCurrentValue
+            except:
+                print("last period data not found")
+                pointValue = 0.0
+                firstValue = currentValue
+            pointLastReset = currentPeriodTimeStamp
         else:
             pointValue = "{:.2f}".format(currentValue - firstValue)
         if(valueName == 'yield_energy'):
@@ -89,20 +103,21 @@ class PVDataConverter(object):
             "measurement": 'kWh',
             # "time":int(time.time()),
             "tags":{
-                'domain':'sensor',
+                # 'domain':'sensor',
                 'entity_id':'{}_{}'.format(valueName,refreshType),
                 'friendly_name_str':valueName,
-                'icon_str':'mdi:counter',
+                # 'icon_str':'mdi:counter',
                 'meter_period_str':refreshType,
-                'source_str':'sensor.{}'.format(meterType),
-                'status_str':'collecting'
+                # 'source_str':'sensor.{}'.format(meterType),
+                # 'status_str':'collecting'
             },
             "fields":{
-                'last_period':0,
+                # 'last_period':0,
                 'last_reset':pointLastReset,
-                'last_reset_str':'',
+                # 'last_reset_str':'',
                 'value':float(pointValue),
-                'first_value':firstValue
+                'first_value':firstValue,
+                'current_value':currentValue
             }
             }]
 
@@ -116,18 +131,18 @@ class PVDataConverter(object):
         "measurement": '%',
         # "time":int(time.time()),
         "tags":{
-            'domain':'sensor',
+            # 'domain':'sensor',
             'entity_id':'self_consumption_rate_{}'.format(refreshType),
             'friendly_name_str':'self_consumption_rate_{}'.format(refreshType),
-            'icon_str':'mdi:counter',
+            # 'icon_str':'mdi:counter',
             'meter_period_str':refreshType,
-            'source_str':'sensor.{}'.format(meterType),
-            'status_str':'collecting'
+            # 'source_str':'sensor.{}'.format(meterType),
+            # 'status_str':'collecting'
         },
         "fields":{
-            'last_period':0,
+            # 'last_period':0,
             'last_reset':'',
-            'last_reset_str':'',
+            # 'last_reset_str':'',
             'value':float(selfUseEnergyValue)/float(yieldEnergyValue),
             'first_value':0.0
         }
