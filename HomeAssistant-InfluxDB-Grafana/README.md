@@ -1,12 +1,18 @@
-# Building an Open Local PV monitoring system by Home Assistant 
+# Building an Open Local PV monitoring system with Home Assistant 
 
 
 
-demo: http://ha.iammeter.com:13000/  
+demo: 
+
+http://ha.iammeter.com:13000/   or [grafana.iammeter.com](grafana.iammeter.com)
+
+[http://ha.iammeter.com:18123/](http://ha.iammeter.com:18123/)   or [homeassistant.iammeter.com](homeassistant.iammeter.com)
 
 user name: iammeter
 
 password: iammeter
+
+![image-20201111141144666](https://leweidoc.oss-cn-hangzhou.aliyuncs.com/lewei50/img/iammeter/tmpliu/tmpimage-20201111141144666.png)
 
 
 
@@ -15,13 +21,13 @@ There are four steps
 - A bi-directional Wi-Fi energy meter that can measure import/export energy simultaneously.
 - Calculate the extra parameter(such as energy_hourly and energy_daily etc..) by HomeAssistant 
 - use InfluxDB for storage 
-- show the data in Garafana and do some simple calculation there to get the parameter such as "direct self-use, self-sufficient rate"
+- show the data in Grafana 
 
 ![garafana_influx_HA_1](https://leweidoc.oss-cn-hangzhou.aliyuncs.com/lewei50/img/iammeter/tmpliu/tmpgarafana_influx_HA_1.png)
 
 ## Step 1:  A bi-directional Wi-Fi energy meter
 
-https://www.home-assistant.io/integrations/iammeter/
+Such as https://www.home-assistant.io/integrations/iammeter/
 
 ## Step 2: Calculate the extra parameter by Home Assistant
 
