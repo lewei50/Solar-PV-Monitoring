@@ -62,14 +62,10 @@ class PVDataConverter(object):
         points = list(qResult.get_points())
         pointLastPeriod = 0.0
         pointLastReset = ''
-        # pointLastResetStr = ''
         pointValue = 0.0
         firstValue = currentValue
         try:
-            #print("Result: {0}".format(points[0]['time']))
-            # pointLastPeriod = float(points[0]['last_period'])
             pointLastReset = points[0]['last_reset']
-            # pointLastResetStr = points[0]['last_reset_str']
             pointValue = float(points[0]['value'])
             firstValue = float(points[0]['first_value'])
         except:
@@ -77,7 +73,7 @@ class PVDataConverter(object):
 
         if pointLastReset != currentPeriodTimeStamp:
             print("need to reset time")
-            #查询上一个周期内的数据是否存在，不存在则忽略以前记录，以当前记录值为最新值
+            # find the data in previous time cycle.
             qry = ('SELECT * FROM "kWh" WHERE "entity_id"=\'{}_{}\' AND time > now() -1{} GROUP BY * ORDER BY DESC LIMIT 1').format(valueName,refreshType, timeUnit)
             # print(qry)
             qLastPeriodResult = self.client.query(qry)
@@ -103,18 +99,12 @@ class PVDataConverter(object):
             "measurement": 'kWh',
             # "time":int(time.time()),
             "tags":{
-                # 'domain':'sensor',
                 'entity_id':'{}_{}'.format(valueName,refreshType),
                 'friendly_name_str':valueName,
-                # 'icon_str':'mdi:counter',
                 'meter_period_str':refreshType,
-                # 'source_str':'sensor.{}'.format(meterType),
-                # 'status_str':'collecting'
             },
             "fields":{
-                # 'last_period':0,
                 'last_reset':pointLastReset,
-                # 'last_reset_str':'',
                 'value':float(pointValue),
                 'first_value':firstValue,
                 'current_value':currentValue
@@ -129,20 +119,13 @@ class PVDataConverter(object):
             return
         w_json = [{
         "measurement": '%',
-        # "time":int(time.time()),
         "tags":{
-            # 'domain':'sensor',
             'entity_id':'self_consumption_rate_{}'.format(refreshType),
             'friendly_name_str':'self_consumption_rate_{}'.format(refreshType),
-            # 'icon_str':'mdi:counter',
             'meter_period_str':refreshType,
-            # 'source_str':'sensor.{}'.format(meterType),
-            # 'status_str':'collecting'
         },
         "fields":{
-            # 'last_period':0,
             'last_reset':'',
-            # 'last_reset_str':'',
             'value':float(selfUseEnergyValue)/float(yieldEnergyValue),
             'first_value':0.0
         }
@@ -154,7 +137,6 @@ class PVDataConverter(object):
     def saveMeterValue(self, id,value):
         w_json = [{
             "measurement": 'W',
-            # "time":int(time.time()),
             "tags":{
                 'domain':'sensor',
                 'icon':'mdi:flash'
