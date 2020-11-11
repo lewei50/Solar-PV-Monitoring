@@ -13,7 +13,7 @@ def Getdata(): # take WEM3080T as example
 
   meterdata = r.json()['Datas']
 
-  \#get data needed
+  #get data needed
 
   inverter_power = meterdata[0][2]
 
