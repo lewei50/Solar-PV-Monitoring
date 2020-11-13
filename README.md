@@ -1,3 +1,12 @@
+demo:
+
+http://ha.iammeter.com:13000/ or grafana.iammeter.com
+
+http://ha.iammeter.com:18123/ or homeassistant.iammeter.com
+
+user name: iammeter
+
+password: iammeter
 ![image-20201108094809177](https://leweidoc.oss-cn-hangzhou.aliyuncs.com/lewei50/img/iammeter/tmpliu/tmpimage-20201108094809177.png)
 
 
