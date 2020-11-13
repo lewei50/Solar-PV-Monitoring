@@ -4,9 +4,9 @@
 
 demo: 
 
-http://ha.iammeter.com:13000/   or [grafana.iammeter.com](http://grafana.iammeter.com)
+http://ha.iammeter.com:13000/   or [http://grafana.iammeter.com](http://grafana.iammeter.com)
 
-[http://ha.iammeter.com:18123/](http://ha.iammeter.com:18123/)   or [homeassistant.iammeter.com](http://homeassistant.iammeter.com)
+[http://ha.iammeter.com:18123/](http://ha.iammeter.com:18123/)   or [http://homeassistant.iammeter.com](http://homeassistant.iammeter.com)
 
 user name: iammeter
 
