@@ -1,5 +1,7 @@
 Demo
 http://ha.iammeter.com:13000/ or [http://grafana.iammeter.com](http://grafana.iammeter.com)
+username:iammeter
+pwd:iammeter
 
 use [getData.py](getData.py) to import solar-PV data to influxdb, then show in [Grafana](https://grafana.com/grafana/dashboards/13295)
 
