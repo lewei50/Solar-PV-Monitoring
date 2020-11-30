@@ -15,37 +15,41 @@ Password: iammeter
 
 ## Parameter Description 
 
-Power: 
+Power: Active Power
 
-Exported energy:
+Exported energy: The surplus solar energy exported to grid
 
-Direct self-use
+Direct self-use: The solar energy consumed by your home load
 
-Yield Energy:
+Yield Energy: The solar energy produced by solar PV system
 
-Grid Consumption:
-
-
+Grid Consumption: The energy consumed from grid
 
 
 
-# sketch map
+
+
+# Working flow
 
 
 
 ![image-20201130101148125](https://leweidoc.oss-cn-hangzhou.aliyuncs.com/lewei50/img/iammeter/tmpliu/tmpimage-20201130101148125.png)
 
-1 a bidirectional wifi energy meter that support Home Assistant
 
-https://www.home-assistant.io/integrations/iammeter/
+1 Install a bi-directional wifi energy meter supporting integration with Home Assistant in your solar PV system
 
-2 calculate the energy_hourly and energy_daily by Home assistant and store all the parameter in InfluxDB
+Meter Example: https://www.home-assistant.io/integrations/iammeter/
+
+
+2 Calculate the energy_hourly and energy_daily by Home Assistant based on data uploaded by meter and store all these data in InfluxDB
 
 3 garafana ID (13295)
 
-# step by step
+
+# Quick start step by step
 
 https://github.com/lewei50/Solar-PV-Monitoring/tree/master/HomeAssistant-InfluxDB-Grafana
+
 
 ## Step 1:  A bi-directional Wi-Fi energy meter
 
