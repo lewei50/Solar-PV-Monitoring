@@ -1,29 +1,52 @@
-# Building an Open Local PV monitoring system with Home Assistant 
+[toc]
 
+ tutorial : How to build a local PV monitoring system with Home Assistant and Garafana
 
+# system Effect
 
-demo: 
+## demo show
 
-http://ha.iammeter.com:13000/   or [http://grafana.iammeter.com](http://grafana.iammeter.com)
-
-[http://ha.iammeter.com:18123/](http://ha.iammeter.com:18123/)   or [http://homeassistant.iammeter.com](http://homeassistant.iammeter.com)
+http://ha.iammeter.com:13000/ or [http://grafana.iammeter.com](http://grafana.iammeter.com/)
 
 user name: iammeter
 
 password: iammeter
 
-![image-20201111141144666](https://leweidoc.oss-cn-hangzhou.aliyuncs.com/lewei50/img/iammeter/tmpliu/tmpimage-20201111141144666.png)
+![sketch map](https://leweidoc.oss-cn-hangzhou.aliyuncs.com/lewei50/img/iammeter/tmpliu/tmp1.jpg)
+
+## Parameter introduction 
+
+Power:
+
+Exported energy:
+
+Direct self-use
+
+Yield Energy:
+
+Grid Consumption:
 
 
 
-There are four steps
 
-- A bi-directional Wi-Fi energy meter that can measure import/export energy simultaneously.
-- Calculate the extra parameter(such as energy_hourly and energy_daily etc..) by HomeAssistant 
-- use InfluxDB for storage 
-- show the data in Grafana 
 
-![garafana_influx_HA_1](https://leweidoc.oss-cn-hangzhou.aliyuncs.com/lewei50/img/iammeter/tmpliu/tmpgarafana_influx_HA_1.png)
+# sketch map
+
+
+
+![image-20201130101148125](https://leweidoc.oss-cn-hangzhou.aliyuncs.com/lewei50/img/iammeter/tmpliu/tmpimage-20201130101148125.png)
+
+1 a bidirectional wifi energy meter that support Home Assistant
+
+https://www.home-assistant.io/integrations/iammeter/
+
+2 calculate the energy_hourly and energy_daily by Home assistant and store all the parameter in InfluxDB
+
+3 garafana ID (13295)
+
+# step by step
+
+https://github.com/lewei50/Solar-PV-Monitoring/tree/master/HomeAssistant-InfluxDB-Grafana
 
 ## Step 1:  A bi-directional Wi-Fi energy meter
 
