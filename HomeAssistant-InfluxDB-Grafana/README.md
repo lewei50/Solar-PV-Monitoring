@@ -1,22 +1,21 @@
-[toc]
 
- tutorial : How to build a local PV monitoring system with Home Assistant and Garafana
+tutorial : Build a local solar PV monitoring system with Home Assistant and Garafana
 
-# system Effect
+# System Overview
 
-## demo show
+## Demo
 
 http://ha.iammeter.com:13000/ or [http://grafana.iammeter.com](http://grafana.iammeter.com/)
 
-user name: iammeter
+User name: iammeter
 
-password: iammeter
+Password: iammeter
 
-![sketch map](https://leweidoc.oss-cn-hangzhou.aliyuncs.com/lewei50/img/iammeter/tmpliu/tmp1.jpg)
+![System Overview](https://leweidoc.oss-cn-hangzhou.aliyuncs.com/lewei50/img/iammeter/tmpliu/tmp1.jpg)
 
-## Parameter introduction 
+## Parameter Description 
 
-Power:
+Power: 
 
 Exported energy:
 
