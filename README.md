@@ -12,7 +12,7 @@ user name: iammeter
 
 password: iammeter
 
-![1](https://leweidoc.oss-cn-hangzhou.aliyuncs.com/lewei50/img/iammeter/tmpliu/tmp1.jpg)
+![sketchmap](https://leweidoc.oss-cn-hangzhou.aliyuncs.com/lewei50/img/iammeter/tmpliu/tmp1.jpg)
 
 ## Parameter introduction 
 
