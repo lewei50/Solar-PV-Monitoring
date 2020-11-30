@@ -1,9 +1,13 @@
 
-tutorial : Build a local solar PV monitoring system with Home Assistant and Garafana
+tutorial : Build a local solar PV plant monitoring system with Home Assistant and Garafana
 
-# System Overview
+# 1. Introduction
 
-## Demo
+This tutorial introduces an open source project, that you can build your own solar PV plant monitoring system by using bi-directional WiFi energy meter and some open source platforms including Home Assistant, InfluxDB and Garafana.
+
+# 2. Project overview
+
+## 2.1 System demo
 
 http://ha.iammeter.com:13000/ or [http://grafana.iammeter.com](http://grafana.iammeter.com/)
 
@@ -13,7 +17,7 @@ Password: iammeter
 
 ![System Overview](https://leweidoc.oss-cn-hangzhou.aliyuncs.com/lewei50/img/iammeter/tmpliu/tmp1.jpg)
 
-## Parameter Description 
+## 2.2 Parameter description 
 
 Power: Active Power
 
@@ -29,7 +33,15 @@ Grid Consumption: The energy consumed from grid
 
 
 
-# Working flow
+# 3. Project introduction
+
+You need to finish the below steps to build your own solar PV plant monitoring system.
+
+1). Install and setup a bi-directional meter supporting integration with Home Assistant, in your sopar PV plant.
+
+Meter Example: https://www.home-assistant.io/integrations/iammeter/
+
+![](https://leweidoc.oss-cn-hangzhou.aliyuncs.com/lewei50/img/iammeter-33-20190809-L2.jpg)
 
 
 
@@ -38,15 +50,15 @@ Grid Consumption: The energy consumed from grid
 
 1 Install a bi-directional wifi energy meter supporting integration with Home Assistant in your solar PV system
 
-Meter Example: https://www.home-assistant.io/integrations/iammeter/
+
 
 
 2 Calculate the energy_hourly and energy_daily by Home Assistant based on data uploaded by meter and store all these data in InfluxDB
 
-3 garafana ID (13295)
+3 View the data on Garafana (garafana ID:13295)
 
 
-# Quick start step by step
+# 4. Quick start step by step
 
 https://github.com/lewei50/Solar-PV-Monitoring/tree/master/HomeAssistant-InfluxDB-Grafana
 
