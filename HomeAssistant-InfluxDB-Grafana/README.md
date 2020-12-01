@@ -35,9 +35,8 @@ Grid Consumption: The energy consumed from grid
 
 # 3. Project introduction
 
-You need to finish the below steps to build your own solar PV plant monitoring system.
 
-1). Install and setup a bi-directional meter supporting integration with Home Assistant, in your sopar PV plant.
+Before building your own solar PV plant monitoring system, you need to install a bi-directional meter supporting integration with Home Assistant, in your sopar PV plant.
 
 Meter Example: https://www.home-assistant.io/integrations/iammeter/
 
@@ -45,45 +44,46 @@ Meter Example: https://www.home-assistant.io/integrations/iammeter/
 
 ![](https://leweidoc.oss-cn-hangzhou.aliyuncs.com/lewei50/img/iammeter-33-20190809-L2.jpg)
 
+
+Then you need to finish few steps to build your own solar PV plant monitoring system.
 **Data Flow**
 ![image-20201201115556543](https://leweidoc.oss-cn-hangzhou.aliyuncs.com/lewei50/img/iammeter/image-20201201115556543.png)
 
 
 
-
-1 Install a bi-directional wifi energy meter supporting integration with Home Assistant in your solar PV system
-
-
-
-
-2 Calculate the energy_hourly and energy_daily by Home Assistant based on data uploaded by meter and store all these data in InfluxDB
-
-3 View the data on Garafana (garafana ID:13295)
+1). Set up the meter and upload the data to Home Assistant;
+2). Home Assistant calculates the energy_hourly and energy_daily based on uploaded data and store all data in InfluxDB.
+3). Call the data on Garafana and present in different data graphs. You can use Garafana template (ID: 13295) to display the data.
 
 
-# 4. Quick start step by step
+
+# 4. Quick start
+
 
 https://github.com/lewei50/Solar-PV-Monitoring/tree/master/HomeAssistant-InfluxDB-Grafana
 
+You can quick start by following below steps,
 
-## Step 1:  A bi-directional Wi-Fi energy meter
+## 4.1  Install a bi-directional Wi-Fi energy meter supporting integration with Home Assistant in your solar PV plant
 
-Such as https://www.home-assistant.io/integrations/iammeter/
+Meter Example: https://www.home-assistant.io/integrations/iammeter/. Please refe to above wiring diagram.
 
-## Step 2: Calculate the extra parameter by Home Assistant
 
-[solariammeter.yaml](solariammeter.yaml)
+## 4.2 Upload data to Home Assistant for calculation
+
+Add this file [solariammeter.yaml](solariammeter.yaml) to the directory "Packages"
 
 ![image-20201102094612014](https://leweidoc.oss-cn-hangzhou.aliyuncs.com/lewei50/img/iammeter/tmpliu/tmpimage-20201102094612014.png)
 
-## Step 3: use InfluxDB for storage of Home Assistant
 
-Replace the Default storage to InfluxDB,Full details of the Home Assistant integration can be found here: https://www.home-assistant.io/components/influxdb/
+## 4.3 Store Home Assistant data in InfluxDB
 
-## Step 4: show the data in Garafana
+Replace the Default storage of Home Assistant to InfluxDB. For details of the Home Assistant integration, please refer to https://www.home-assistant.io/components/influxdb/
 
-[Garafana ID 13295](https://grafana.com/grafana/dashboards/13295?src=twitter.com&mdm=social&cnt=buffera6a03&camp=buffer&pg=prod-ent&plcmt=contact-banner)
+## 4.4 Display the data in Garafana
 
+You can use below Garafana template to display the data.
+[Garafana ID 13295](https://grafana.com/grafana/dashboards/13295?src=twitter.com&mdm=social&cnt=buffera6a03&camp=buffer&pg=prod-ent&plcmt=contact-banner).
 
 
 You need to get the following data from infixdb
