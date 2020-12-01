@@ -36,7 +36,7 @@ Grid Consumption: The energy consumed from grid
 # 3. Project introduction
 
 
-Before building your own solar PV plant monitoring system, you need to install a bi-directional meter supporting integration with Home Assistant, in your sopar PV plant.
+Before building your own solar PV plant monitoring system, you need to install a bi-directional meter supporting integration with Home Assistant, in your solar PV plant.
 
 Meter Example: https://www.home-assistant.io/integrations/iammeter/
 
