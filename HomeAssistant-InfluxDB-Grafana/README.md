@@ -41,11 +41,14 @@ You need to finish the below steps to build your own solar PV plant monitoring s
 
 Meter Example: https://www.home-assistant.io/integrations/iammeter/
 
+**Meter Wiring Diagram**
+
 ![](https://leweidoc.oss-cn-hangzhou.aliyuncs.com/lewei50/img/iammeter-33-20190809-L2.jpg)
 
+**Data Flow**
+![image-20201201115556543](https://leweidoc.oss-cn-hangzhou.aliyuncs.com/lewei50/img/iammeter/image-20201201115556543.png)
 
 
-![image-20201130101148125](https://leweidoc.oss-cn-hangzhou.aliyuncs.com/lewei50/img/iammeter/tmpliu/tmpimage-20201130101148125.png)
 
 
 1 Install a bi-directional wifi energy meter supporting integration with Home Assistant in your solar PV system
