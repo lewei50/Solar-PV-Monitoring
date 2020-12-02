@@ -1,9 +1,9 @@
 
-tutorial : Build a local solar PV plant monitoring system with Home Assistant and Garafana
+tutorial : Build a local solar PV plant monitoring system with Home Assistant and Grafana
 
 # 1. Introduction
 
-This tutorial introduces an open source project, that you can build your own solar PV plant monitoring system by using bi-directional WiFi energy meter and some open source platforms including Home Assistant, InfluxDB and Garafana.
+This tutorial introduces an open source project, that you can build your own solar PV plant monitoring system by using bi-directional WiFi energy meter and some open source platforms including Home Assistant, InfluxDB and Grafana.
 
 # 2. Project overview
 
@@ -53,7 +53,7 @@ Then you need to finish few steps to build your own solar PV plant monitoring sy
 
 1). Set up the meter and upload the data to Home Assistant;
 2). Home Assistant calculates the energy_hourly and energy_daily based on uploaded data and store all data in InfluxDB.
-3). Call the data on Garafana and present in different data graphs. You can use Garafana template (ID: 13295) to display the data.
+3). Call the data on Grafana and present in different data graphs. You can use Grafana template (ID: 13295) to display the data.
 
 
 
@@ -80,10 +80,10 @@ Add this file [solariammeter.yaml](solariammeter.yaml) to the directory "Package
 
 Replace the Default storage of Home Assistant to InfluxDB. For details of the Home Assistant integration, please refer to https://www.home-assistant.io/components/influxdb/
 
-## 4.4 Display the data in Garafana
+## 4.4 Display the data in Grafana
 
-You can use below Garafana template to display the data.
-[Garafana ID 13295](https://grafana.com/grafana/dashboards/13295?src=twitter.com&mdm=social&cnt=buffera6a03&camp=buffer&pg=prod-ent&plcmt=contact-banner).
+You can use below Grafana template to display the data.
+[Grafana ID 13295](https://grafana.com/grafana/dashboards/13295?src=twitter.com&mdm=social&cnt=buffera6a03&camp=buffer&pg=prod-ent&plcmt=contact-banner).
 
 
 You need to get the following data from infixdb
