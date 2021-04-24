@@ -12,7 +12,7 @@ user name: iammeter
 
 password: iammeter
 
-![sketchmap](https://leweidoc.oss-cn-hangzhou.aliyuncs.com/lewei50/img/iammeter/tmpliu/tmp1.jpg)
+![grafana in IAMMETER open source solution](https://leweidoc.oss-cn-hangzhou.aliyuncs.com/lewei50/img/iammeter/tmpliu/tmpQQ20210424090859.jpg)
 
 ## Parameter introduction 
 
