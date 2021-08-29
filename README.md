@@ -1,4 +1,8 @@
-[toc]
+* [<a name="user\-content\-building\-an\-open\-local\-pv\-monitoring\-system\-by\-home\-assistant"></a><span>Building an Open Local PV monitoring system by Home Assistant </span>](#building-an-open-local-pv-monitoring-system-by-home-assistant-)
+  * [<a name="user\-content\-step\-1\-\-a\-bi\-directional\-wi\-fi\-energy\-meter"></a><span>Step 1:  A bi\-directional Wi\-Fi energy meter</span>](#step-1--a-bi-directional-wi-fi-energy-meter)
+  * [<a name="user\-content\-step\-2\-calculate\-the\-extra\-parameter\-by\-home\-assistant"></a><span>Step 2: Calculate the extra parameter by Home Assistant</span>](#step-2-calculate-the-extra-parameter-by-home-assistant)
+  * [<a name="user\-content\-step\-3\-use\-influxdb\-for\-storage\-of\-home\-assistant"></a><span>Step 3: use InfluxDB for storage of Home Assistant</span>](#step-3-use-influxdb-for-storage-of-home-assistant)
+  * [<a name="user\-content\-step\-4\-show\-the\-data\-in\-garafana"></a><span>Step 4: show the data in Garafana</span>](#step-4-show-the-data-in-garafana)
 
  tutorial : How to build a local PV monitoring system with Home Assistant and Garafana
 
