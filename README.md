@@ -108,3 +108,7 @@ You need to get the following data from infixdb
 | selfuse_energy_monthly          |
 | load_energy_monthly             |
 | self_consumption_rate_monthly   |
+
+# Wifi Energy meter introduction
+[WEM3080](https://www.iammeter.com/products/single-phase-meter):single-phase energy meter 
+[WEM3080T](https://www.iammeter.com/products/three-phase-meter):three-phaes energy meter
