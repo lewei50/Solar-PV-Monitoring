@@ -7,7 +7,7 @@
   * [Step 2: Calculate the extra parameter by Home Assistant](#step-2-calculate-the-extra-parameter-by-home-assistant)
   * [Step 3: use InfluxDB for storage of Home Assistant](#step-3-use-influxdb-for-storage-of-home-assistant)
   * [Step 4: show the data in Garafana](#step-4-show-the-data-in-garafana)
-
+* [ Wifi Energy meter introduction](#Wifi-Energy-meter-introduction)
  tutorial : How to build a local PV monitoring system with Home Assistant and Garafana
 
 # system Effect
