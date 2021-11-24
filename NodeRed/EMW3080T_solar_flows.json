@@ -21,14 +21,14 @@
                 "vt": "str"
             }
         ],
-        "repeat": "60",
+        "repeat": "",
         "crontab": "",
-        "once": true,
+        "once": false,
         "onceDelay": 0.1,
         "topic": "",
         "payloadType": "date",
-        "x": 120,
-        "y": 180,
+        "x": 722,
+        "y": 57,
         "wires": [
             [
                 "66abcc8eae679991"
@@ -46,8 +46,8 @@
         "tostatus": false,
         "complete": "true",
         "targetType": "full",
-        "x": 130,
-        "y": 420,
+        "x": 179,
+        "y": 543,
         "wires": []
     },
     {
@@ -55,7 +55,7 @@
         "type": "function",
         "z": "5fb9966c8a33b771",
         "name": "meter_a",
-        "func": "let dataArr = msg.payload.Datas[0];\n\nlet result = [];\nfor(var item in dataArr) {\n    result.push({\n        payload: dataArr[item]\n    });\n}\n\nreturn result;\n\n//output\n/* \nVoltage\nCurrent\nPower\nImportenergy\nExportgrid\n*/",
+        "func": "let dataArr = msg.payload[0];\n\nlet result = [];\nfor(var item in dataArr) {\n    result.push({\n        payload: dataArr[item]\n    });\n}\n\nreturn result;\n\n//output\n/* \nVoltage\nCurrent\nPower\nImportenergy\nExportgrid\n*/",
         "outputs": 5,
         "noerr": 0,
         "initialize": "",
@@ -76,7 +76,7 @@
         "type": "function",
         "z": "5fb9966c8a33b771",
         "name": "meter_b",
-        "func": "let dataArr = msg.payload.Datas[1];\n\nlet result = [];\nfor(var item in dataArr) {\n    result.push({\n        payload: dataArr[item]\n    });\n}\n\nreturn result;\n\n//output\n/* \nVoltage\nCurrent\nPower\nImportenergy\nExportgrid\n*/",
+        "func": "let dataArr = msg.payload[1];\n\nlet result = [];\nfor(var item in dataArr) {\n    result.push({\n        payload: dataArr[item]\n    });\n}\n\nreturn result;\n\n//output\n/* \nVoltage\nCurrent\nPower\nImportenergy\nExportgrid\n*/",
         "outputs": 5,
         "noerr": 0,
         "initialize": "",
@@ -97,7 +97,7 @@
         "type": "function",
         "z": "5fb9966c8a33b771",
         "name": "meter_c",
-        "func": "let dataArr = msg.payload.Datas[2];\n\nlet result = [];\nfor(var item in dataArr) {\n    result.push({\n        payload: dataArr[item]\n    });\n}\n\nreturn result;\n\n//output\n/* \nVoltage\nCurrent\nPower\nImportenergy\nExportgrid\n*/",
+        "func": "let dataArr = msg.payload[2];\n\nlet result = [];\nfor(var item in dataArr) {\n    result.push({\n        payload: dataArr[item]\n    });\n}\n\nreturn result;\n\n//output\n/* \nVoltage\nCurrent\nPower\nImportenergy\nExportgrid\n*/",
         "outputs": 5,
         "noerr": 0,
         "initialize": "",
@@ -118,14 +118,14 @@
         "type": "function",
         "z": "5fb9966c8a33b771",
         "name": "host",
-        "func": "//iammeter IP\nmsg.host = '192.168.1.6'\n\nreturn msg;",
+        "func": "//iammeter IP\nmsg.host = 'https://www.iammeter.com/api/v1/site/meterdata/B384789C?token=ec0aeb9c07e24368b5fd9bb3b42a3095'\n\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 130,
-        "y": 260,
+        "x": 742,
+        "y": 137,
         "wires": [
             [
                 "1bed83dbb6ab0660"
@@ -140,26 +140,16 @@
         "method": "GET",
         "ret": "obj",
         "paytoqs": "ignore",
-        "url": "http://{{{host}}}/monitorjson",
+        "url": "{{{host}}}",
         "tls": "",
         "persist": false,
         "proxy": "",
-        "authType": "basic",
+        "authType": "",
         "senderr": false,
-        "credentials": {
-            "user": "admin",
-            "password": "admin"
-        },
-        "x": 130,
-        "y": 320,
+        "x": 742,
+        "y": 197,
         "wires": [
-            [
-                "d52c8e481eb959b8",
-                "02ad8acebdd33fc7",
-                "6d671c77a682e9a1",
-                "b3f3557fd1df50f7",
-                "d730ce29db99d728"
-            ]
+            []
         ]
     },
     {
@@ -177,7 +167,7 @@
         "type": "function",
         "z": "5fb9966c8a33b771",
         "name": "meter_solar",
-        "func": "var solar_voltage_a = msg.payload.Datas[0][0]\nvar solar_current_a = msg.payload.Datas[0][1]\nvar solar_power_a = msg.payload.Datas[0][2]\nvar solar_importenergy_a = msg.payload.Datas[0][3]\nvar solar_exportgrid_a = msg.payload.Datas[0][4]\n\nvar solar_voltage_b = msg.payload.Datas[1][0]\nvar solar_current_b = msg.payload.Datas[1][1]\nvar solar_power_b = msg.payload.Datas[1][2]\nvar solar_importenergy_b = msg.payload.Datas[1][3]\nvar solar_exportgrid_b = msg.payload.Datas[1][4]\n\n/* //not use\nvar solar_voltage_c = msg.payload.Datas[2][0]\nvar solar_current_c = msg.payload.Datas[2][1]\nvar solar_power_c = msg.payload.Datas[2][2]\nvar solar_importenergy_c = msg.payload.Datas[2][3]\nvar solar_exportgrid_c = msg.payload.Datas[2][4]\n*/\n\nvar inverter_power = solar_power_a\nvar feedin_power = -solar_power_b\nvar load_power = solar_power_a + solar_power_b \n\nvar grid_consumption_energy\nvar exported_energy\nvar yield_energy\nvar selfuse_energy\nvar load_energy\n\nif(solar_importenergy_b > 0){\n    grid_consumption_energy = solar_importenergy_b\n}\nif(solar_exportgrid_b > 0){\n    exported_energy = solar_exportgrid_b\n}\nif(solar_importenergy_a > 0){\n    yield_energy = solar_importenergy_a\n}\nif( (yield_energy - exported_energy) > 0){\n    selfuse_energy = yield_energy - exported_energy\n}\nif( (grid_consumption_energy + yield_energy - exported_energy) > 0){\n    load_energy = grid_consumption_energy + yield_energy - exported_energy\n}\n\nglobal.set(\"grid_consumption_energy_total\", grid_consumption_energy, \"store\");\nglobal.set(\"yield_energy_total\", yield_energy, \"store\");\nglobal.set(\"exported_energy_total\", exported_energy, \"store\");\nglobal.set(\"selfuse_energy_total\", selfuse_energy, \"store\");\nglobal.set(\"load_energy_total\", load_energy, \"store\");\n\nvar newmsg = [\n    {topic:\"inverter_power\",payload:inverter_power},\n    {topic:\"feedin_power\",payload:feedin_power},\n    {topic:\"load_power\",payload:load_power},\n    {topic:\"grid_consumption_energy\",payload:grid_consumption_energy},\n    {topic:\"yield_energy\",payload:yield_energy},\n    {topic:\"exported_energy\",payload:exported_energy},\n    {topic:\"selfuse_energy\",payload:selfuse_energy},\n    {topic:\"load_energy\",payload:load_energy}\n    ];\n \nreturn newmsg;\n\n\n\n\n\n\n\n\n\n\n\n\n\n",
+        "func": "var solar_voltage_a = msg.payload[0][0]\nvar solar_current_a = msg.payload[0][1]\nvar solar_power_a = msg.payload[0][2]\nvar solar_importenergy_a = msg.payload[0][3]\nvar solar_exportgrid_a = msg.payload[0][4]\n\nvar solar_voltage_b = msg.payload[1][0]\nvar solar_current_b = msg.payload[1][1]\nvar solar_power_b = msg.payload[1][2]\nvar solar_importenergy_b = msg.payload[1][3]\nvar solar_exportgrid_b = msg.payload[1][4]\n\n/* //not use\nvar solar_voltage_c = msg.payload[2][0]\nvar solar_current_c = msg.payload[2][1]\nvar solar_power_c = msg.payload[2][2]\nvar solar_importenergy_c = msg.payload[2][3]\nvar solar_exportgrid_c = msg.payload[2][4]\n*/\n\nvar inverter_power = solar_power_a\nvar feedin_power = -solar_power_b\nvar load_power = solar_power_a + solar_power_b \n\nvar grid_consumption_energy\nvar exported_energy\nvar yield_energy\nvar selfuse_energy\nvar load_energy\n\nif(solar_importenergy_b > 0){\n    grid_consumption_energy = solar_importenergy_b\n}\nif(solar_exportgrid_b > 0){\n    exported_energy = solar_exportgrid_b\n}\nif(solar_importenergy_a > 0){\n    yield_energy = solar_importenergy_a\n}\nif( (yield_energy - exported_energy) > 0){\n    selfuse_energy = yield_energy - exported_energy\n}\nif( (grid_consumption_energy + yield_energy - exported_energy) > 0){\n    load_energy = grid_consumption_energy + yield_energy - exported_energy\n}\n\nglobal.set(\"grid_consumption_energy_total\", grid_consumption_energy, \"store\");\nglobal.set(\"yield_energy_total\", yield_energy, \"store\");\nglobal.set(\"exported_energy_total\", exported_energy, \"store\");\nglobal.set(\"selfuse_energy_total\", selfuse_energy, \"store\");\nglobal.set(\"load_energy_total\", load_energy, \"store\");\n\nvar newmsg = [\n    {topic:\"inverter_power\",payload:inverter_power},\n    {topic:\"feedin_power\",payload:feedin_power},\n    {topic:\"load_power\",payload:load_power},\n    {topic:\"grid_consumption_energy\",payload:grid_consumption_energy},\n    {topic:\"yield_energy\",payload:yield_energy},\n    {topic:\"exported_energy\",payload:exported_energy},\n    {topic:\"selfuse_energy\",payload:selfuse_energy},\n    {topic:\"load_energy\",payload:load_energy}\n    ];\n \nreturn newmsg;\n\n\n\n\n\n\n\n\n\n\n\n\n\n",
         "outputs": 8,
         "noerr": 0,
         "initialize": "",
@@ -1197,8 +1187,8 @@
         "outputs": 1,
         "useDifferentColor": false,
         "className": "",
-        "x": 970,
-        "y": 320,
+        "x": 972.0000305175781,
+        "y": 296.00000953674316,
         "wires": [
             []
         ]
@@ -1445,6 +1435,26 @@
         "x": 430,
         "y": 100,
         "wires": []
+    },
+    {
+        "id": "424798f99c387eef",
+        "type": "local-realtime",
+        "z": "5fb9966c8a33b771",
+        "name": "local-realtime",
+        "ip": "192.168.1.6",
+        "interval": 60,
+        "x": 133.5,
+        "y": 387,
+        "wires": [
+            [
+                "02ad8acebdd33fc7",
+                "6d671c77a682e9a1",
+                "b3f3557fd1df50f7",
+                "d730ce29db99d728",
+                "d52c8e481eb959b8"
+            ]
+        ],
+        "l": false
     },
     {
         "id": "def107730da3d368",
