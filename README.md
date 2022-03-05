@@ -64,7 +64,7 @@ Such as https://www.home-assistant.io/integrations/iammeter/
 
 ## Step 2: Calculate the extra parameter by Home Assistant
 
-[solariammeter.yaml](solariammeter.yaml)
+[solariammeter.yaml](https://github.com/lewei50/Solar-PV-Monitoring/blob/master/HomeAssistant-InfluxDB-Grafana/solariammeter.yaml)
 
 ![image-20201102094612014](https://leweidoc.oss-cn-hangzhou.aliyuncs.com/lewei50/img/iammeter/tmpliu/tmpimage-20201102094612014.png)
 
