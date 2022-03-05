@@ -1,0 +1,85 @@
+type: horizontal-stack
+cards:
+  - type: vertical-stack
+    cards:
+      - type: horizontal-stack
+        cards:
+          - type: gauge
+            entity: sensor.meter3_power_a
+            min: 0
+            max: 1000
+            name: Power A
+            needle: true
+            severity:
+              green: 0
+              yellow: 500
+              red: 700
+          - type: gauge
+            entity: sensor.meter3_power_b
+            min: 0
+            max: 1000
+            name: Power B
+            needle: true
+            severity:
+              green: 0
+              yellow: 500
+              red: 700
+          - type: gauge
+            entity: sensor.meter3_power_c
+            min: 0
+            max: 1000
+            name: Power C
+            needle: true
+            severity:
+              green: 0
+              yellow: 500
+              red: 700
+      - type: horizontal-stack
+        cards:
+          - type: sensor
+            entity: sensor.monthly_energy_total_a
+            name: Monthly Energy Total A
+          - type: sensor
+            entity: sensor.monthly_energy_total_b
+            name: Monthly Energy Total B
+          - type: sensor
+            entity: sensor.monthly_energy_total_c
+            name: Monthly Energy Total C
+      - type: horizontal-stack
+        cards:
+          - type: sensor
+            entity: sensor.daily_energy_total_a
+            name: Daily Energy Total A
+          - type: sensor
+            entity: sensor.daily_energy_total_b
+            name: Daily Energy Total B
+          - type: sensor
+            entity: sensor.daily_energy_total_c
+            name: Daily Energy Total C
+      - type: history-graph
+        entities:
+          - entity: sensor.energy_total_a
+          - entity: sensor.energy_total_b
+          - entity: sensor.energy_total_c
+        hours_to_show: 24
+        refresh_interval: 0
+  - type: vertical-stack
+    cards:
+      - type: horizontal-stack
+        cards:
+          - type: history-graph
+            entities:
+              - entity: sensor.meter3_power_a
+              - entity: sensor.meter3_power_b
+              - entity: sensor.meter3_power_c
+            hours_to_show: 1
+            refresh_interval: 0
+      - type: horizontal-stack
+        cards:
+          - type: history-graph
+            entities:
+              - entity: sensor.meter3_voltage_a
+              - entity: sensor.meter3_voltage_b
+              - entity: sensor.meter3_voltage_c
+            hours_to_show: 1
+            refresh_interval: 0

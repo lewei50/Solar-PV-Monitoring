@@ -1,0 +1,83 @@
+cards:
+  - type: horizontal-stack
+    cards:
+      - type: sensor
+        entity: sensor.selfuse_energy_daily
+        detail: 2
+      - type: sensor
+        entity: sensor.grid_consumption_energy_daily
+        detail: 2
+  - type: horizontal-stack
+    cards:
+      - type: custom:apexcharts-card
+        header:
+          show: true
+          title: POWER
+          show_states: true
+          colorize_states: true
+        apex_config:
+          chart:
+            height: 350
+            zoom:
+              type: x
+              enabled: true
+              autoScaleYaxis: false
+            toolbar:
+              show: true
+              autoSelected: zoom
+            xaxis.type: datetime
+          stroke:
+            width: 1
+            curve: smooth
+        series:
+          - entity: sensor.inverter_power
+            group_by:
+              func: avg
+              duration: 5min
+          - entity: sensor.feedin_power
+            group_by:
+              func: avg
+              duration: 5min
+          - entity: sensor.load_power
+            group_by:
+              func: avg
+              duration: 5min
+  - type: horizontal-stack
+    cards:
+      - type: custom:apexcharts-card
+        header:
+          show: true
+          title: Yield Daily
+          show_states: true
+          colorize_states: true
+        apex_config:
+          chart:
+            height: 350
+            zoom:
+              type: x
+              enabled: true
+              autoScaleYaxis: false
+            toolbar:
+              show: true
+              autoSelected: zoom
+            xaxis.type: datetime
+        series:
+          - entity: sensor.yield_energy_daily
+            type: column
+            group_by:
+              func: max
+              duration: 24h
+          - entity: sensor.exported_energy_daily
+            type: column
+            group_by:
+              func: max
+              duration: 24h
+          - entity: sensor.selfuse_energy_daily
+            type: column
+            group_by:
+              func: max
+              duration: 24h
+        graph_span: 8d
+        span:
+          end: day
+type: vertical-stack

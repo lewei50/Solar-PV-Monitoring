@@ -1,0 +1,144 @@
+# Example configuration.yaml entry
+
+#IamMeter For SolarPV With HomeAssistant
+# WEM3080T
+#-- CT1 <-> Inverter
+#-- CT2 <-> Feedin(Grid)
+#------------------------
+
+sensor:
+  - platform: iammeter
+    host: 192.168.12.31
+    name: meter3
+
+template:
+  - sensor:
+    - name: 'Inverter Power'
+      unit_of_measurement: W
+      state: "{{ states('sensor.meter3_power_a') | float }}"
+    - name: 'Feedin Power'
+      unit_of_measurement: W
+      state: "{{ states('sensor.meter3_power_b') | float * (-1.0) }}"
+    - name: 'Load Power'
+      unit_of_measurement: W
+      state: "{{ states('sensor.meter3_power_a')|float + states('sensor.meter3_power_b')|float }}"
+    - name: 'Zero Power'
+      unit_of_measurement: W
+      state: "{{ 0 }}"
+    - name: 'Demo heater Power'
+      unit_of_measurement: W
+      state: "{{ 100 }}"
+
+    - name: 'Grid Consumption Energy'
+      device_class: energy
+      state_class: total_increasing
+      unit_of_measurement: kWh
+      state: >
+        {% if is_number(states('sensor.meter3_importenergy_b')) and states('sensor.meter3_importenergy_b') | int >0 %}
+          {{ states('sensor.meter3_importenergy_b') | float }}
+        {% else %}
+          None
+        {% endif %}
+
+    - name: 'Exported Energy'
+      device_class: energy
+      state_class: total_increasing
+      unit_of_measurement: kWh
+      state: >
+        {% if is_number(states('sensor.meter3_exportgrid_b')) and states('sensor.meter3_exportgrid_b') | int >0 %}
+          {{ states('sensor.meter3_exportgrid_b') | float }}
+        {% else %}
+          None
+        {% endif %}
+
+    - name: 'Yield Energy'
+      device_class: energy
+      state_class: total_increasing
+      unit_of_measurement: kWh
+      state: >
+        {% if is_number(states('sensor.meter3_importenergy_a')) and states('sensor.meter3_importenergy_a') | int >0 %}
+          {{ states('sensor.meter3_importenergy_a') | float }}
+        {% else %}
+          None
+        {% endif %}
+
+    - name: 'Selfuse Energy'
+      device_class: energy
+      state_class: total_increasing
+      unit_of_measurement: kWh
+      state: >
+        {% if is_number(states('sensor.yield_energy')|float - states('sensor.exported_energy')|float) and (states('sensor.yield_energy')|float - states('sensor.exported_energy')|float)|int>0 %}
+          {{ states('sensor.yield_energy')|float - states('sensor.exported_energy')|float }}
+        {% else %}
+          None
+        {% endif %}
+    - name: 'Load Energy'
+      device_class: energy
+      state_class: total_increasing
+      unit_of_measurement: kWh
+      state: >
+        {% if is_number(states('sensor.grid_consumption_energy')|float + states('sensor.yield_energy')|float - states('sensor.exported_energy')|float) and (states('sensor.grid_consumption_energy')|float + states('sensor.yield_energy')|float - states('sensor.exported_energy')|float)|int>0 %}
+          {{ states('sensor.grid_consumption_energy')|float + states('sensor.yield_energy')|float - states('sensor.exported_energy')|float }}
+        {% else %}
+          None
+        {% endif %}
+
+    - name: 'Self Consumption Rate Daily'
+      unit_of_measurement: "%"
+      state: "{{ states('sensor.selfuse_energy_daily')|float / states('sensor.yield_energy_daily')|float }}"
+    - name: 'Self Consumption Rate Monthly'
+      unit_of_measurement: "%"
+      state: "{{ states('sensor.selfuse_energy_monthly')|float / states('sensor.yield_energy_monthly')|float }}"
+
+# Example configuration.yaml entry
+utility_meter:
+
+  grid_consumption_energy_hourly:
+    source: sensor.grid_consumption_energy
+    cycle: hourly
+  grid_consumption_energy_daily:
+    source: sensor.grid_consumption_energy
+    cycle: daily
+  grid_consumption_energy_monthly:
+    source: sensor.grid_consumption_energy
+    cycle: monthly
+    
+  exported_energy_hourly:
+    source: sensor.exported_energy
+    cycle: hourly
+  exported_energy_daily:
+    source: sensor.exported_energy
+    cycle: daily
+  exported_energy_monthly:
+    source: sensor.exported_energy
+    cycle: monthly
+    
+  yield_energy_hourly:
+    source: sensor.yield_energy
+    cycle: hourly
+  yield_energy_daily:
+    source: sensor.yield_energy
+    cycle: daily
+  yield_energy_monthly:
+    source: sensor.yield_energy
+    cycle: monthly
+    
+  selfuse_energy_hourly:
+    source: sensor.selfuse_energy
+    cycle: hourly
+  selfuse_energy_daily:
+    source: sensor.selfuse_energy
+    cycle: daily
+  selfuse_energy_monthly:
+    source: sensor.selfuse_energy
+    cycle: monthly
+
+  load_energy_hourly:
+    source: sensor.load_energy
+    cycle: hourly
+  load_energy_daily:
+    source: sensor.load_energy
+    cycle: daily
+  load_energy_monthly:
+    source: sensor.load_energy
+    cycle: monthly

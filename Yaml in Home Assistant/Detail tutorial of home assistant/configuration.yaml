@@ -1,0 +1,82 @@
+
+# Configure a default setup of Home Assistant (frontend, api, etc)
+default_config:
+
+# Text to speech
+tts:
+  - platform: google_translate
+
+group: !include groups.yaml
+automation: !include automations.yaml
+script: !include scripts.yaml
+scene: !include scenes.yaml
+
+# Example configuration.yaml entry
+sensor:
+  - platform: iammeter
+    host: 192.168.12.31
+    name: meter3
+
+template:
+  - sensor:
+    - name: 'Energy Total A'
+      device_class: energy
+      state_class: total_increasing
+      unit_of_measurement: kWh
+      state: >
+        {% if is_number(states('sensor.meter3_importenergy_a')) and states('sensor.meter3_importenergy_a') | int > 0 %}
+          {{ states('sensor.meter3_importenergy_a') | float }}
+        {% else %}
+          None
+        {% endif %}
+    - name: 'Energy Total B'
+      device_class: energy
+      state_class: total_increasing
+      unit_of_measurement: kWh
+      state: >
+        {% if is_number(states('sensor.meter3_importenergy_b')) and states('sensor.meter3_importenergy_b') | int > 0 %}
+          {{ states('sensor.meter3_importenergy_b') | float }}
+        {% else %}
+          None
+        {% endif %}
+    - name: 'Energy Total C'
+      device_class: energy
+      state_class: total_increasing
+      unit_of_measurement: kWh
+      state: >
+        {% if is_number(states('sensor.meter3_importenergy_c')) and states('sensor.meter3_importenergy_c') | int > 0 %}
+          {{ states('sensor.meter3_importenergy_c') | float }}
+        {% else %}
+          None
+        {% endif %}
+
+utility_meter:
+  hourly_energy_total_a:
+    source: sensor.energy_total_a
+    cycle: hourly
+  daily_energy_total_a:
+    source: sensor.energy_total_a
+    cycle: daily
+  monthly_energy_total_a:
+    source: sensor.energy_total_a
+    cycle: monthly
+
+  hourly_energy_total_b:
+    source: sensor.energy_total_b
+    cycle: hourly
+  daily_energy_total_b:
+    source: sensor.energy_total_b
+    cycle: daily
+  monthly_energy_total_b:
+    source: sensor.energy_total_b
+    cycle: monthly
+
+  hourly_energy_total_c:
+    source: sensor.energy_total_c
+    cycle: hourly
+  daily_energy_total_c:
+    source: sensor.energy_total_c
+    cycle: daily
+  monthly_energy_total_c:
+    source: sensor.energy_total_c
+    cycle: monthly

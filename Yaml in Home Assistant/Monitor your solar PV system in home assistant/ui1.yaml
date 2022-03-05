@@ -1,0 +1,44 @@
+cards:
+  - type: horizontal-stack
+    cards:
+      - type: sensor
+        entity: sensor.yield_energy_daily
+        detail: 2
+      - type: sensor
+        entity: sensor.exported_energy_daily
+        detail: 2
+  - type: horizontal-stack
+    cards:
+      - type: custom:tesla-style-solar-power-card
+        show_w_not_kw: 1
+        name: Current state
+        generation_to_grid_entity: sensor.feedin_power
+        generation_to_house_entity: sensor.load_power
+        generation_to_battery_entity: sensor.zero_power
+        battery_to_house_entity: sensor.zero_power
+        appliance1_consumption_entity: sensor.demo_heater_power
+        house_entity: sensor.load_power
+        grid_entity: sensor.feedin_power
+        generation_entity: sensor.inverter_power
+        battery_entity: sensor.demo_heater_power
+        grid_icon: mdi:transmission-tower
+        generation_icon: mdi:solar-panel-large
+        house_icon: mdi:home
+        battery_icon: mdi:battery
+        appliance1_icon: mdi:server
+        appliance2_icon: mdi:server
+  - type: horizontal-stack
+    cards:
+      - type: custom:apexcharts-card
+        header:
+          show: true
+          title: Proportion
+          show_states: false
+          colorize_states: true
+        series:
+          - entity: sensor.exported_energy_daily
+          - entity: sensor.selfuse_energy_daily
+        span:
+          end: day
+        chart_type: donut
+type: vertical-stack
