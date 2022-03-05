@@ -2,7 +2,9 @@
 
 This folder is used to store the Yaml file in the tutorial about how to integrate IAMMETER product in home assistant.
 
+Doc tutorial: https://www.iammeter.com/docs/homeassistant
 
+Discuss here : https://imeter.club/topic/189
 
 # Detailed tutorial: Integrate a smart 3 phase energy meter into Home Assistant
 
