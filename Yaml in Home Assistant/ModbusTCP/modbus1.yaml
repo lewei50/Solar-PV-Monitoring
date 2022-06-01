@@ -1,8 +1,8 @@
 # Example configuration.yaml entry for multiple TCP connections
 modbus:
-  - name: hub1
+  - name: hub11
     type: tcp
-    host: 192.168.15.38
+    host: 192.168.1.6
     port: 502
     sensors:
       - name: Modbus_Voltage
@@ -51,7 +51,7 @@ modbus:
         count: 2
         scale: 0.00125
         offset: 0
-        precision: 2
+        precision: 3
         data_type: uint32
       - name: Modbus_ExportGrid
         slave: 1
@@ -61,19 +61,7 @@ modbus:
         device_class: energy
         state_class: total_increasing
         count: 2
-        scale: 0.00125
+        scale: 0.0003125
         offset: 0
-        precision: 2
+        precision: 3
         data_type: uint32
-      - name: Modbus_PF
-        slave: 1
-        address: 8
-        input_type: holding
-        #unit_of_measurement: '%'
-        device_class: power_factor
-        state_class: measurement
-        count: 1
-        scale: 0.001
-        offset: 0
-        precision: 2
-        data_type: uint16
