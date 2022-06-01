@@ -1,0 +1,79 @@
+# Example configuration.yaml entry for multiple TCP connections
+modbus:
+  - name: hub1
+    type: tcp
+    host: 192.168.15.38
+    port: 502
+    sensors:
+      - name: Modbus_Voltage
+        slave: 1
+        address: 0
+        input_type: holding
+        unit_of_measurement: V
+        device_class: voltage
+        state_class: measurement
+        count: 1
+        scale: 0.01
+        offset: 0
+        precision: 1
+        data_type: uint16
+      - name: Modbus_Current
+        slave: 1
+        address: 1
+        input_type: holding
+        unit_of_measurement: A
+        device_class: current
+        state_class: measurement
+        count: 1
+        scale: 0.01
+        offset: 0
+        precision: 1
+        data_type: uint16
+      - name: Modbus_Power
+        slave: 1
+        address: 2
+        input_type: holding
+        unit_of_measurement: W
+        device_class: power
+        state_class: measurement
+        count: 2
+        scale: 1
+        offset: 0
+        precision: 0
+        data_type: int32
+      - name: Modbus_ImportEnergy
+        slave: 1
+        address: 4
+        input_type: holding
+        unit_of_measurement: kWh
+        device_class: energy
+        state_class: total_increasing
+        count: 2
+        scale: 0.00125
+        offset: 0
+        precision: 2
+        data_type: uint32
+      - name: Modbus_ExportGrid
+        slave: 1
+        address: 6
+        input_type: holding
+        unit_of_measurement: kWh
+        device_class: energy
+        state_class: total_increasing
+        count: 2
+        scale: 0.00125
+        offset: 0
+        precision: 2
+        data_type: uint32
+      - name: Modbus_PF
+        slave: 1
+        address: 8
+        input_type: holding
+        #unit_of_measurement: '%'
+        device_class: power_factor
+        state_class: measurement
+        count: 1
+        scale: 0.001
+        offset: 0
+        precision: 2
+        data_type: uint16
