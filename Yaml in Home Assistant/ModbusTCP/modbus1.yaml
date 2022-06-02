@@ -49,7 +49,7 @@ modbus:
         device_class: energy
         state_class: total_increasing
         count: 2
-        scale: 0.00125
+        scale: 0.0003125
         offset: 0
         precision: 3
         data_type: uint32
