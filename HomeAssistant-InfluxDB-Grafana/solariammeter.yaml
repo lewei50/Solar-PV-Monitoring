@@ -11,7 +11,7 @@ sensor:
         value_template: "{{ states('sensor.metert_power_a') }}"   
       feedin_power:
         unit_of_measurement: 'W'
-        value_template: "{{ -states('sensor.metert_power_b') }}"
+        value_template: "{{ states('sensor.metert_power_b') | float * (-1.0) }}"
       load_power:
         unit_of_measurement: 'W'
         value_template: "{{ states('sensor.metert_power_a')|float + states('sensor.metert_power_b')|float }}" 
