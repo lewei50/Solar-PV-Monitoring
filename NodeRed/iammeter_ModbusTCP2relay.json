@@ -1,0 +1,1128 @@
+[
+    {
+        "id": "1da05dbd6ccb1bb2",
+        "type": "tab",
+        "label": "iammeter_modbusTCP",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "81c8bacffccd3e37",
+        "type": "function",
+        "z": "1da05dbd6ccb1bb2",
+        "name": "",
+        "func": "var i;\nvar int32 = new Int32Array(4);\n//Phase A\ni = 0;\nVoltage_A = msg.payload[i*10+0]/100;\nCurrent_A = msg.payload[i*10+1]/100;\nint32[i] = msg.payload[i*10+2]*65536 + msg.payload[i*10+3];\nPower_A = int32[i];\nImportEnergy_A = (msg.payload[i*10+4]*65536 + msg.payload[i*10+5])/800;\nExportGrid_A = (msg.payload[i*10+6]*65536 + msg.payload[i*10+7])/800;\n//Frequency = msg.payload[30]/100;\nPF_A = msg.payload[i*10+8]/1000;\n\n//Phase B\ni = 1;\nVoltage_B = msg.payload[i*10+0]/100;\nCurrent_B = msg.payload[i*10+1]/100;\nint32[i] = msg.payload[i*10+2]*65536 + msg.payload[i*10+3];\nPower_B = int32[i];\nImportEnergy_B = (msg.payload[i*10+4]*65536 + msg.payload[i*10+5])/800;\nExportGrid_B = (msg.payload[i*10+6]*65536 + msg.payload[i*10+7])/800;\n//Frequency = msg.payload[30]/100;\nPF_B = msg.payload[i*10+8]/1000;\n\n//Phase C\ni = 2;\nVoltage_C = msg.payload[i*10+0]/100;\nCurrent_C = msg.payload[i*10+1]/100;\nint32[i] = msg.payload[i*10+2]*65536 + msg.payload[i*10+3];\nPower_C = int32[i];\nImportEnergy_C = (msg.payload[i*10+4]*65536 + msg.payload[i*10+5])/800;\nExportGrid_C = (msg.payload[i*10+6]*65536 + msg.payload[i*10+7])/800;\n//Frequency = msg.payload[30]/100;\nPF_C = msg.payload[i*10+8]/1000;\n\n//Phase ALL\ni = 3;\nFrequency = msg.payload[i*10+0]/100;\nint32[i] = msg.payload[i*10+2]*65536 + msg.payload[i*10+3];\nPower_SUM = int32[i];\nImportEnergy_SUM = (msg.payload[i*10+4]*65536 + msg.payload[i*10+5])/800;\nExportGrid_SUM = (msg.payload[i*10+6]*65536 + msg.payload[i*10+7])/800;\n\nvar meter_data = {\n    \"SN\": \"12345678\",\n    \"Datas\": [\n        [\n            Voltage_A,\n            Current_A,\n            Power_A,\n            ImportEnergy_A.toFixed(2),\n            ExportGrid_A.toFixed(2),\n            Frequency,\n            PF_A\n        ],\n        [\n            Voltage_B,\n            Current_B,\n            Power_B,\n            ImportEnergy_B.toFixed(2),\n            ExportGrid_B.toFixed(2),\n            Frequency,\n            PF_B\n        ],\n        [\n            Voltage_C,\n            Current_C,\n            Power_C,\n            ImportEnergy_C.toFixed(2),\n            ExportGrid_C.toFixed(2),\n            Frequency,\n            PF_C\n        ],\n        [\n            Power_SUM,\n            ImportEnergy_SUM.toFixed(2),\n            ExportGrid_SUM.toFixed(2)\n        ]\n    ]\n}\n\nmsg.payload = meter_data\n//msg.all = payload\n\nreturn msg;\n\n\n\n\n//num=msg.payload[0];\n//\tif(num>0xffff/2){\n//\t\tvar a=~0xffff;\n//\t\tnum=num|a;\n//\t}\n//msg.payload=(num*0.01).toFixed(2);\n//return msg;\n\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 370,
+        "y": 300,
+        "wires": [
+            [
+                "b7e58ee42aaab383",
+                "9c5f0e19285869e6",
+                "3ce5cfc3e3271d67",
+                "a2560e2e4825a9ea",
+                "6c3b0d39b69a19bd"
+            ]
+        ]
+    },
+    {
+        "id": "b7e58ee42aaab383",
+        "type": "debug",
+        "z": "1da05dbd6ccb1bb2",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 590,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "9c5f0e19285869e6",
+        "type": "function",
+        "z": "1da05dbd6ccb1bb2",
+        "name": "EMW3080TA",
+        "func": "let dataArr = msg.payload.Datas[0];\n\nlet result = [];\nfor(var item in dataArr) {\n    result.push({\n        payload: dataArr[item]\n    });\n}\n\nreturn result;",
+        "outputs": 7,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 590,
+        "y": 260,
+        "wires": [
+            [
+                "a156bbcbac04a576"
+            ],
+            [
+                "4acb2746df40c67e"
+            ],
+            [
+                "9bee27826fd92640"
+            ],
+            [
+                "6fbd293c02075ced"
+            ],
+            [
+                "90e59a40ea35d214"
+            ],
+            [
+                "83442b765c6a0903"
+            ],
+            [
+                "2692b9ada8075feb"
+            ]
+        ]
+    },
+    {
+        "id": "3ce5cfc3e3271d67",
+        "type": "function",
+        "z": "1da05dbd6ccb1bb2",
+        "name": "EMW3080TB",
+        "func": "let dataArr = msg.payload.Datas[1];\n\nlet result = [];\nfor(var item in dataArr) {\n    result.push({\n        payload: dataArr[item]\n    });\n}\n\nreturn result;",
+        "outputs": 7,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 590,
+        "y": 540,
+        "wires": [
+            [
+                "c2475229b672fb44"
+            ],
+            [
+                "1cc4ec274ba5b8cf"
+            ],
+            [
+                "2fe4eb8e6fbc2b0d"
+            ],
+            [
+                "11a9d30c088e6f8b"
+            ],
+            [
+                "9708c7aa4b55fca6"
+            ],
+            [
+                "b479dc12dbbaf434"
+            ],
+            [
+                "d5e3974601ba23cb"
+            ]
+        ]
+    },
+    {
+        "id": "a2560e2e4825a9ea",
+        "type": "function",
+        "z": "1da05dbd6ccb1bb2",
+        "name": "EMW3080TC",
+        "func": "let dataArr = msg.payload.Datas[2];\n\nlet result = [];\nfor(var item in dataArr) {\n    result.push({\n        payload: dataArr[item]\n    });\n}\n\nreturn result;",
+        "outputs": 7,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 600,
+        "y": 840,
+        "wires": [
+            [
+                "3a4eb5e3af6e8cbe"
+            ],
+            [
+                "ad1dcd4ae787a64c"
+            ],
+            [
+                "5c5819ec30a1996c"
+            ],
+            [
+                "c3a35b8ecfac1101"
+            ],
+            [
+                "dba47f7b3f5b1f85"
+            ],
+            [
+                "78cf08c6a4cfcae7"
+            ],
+            [
+                "e740d27f9dcb9b59"
+            ]
+        ]
+    },
+    {
+        "id": "a156bbcbac04a576",
+        "type": "ui_text",
+        "z": "1da05dbd6ccb1bb2",
+        "group": "0bf9ccee4e243bdd",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "name": "voltageA",
+        "label": "voltageA",
+        "format": "{{msg.payload}}V",
+        "layout": "row-spread",
+        "className": "",
+        "x": 840,
+        "y": 120,
+        "wires": []
+    },
+    {
+        "id": "4acb2746df40c67e",
+        "type": "ui_text",
+        "z": "1da05dbd6ccb1bb2",
+        "group": "0bf9ccee4e243bdd",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "name": "currentA",
+        "label": "currentA",
+        "format": "{{msg.payload}}A",
+        "layout": "row-spread",
+        "className": "",
+        "x": 840,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "9bee27826fd92640",
+        "type": "ui_text",
+        "z": "1da05dbd6ccb1bb2",
+        "group": "0bf9ccee4e243bdd",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "name": "powerA",
+        "label": "powerA",
+        "format": "{{msg.payload}}W",
+        "layout": "row-spread",
+        "className": "",
+        "x": 840,
+        "y": 200,
+        "wires": []
+    },
+    {
+        "id": "6fbd293c02075ced",
+        "type": "ui_text",
+        "z": "1da05dbd6ccb1bb2",
+        "group": "0bf9ccee4e243bdd",
+        "order": 4,
+        "width": 0,
+        "height": 0,
+        "name": "importenergyA",
+        "label": "importenergyA",
+        "format": "{{msg.payload}}kWh",
+        "layout": "row-spread",
+        "className": "",
+        "x": 860,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "90e59a40ea35d214",
+        "type": "ui_text",
+        "z": "1da05dbd6ccb1bb2",
+        "group": "0bf9ccee4e243bdd",
+        "order": 5,
+        "width": 0,
+        "height": 0,
+        "name": "exportgridA",
+        "label": "exportgridA",
+        "format": "{{msg.payload}}kWh",
+        "layout": "row-spread",
+        "className": "",
+        "x": 850,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "c2475229b672fb44",
+        "type": "ui_text",
+        "z": "1da05dbd6ccb1bb2",
+        "group": "ac7fee884854cdb3",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "name": "voltageB",
+        "label": "voltageB",
+        "format": "{{msg.payload}}V",
+        "layout": "row-spread",
+        "className": "",
+        "x": 835,
+        "y": 431,
+        "wires": []
+    },
+    {
+        "id": "1cc4ec274ba5b8cf",
+        "type": "ui_text",
+        "z": "1da05dbd6ccb1bb2",
+        "group": "ac7fee884854cdb3",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "name": "currentB",
+        "label": "currentB",
+        "format": "{{msg.payload}}A",
+        "layout": "row-spread",
+        "className": "",
+        "x": 836.5,
+        "y": 470,
+        "wires": []
+    },
+    {
+        "id": "2fe4eb8e6fbc2b0d",
+        "type": "ui_text",
+        "z": "1da05dbd6ccb1bb2",
+        "group": "ac7fee884854cdb3",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "name": "powerB",
+        "label": "powerB",
+        "format": "{{msg.payload}}W",
+        "layout": "row-spread",
+        "className": "",
+        "x": 834.5,
+        "y": 507,
+        "wires": []
+    },
+    {
+        "id": "11a9d30c088e6f8b",
+        "type": "ui_text",
+        "z": "1da05dbd6ccb1bb2",
+        "group": "ac7fee884854cdb3",
+        "order": 4,
+        "width": 0,
+        "height": 0,
+        "name": "importenergyB",
+        "label": "importenergyB",
+        "format": "{{msg.payload}}kWh",
+        "layout": "row-spread",
+        "className": "",
+        "x": 854.5,
+        "y": 541,
+        "wires": []
+    },
+    {
+        "id": "9708c7aa4b55fca6",
+        "type": "ui_text",
+        "z": "1da05dbd6ccb1bb2",
+        "group": "ac7fee884854cdb3",
+        "order": 5,
+        "width": 0,
+        "height": 0,
+        "name": "exportgridB",
+        "label": "exportgridB",
+        "format": "{{msg.payload}}kWh",
+        "layout": "row-spread",
+        "className": "",
+        "x": 845.5,
+        "y": 580,
+        "wires": []
+    },
+    {
+        "id": "3a4eb5e3af6e8cbe",
+        "type": "ui_text",
+        "z": "1da05dbd6ccb1bb2",
+        "group": "eec8c707bba8afda",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "name": "voltageC",
+        "label": "voltageC",
+        "format": "{{msg.payload}}V",
+        "layout": "row-spread",
+        "className": "",
+        "x": 840,
+        "y": 740,
+        "wires": []
+    },
+    {
+        "id": "ad1dcd4ae787a64c",
+        "type": "ui_text",
+        "z": "1da05dbd6ccb1bb2",
+        "group": "eec8c707bba8afda",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "name": "currentC",
+        "label": "currentC",
+        "format": "{{msg.payload}}A",
+        "layout": "row-spread",
+        "className": "",
+        "x": 841.5,
+        "y": 779,
+        "wires": []
+    },
+    {
+        "id": "5c5819ec30a1996c",
+        "type": "ui_text",
+        "z": "1da05dbd6ccb1bb2",
+        "group": "eec8c707bba8afda",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "name": "powerC",
+        "label": "powerC",
+        "format": "{{msg.payload}}W",
+        "layout": "row-spread",
+        "className": "",
+        "x": 839.5,
+        "y": 816,
+        "wires": []
+    },
+    {
+        "id": "c3a35b8ecfac1101",
+        "type": "ui_text",
+        "z": "1da05dbd6ccb1bb2",
+        "group": "eec8c707bba8afda",
+        "order": 4,
+        "width": 0,
+        "height": 0,
+        "name": "importenergyC",
+        "label": "importenergyC",
+        "format": "{{msg.payload}}kWh",
+        "layout": "row-spread",
+        "className": "",
+        "x": 859.5,
+        "y": 850,
+        "wires": []
+    },
+    {
+        "id": "dba47f7b3f5b1f85",
+        "type": "ui_text",
+        "z": "1da05dbd6ccb1bb2",
+        "group": "eec8c707bba8afda",
+        "order": 5,
+        "width": 0,
+        "height": 0,
+        "name": "exportgridC",
+        "label": "exportgridC",
+        "format": "{{msg.payload}}kWh",
+        "layout": "row-spread",
+        "className": "",
+        "x": 850.5,
+        "y": 889,
+        "wires": []
+    },
+    {
+        "id": "83442b765c6a0903",
+        "type": "ui_text",
+        "z": "1da05dbd6ccb1bb2",
+        "group": "0bf9ccee4e243bdd",
+        "order": 6,
+        "width": 0,
+        "height": 0,
+        "name": "Frequency",
+        "label": "Frequency",
+        "format": "{{msg.payload}}Hz",
+        "layout": "row-spread",
+        "className": "",
+        "x": 850,
+        "y": 320,
+        "wires": []
+    },
+    {
+        "id": "2692b9ada8075feb",
+        "type": "ui_text",
+        "z": "1da05dbd6ccb1bb2",
+        "group": "0bf9ccee4e243bdd",
+        "order": 7,
+        "width": 0,
+        "height": 0,
+        "name": "PF_A",
+        "label": "PF_A",
+        "format": "{{msg.payload}}",
+        "layout": "row-spread",
+        "className": "",
+        "x": 830,
+        "y": 360,
+        "wires": []
+    },
+    {
+        "id": "b479dc12dbbaf434",
+        "type": "ui_text",
+        "z": "1da05dbd6ccb1bb2",
+        "group": "ac7fee884854cdb3",
+        "order": 6,
+        "width": 0,
+        "height": 0,
+        "name": "Frequency",
+        "label": "Frequency",
+        "format": "{{msg.payload}}Hz",
+        "layout": "row-spread",
+        "className": "",
+        "x": 850,
+        "y": 620,
+        "wires": []
+    },
+    {
+        "id": "d5e3974601ba23cb",
+        "type": "ui_text",
+        "z": "1da05dbd6ccb1bb2",
+        "group": "ac7fee884854cdb3",
+        "order": 7,
+        "width": 0,
+        "height": 0,
+        "name": "PF_B",
+        "label": "PF_B",
+        "format": "{{msg.payload}}",
+        "layout": "row-spread",
+        "className": "",
+        "x": 830,
+        "y": 660,
+        "wires": []
+    },
+    {
+        "id": "78cf08c6a4cfcae7",
+        "type": "ui_text",
+        "z": "1da05dbd6ccb1bb2",
+        "group": "eec8c707bba8afda",
+        "order": 6,
+        "width": 0,
+        "height": 0,
+        "name": "Frequency",
+        "label": "Frequency",
+        "format": "{{msg.payload}}Hz",
+        "layout": "row-spread",
+        "className": "",
+        "x": 853,
+        "y": 930,
+        "wires": []
+    },
+    {
+        "id": "e740d27f9dcb9b59",
+        "type": "ui_text",
+        "z": "1da05dbd6ccb1bb2",
+        "group": "eec8c707bba8afda",
+        "order": 7,
+        "width": 0,
+        "height": 0,
+        "name": "PF_C",
+        "label": "PF_C",
+        "format": "{{msg.payload}}",
+        "layout": "row-spread",
+        "className": "",
+        "x": 833,
+        "y": 970,
+        "wires": []
+    },
+    {
+        "id": "6c3b0d39b69a19bd",
+        "type": "function",
+        "z": "1da05dbd6ccb1bb2",
+        "name": "EMW3080TALL",
+        "func": "let dataArr = msg.payload.Datas[3];\n\nlet result = [];\nfor(var item in dataArr) {\n    result.push({\n        payload: dataArr[item]\n    });\n}\n\nreturn result;",
+        "outputs": 3,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 600,
+        "y": 1060,
+        "wires": [
+            [
+                "6e7a17131c6d9582"
+            ],
+            [
+                "07ab02e14fd5dd80"
+            ],
+            [
+                "970f54ba8e885038"
+            ]
+        ]
+    },
+    {
+        "id": "6e7a17131c6d9582",
+        "type": "ui_text",
+        "z": "1da05dbd6ccb1bb2",
+        "group": "dfe97582c925a9ae",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "name": "Power_SUM",
+        "label": "Power_SUM",
+        "format": "{{msg.payload}}W",
+        "layout": "row-spread",
+        "className": "",
+        "x": 849.5,
+        "y": 1036,
+        "wires": []
+    },
+    {
+        "id": "07ab02e14fd5dd80",
+        "type": "ui_text",
+        "z": "1da05dbd6ccb1bb2",
+        "group": "dfe97582c925a9ae",
+        "order": 4,
+        "width": 0,
+        "height": 0,
+        "name": "ImportEnergy_SUM",
+        "label": "ImportEnergy_SUM",
+        "format": "{{msg.payload}}kWh",
+        "layout": "row-spread",
+        "className": "",
+        "x": 869.5,
+        "y": 1070,
+        "wires": []
+    },
+    {
+        "id": "970f54ba8e885038",
+        "type": "ui_text",
+        "z": "1da05dbd6ccb1bb2",
+        "group": "dfe97582c925a9ae",
+        "order": 5,
+        "width": 0,
+        "height": 0,
+        "name": "ExportGrid_SUM",
+        "label": "ExportGrid_SUM",
+        "format": "{{msg.payload}}kWh",
+        "layout": "row-spread",
+        "className": "",
+        "x": 870.5,
+        "y": 1109,
+        "wires": []
+    },
+    {
+        "id": "94b76b25757c5535",
+        "type": "function",
+        "z": "1da05dbd6ccb1bb2",
+        "name": "WEM3080",
+        "func": "let dataArr = msg.payload.Data;\n\nlet result = [];\nfor(var item in dataArr) {\n    result.push({\n        payload: dataArr[item]\n    });\n}\n\nreturn result;",
+        "outputs": 5,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 590,
+        "y": 1280,
+        "wires": [
+            [
+                "aa2c2d6c3122731d"
+            ],
+            [
+                "aa0c6f2ff98c83df"
+            ],
+            [
+                "85212f3d6b6677f3",
+                "e66e3e820463f8e4"
+            ],
+            [
+                "ebed44b2be23cdd4"
+            ],
+            [
+                "83d6cf81b881e411"
+            ]
+        ]
+    },
+    {
+        "id": "d91cbad1074464a2",
+        "type": "function",
+        "z": "1da05dbd6ccb1bb2",
+        "name": "",
+        "func": "var i;\nvar int32 = new Int32Array(4);\n//Phase\ni = 0;\nVoltage = msg.payload[i*10+0]/100;\nCurrent = msg.payload[i*10+1]/100;\nint32[i] = msg.payload[i*10+2]*65536 + msg.payload[i*10+3];\nPower = int32[i];\nImportEnergy = (msg.payload[i*10+4]*65536 + msg.payload[i*10+5])/3200;\nExportGrid = (msg.payload[i*10+6]*65536 + msg.payload[i*10+7])/3200;\n\nvar meter_data = {\n    \"SN\": \"12345678\",\n    \"Data\": [\n        Voltage,\n        Current,\n        Power,\n        ImportEnergy.toFixed(2),\n        ExportGrid.toFixed(2),\n    ]\n}\n\nmsg.payload = meter_data\n//msg.all = payload\n\nreturn msg;\n\n\n\n\n//num=msg.payload[0];\n//\tif(num>0xffff/2){\n//\t\tvar a=~0xffff;\n//\t\tnum=num|a;\n//\t}\n//msg.payload=(num*0.01).toFixed(2);\n//return msg;\n\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 370,
+        "y": 1280,
+        "wires": [
+            [
+                "94b76b25757c5535"
+            ]
+        ]
+    },
+    {
+        "id": "aa2c2d6c3122731d",
+        "type": "ui_text",
+        "z": "1da05dbd6ccb1bb2",
+        "group": "85891764b4847553",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "name": "voltage",
+        "label": "voltage",
+        "format": "{{msg.payload}}V",
+        "layout": "row-spread",
+        "className": "",
+        "x": 840,
+        "y": 1200,
+        "wires": []
+    },
+    {
+        "id": "aa0c6f2ff98c83df",
+        "type": "ui_text",
+        "z": "1da05dbd6ccb1bb2",
+        "group": "85891764b4847553",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "name": "current",
+        "label": "current",
+        "format": "{{msg.payload}}A",
+        "layout": "row-spread",
+        "className": "",
+        "x": 840,
+        "y": 1240,
+        "wires": []
+    },
+    {
+        "id": "85212f3d6b6677f3",
+        "type": "ui_text",
+        "z": "1da05dbd6ccb1bb2",
+        "group": "85891764b4847553",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "name": "power",
+        "label": "power",
+        "format": "{{msg.payload}}W",
+        "layout": "row-spread",
+        "className": "",
+        "x": 830,
+        "y": 1320,
+        "wires": []
+    },
+    {
+        "id": "ebed44b2be23cdd4",
+        "type": "ui_text",
+        "z": "1da05dbd6ccb1bb2",
+        "group": "85891764b4847553",
+        "order": 4,
+        "width": 0,
+        "height": 0,
+        "name": "importenergy",
+        "label": "importenergy",
+        "format": "{{msg.payload}}kWh",
+        "layout": "row-spread",
+        "className": "",
+        "x": 850,
+        "y": 1360,
+        "wires": []
+    },
+    {
+        "id": "83d6cf81b881e411",
+        "type": "ui_text",
+        "z": "1da05dbd6ccb1bb2",
+        "group": "85891764b4847553",
+        "order": 5,
+        "width": 0,
+        "height": 0,
+        "name": "exportgrid",
+        "label": "exportgrid",
+        "format": "{{msg.payload}}kWh",
+        "layout": "row-spread",
+        "className": "",
+        "x": 840,
+        "y": 1400,
+        "wires": []
+    },
+    {
+        "id": "805b43b2b68727ba",
+        "type": "debug",
+        "z": "1da05dbd6ccb1bb2",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 379,
+        "y": 1339.9999389648438,
+        "wires": []
+    },
+    {
+        "id": "7c881f9df517b06e",
+        "type": "comment",
+        "z": "1da05dbd6ccb1bb2",
+        "name": "3 phase energy meter",
+        "info": "",
+        "x": 200,
+        "y": 260,
+        "wires": []
+    },
+    {
+        "id": "45800e38fa4af904",
+        "type": "comment",
+        "z": "1da05dbd6ccb1bb2",
+        "name": "single phase energy meter",
+        "info": "",
+        "x": 210,
+        "y": 1240,
+        "wires": []
+    },
+    {
+        "id": "9ed26729df45ec11",
+        "type": "modbus-read",
+        "z": "1da05dbd6ccb1bb2",
+        "name": "WEM3080T",
+        "topic": "",
+        "showStatusActivities": false,
+        "logIOActivities": false,
+        "showErrors": false,
+        "unitid": "1",
+        "dataType": "HoldingRegister",
+        "adr": "0",
+        "quantity": "38",
+        "rate": "10",
+        "rateUnit": "s",
+        "delayOnStart": false,
+        "startDelayTime": "",
+        "server": "3f0136f3.cc3b7a",
+        "useIOFile": false,
+        "ioFile": "",
+        "useIOForPayload": false,
+        "emptyMsgOnFail": false,
+        "x": 170,
+        "y": 300,
+        "wires": [
+            [
+                "81c8bacffccd3e37"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "aa8fe0365fe6db1b",
+        "type": "modbus-read",
+        "z": "1da05dbd6ccb1bb2",
+        "name": "WEM3080",
+        "topic": "",
+        "showStatusActivities": false,
+        "logIOActivities": false,
+        "showErrors": false,
+        "unitid": "1",
+        "dataType": "HoldingRegister",
+        "adr": "0",
+        "quantity": "8",
+        "rate": "10",
+        "rateUnit": "s",
+        "delayOnStart": false,
+        "startDelayTime": "",
+        "server": "2a0686e8f1f7a12d",
+        "useIOFile": false,
+        "ioFile": "",
+        "useIOForPayload": false,
+        "emptyMsgOnFail": false,
+        "x": 160,
+        "y": 1280,
+        "wires": [
+            [
+                "d91cbad1074464a2"
+            ],
+            [
+                "805b43b2b68727ba"
+            ]
+        ]
+    },
+    {
+        "id": "e66e3e820463f8e4",
+        "type": "function",
+        "z": "1da05dbd6ccb1bb2",
+        "name": "control",
+        "func": "tmp = msg.payload;\nif(tmp >= \"1000\"){\n    msg.payload = \"on\";\n    return msg;\n}\nif(tmp <= \"500\"){\n    msg.payload = \"off\";\n    return msg;\n}\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 830,
+        "y": 1280,
+        "wires": [
+            [
+                "702f39de484889e6"
+            ]
+        ]
+    },
+    {
+        "id": "702f39de484889e6",
+        "type": "Tasmota Switch",
+        "z": "1da05dbd6ccb1bb2",
+        "broker": "a780e79b63a63cf5",
+        "device": "tasmota_8476DD",
+        "name": "",
+        "outputs": 1,
+        "uidisabler": false,
+        "fullTopic": "",
+        "cmndPrefix": "",
+        "statPrefix": "",
+        "telePrefix": "",
+        "qos": 1,
+        "retain": false,
+        "x": 1170,
+        "y": 1280,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "86dae87f719f7903",
+        "type": "Tasmota Generic",
+        "z": "1da05dbd6ccb1bb2",
+        "broker": "a780e79b63a63cf5",
+        "device": "tasmota_8476DD",
+        "name": "",
+        "outputs": 1,
+        "uidisabler": false,
+        "fullTopic": "",
+        "cmndPrefix": "",
+        "statPrefix": "",
+        "telePrefix": "",
+        "qos": 1,
+        "retain": false,
+        "subscribeToStat": false,
+        "subscribeToTele": false,
+        "x": 1170,
+        "y": 1360,
+        "wires": [
+            [
+                "87cf21728f69a8ec",
+                "87b31cd639f73ece"
+            ]
+        ]
+    },
+    {
+        "id": "87cf21728f69a8ec",
+        "type": "debug",
+        "z": "1da05dbd6ccb1bb2",
+        "name": "debug 1",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1340,
+        "y": 1360,
+        "wires": []
+    },
+    {
+        "id": "d6caef2b9ac2d8f8",
+        "type": "inject",
+        "z": "1da05dbd6ccb1bb2",
+        "name": "on",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "on",
+        "payloadType": "str",
+        "x": 1010,
+        "y": 1240,
+        "wires": [
+            [
+                "702f39de484889e6"
+            ]
+        ]
+    },
+    {
+        "id": "7494aea286a07fe9",
+        "type": "inject",
+        "z": "1da05dbd6ccb1bb2",
+        "name": "off",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "off",
+        "payloadType": "str",
+        "x": 1010,
+        "y": 1320,
+        "wires": [
+            [
+                "702f39de484889e6"
+            ]
+        ]
+    },
+    {
+        "id": "87b31cd639f73ece",
+        "type": "ui_switch",
+        "z": "1da05dbd6ccb1bb2",
+        "name": "",
+        "label": "switch",
+        "tooltip": "",
+        "group": "85891764b4847553",
+        "order": 7,
+        "width": 0,
+        "height": 0,
+        "passthru": true,
+        "decouple": "false",
+        "topic": "topic",
+        "topicType": "msg",
+        "style": "",
+        "onvalue": "{\"POWER\":\"ON\"}",
+        "onvalueType": "json",
+        "onicon": "",
+        "oncolor": "",
+        "offvalue": "{\"POWER\":\"OFF\"}",
+        "offvalueType": "json",
+        "officon": "",
+        "offcolor": "",
+        "animate": false,
+        "className": "",
+        "x": 1290,
+        "y": 1440,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "0bf9ccee4e243bdd",
+        "type": "ui_group",
+        "name": "A",
+        "tab": "9d6fec5026e16868",
+        "order": 1,
+        "disp": true,
+        "width": "6",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "ac7fee884854cdb3",
+        "type": "ui_group",
+        "name": "B",
+        "tab": "9d6fec5026e16868",
+        "order": 2,
+        "disp": true,
+        "width": "6",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "eec8c707bba8afda",
+        "type": "ui_group",
+        "name": "C",
+        "tab": "9d6fec5026e16868",
+        "order": 3,
+        "disp": true,
+        "width": "6",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "dfe97582c925a9ae",
+        "type": "ui_group",
+        "name": "ALL",
+        "tab": "9d6fec5026e16868",
+        "order": 4,
+        "disp": true,
+        "width": "6",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "85891764b4847553",
+        "type": "ui_group",
+        "name": "WEM3080",
+        "tab": "9d6fec5026e16868",
+        "order": 5,
+        "disp": true,
+        "width": "6",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "3f0136f3.cc3b7a",
+        "type": "modbus-client",
+        "name": "meter_modbusTCP",
+        "clienttype": "tcp",
+        "bufferCommands": true,
+        "stateLogEnabled": true,
+        "queueLogEnabled": true,
+        "tcpHost": "192.168.15.38",
+        "tcpPort": "502",
+        "tcpType": "DEFAULT",
+        "serialPort": "/dev/ttyUSB0",
+        "serialType": "RTU",
+        "serialBaudrate": "9600",
+        "serialDatabits": "8",
+        "serialStopbits": "1",
+        "serialParity": "none",
+        "serialConnectionDelay": "1000",
+        "unit_id": "34",
+        "commandDelay": "1",
+        "clientTimeout": "1000",
+        "reconnectOnTimeout": true,
+        "reconnectTimeout": "1000",
+        "parallelUnitIdsAllowed": true
+    },
+    {
+        "id": "2a0686e8f1f7a12d",
+        "type": "modbus-client",
+        "name": "WEM3080_ModebusTCP",
+        "clienttype": "tcp",
+        "bufferCommands": true,
+        "stateLogEnabled": false,
+        "queueLogEnabled": false,
+        "tcpHost": "192.168.15.33",
+        "tcpPort": "502",
+        "tcpType": "DEFAULT",
+        "serialPort": "/dev/ttyUSB",
+        "serialType": "RTU-BUFFERD",
+        "serialBaudrate": "9600",
+        "serialDatabits": "8",
+        "serialStopbits": "1",
+        "serialParity": "none",
+        "serialConnectionDelay": "100",
+        "serialAsciiResponseStartDelimiter": "",
+        "unit_id": "1",
+        "commandDelay": "1",
+        "clientTimeout": "1000",
+        "reconnectOnTimeout": true,
+        "reconnectTimeout": "2000",
+        "parallelUnitIdsAllowed": true
+    },
+    {
+        "id": "a780e79b63a63cf5",
+        "type": "tasmota-mqtt-broker",
+        "name": "",
+        "broker": "localhost",
+        "port": "1883",
+        "clientid": "",
+        "usetls": false,
+        "keepalive": "60",
+        "cleansession": true
+    },
+    {
+        "id": "9d6fec5026e16868",
+        "type": "ui_tab",
+        "name": "ModbusTCP",
+        "icon": "dashboard",
+        "order": 1,
+        "disabled": false,
+        "hidden": false
+    }
+]
