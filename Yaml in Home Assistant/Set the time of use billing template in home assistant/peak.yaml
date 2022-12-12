@@ -1,0 +1,155 @@
+sensor:
+  - platform: template
+    sensors:
+      #----peak----# 
+      ## https://community.home-assistant.io/t/scraping-alectra-utilities-power-website/304234
+      energy_price_offpeak:
+        friendly_name: "Off-peak Price"
+        value_template: "0.3"
+        icon_template: mdi:speedometer-slow
+        unit_of_measurement: "$"
+
+      energy_price_midpeak:
+        friendly_name: "Mid-peak Price"
+        value_template: "0.48"
+        icon_template: mdi:speedometer-medium
+        unit_of_measurement: '$'
+
+      energy_price_onpeak:
+        friendly_name: "On-peak Price"
+        value_template: "0.6"
+        icon_template: mdi:speedometer
+        unit_of_measurement: '$'
+
+      # Looks at scraped string and finds the three values that are "0.###" and picks the right one for the current peak. This block is under platform: template
+      energy_price_current: 
+        friendly_name: "Current peak Price"
+        value_template: >-
+          {% if is_state('select.daily_energy', 'offpeak') %}
+            {{(states('sensor.energy_price_offpeak'))}}
+          {% elif is_state('select.daily_energy', 'midpeak') %}
+            {{(states('sensor.energy_price_midpeak'))}}
+          {% elif is_state('select.daily_energy', 'peak') %}
+            {{(states('sensor.energy_price_onpeak'))}}
+          {% else %}
+            0
+          {% endif %}
+        icon_template: >-
+          {% if is_state('select.daily_energy', 'offpeak') %}
+            mdi:speedometer-slow
+          {% elif is_state('select.daily_energy', 'midpeak') %}
+            mdi:speedometer-medium
+          {% elif is_state('select.daily_energy', 'peak') %}
+            mdi:speedometer
+          {% else %}
+            mdi:exclamation-thick
+          {% endif %}
+        unit_of_measurement: '$'
+
+      daily_energy_peak_money:
+        unit_of_measurement: '$'
+        value_template: "{{ ( states('sensor.daily_energy_peak')|float * states('sensor.energy_price_current')|float ) | round(2) }}"
+      daily_energy_midpeak_money:
+        unit_of_measurement: '$'
+        value_template: "{{ ( states('sensor.daily_energy_midpeak')|float * states('sensor.energy_price_current')|float ) | round(2) }}"
+      daily_energy_offpeak_money:
+        unit_of_measurement: '$'
+        value_template: "{{ ( states('sensor.daily_energy_offpeak')|float * states('sensor.energy_price_current')|float ) | round(2) }}"
+      monthly_energy_peak_money:
+        unit_of_measurement: '$'
+        value_template: "{{ ( states('sensor.monthly_energy_peak')|float * states('sensor.energy_price_current')|float ) | round(2) }}"
+      monthly_energy_midpeak_money:
+        unit_of_measurement: '$'
+        value_template: "{{ ( states('sensor.monthly_energy_midpeak')|float * states('sensor.energy_price_current')|float ) | round(2) }}"
+      monthly_energy_offpeak_money:
+        unit_of_measurement: '$'
+        value_template: "{{ ( states('sensor.monthly_energy_offpeak')|float * states('sensor.energy_price_current')|float ) | round(2) }}"
+      meter_energy_daily_money:
+        unit_of_measurement: '$'
+        value_template: "{{ (states('sensor.daily_energy_peak_money')) + (states('sensor.daily_energy_midpeak_money')) + (states('sensor.daily_energy_offpeak_money')) }}"
+      meter_energy_monthly_money:
+        unit_of_measurement: '$'
+        value_template: "{{ (states('sensor.monthly_energy_peak_money')) + (states('sensor.monthly_energy_midpeak_money')) + (states('sensor.monthly_energy_offpeak_money')) }}"
+
+utility_meter:
+  meter_energy_daily:
+    source: sensor.meter_importenergy
+    cycle: daily
+  meter_energy_monthly:
+    source: sensor.meter_importenergy
+    cycle: monthly
+
+  daily_energy:
+    source: sensor.meter_importenergy
+    name: Daily Energy
+    cycle: daily
+    tariffs:
+      - peak
+      - offpeak
+      - midpeak
+  monthly_energy:
+    source: sensor.meter_importenergy
+    name: Monthly Energy
+    cycle: monthly
+    tariffs:
+      - peak
+      - offpeak
+      - midpeak
+
+## time：
+## peak（9：00—11：30、14：00—16：30、19：00—21：00）、
+## midpeak（7：00—9：00、11：30—14：00、16：30—19：00、21：00—23：00）、
+## offpeak（23：00—Tomorrow7：00）。
+automation:
+  trigger:
+    - platform: time
+      at: "07:00:00"
+      variables:
+        tariff: "midpeak"
+    - platform: time
+      at: "09:00:00"
+      variables:
+        tariff: "peak"
+    - platform: time
+      at: "11:30:00"
+      variables:
+        tariff: "midpeak"
+    - platform: time
+      at: "14:00:00"
+      variables:
+        tariff: "peak"
+    - platform: time
+      at: "16:30:00"
+      variables:
+        tariff: "midpeak"
+    - platform: time
+      at: "19:00:00"
+      variables:
+        tariff: "peak"
+    - platform: time
+      at: "21:00:00"
+      variables:
+        tariff: "midpeak"
+    - platform: time
+      at: "23:00:00"
+      variables:
+        tariff: "offpeak"
+#  condition:
+#      condition: time
+#      weekday:
+#      - mon
+#      - tue
+#      - wed
+#      - thu
+#      - fri
+  action:
+    - service: select.select_option
+      target:
+        entity_id: select.daily_energy
+      data:
+        option: "{{ tariff }}"
+    - service: select.select_option
+      target:
+        entity_id: select.monthly_energy
+      data:
+        option: "{{ tariff }}"
