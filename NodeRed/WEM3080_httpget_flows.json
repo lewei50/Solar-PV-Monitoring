@@ -1,0 +1,881 @@
+[
+    {
+        "id": "d3cdff25.7e38",
+        "type": "tab",
+        "label": "IamMeter",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "d1a8ac7f.855a1",
+        "type": "inject",
+        "z": "d3cdff25.7e38",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 132,
+        "y": 333,
+        "wires": [
+            [
+                "e393add.ec73f5"
+            ]
+        ]
+    },
+    {
+        "id": "da96de90.da3b5",
+        "type": "debug",
+        "z": "d3cdff25.7e38",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "x": 634,
+        "y": 65,
+        "wires": []
+    },
+    {
+        "id": "264bf1ac.4074fe",
+        "type": "function",
+        "z": "d3cdff25.7e38",
+        "name": "WEM3162",
+        "func": "let dataArr = msg.payload.data;\n\nlet result = [];\nfor(var item in dataArr) {\n    result.push({\n        payload: dataArr[item]\n    });\n}\n\nreturn result;",
+        "outputs": 5,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 672,
+        "y": 171,
+        "wires": [
+            [
+                "b6c9827e.6a018"
+            ],
+            [
+                "7ed17cb4.385654"
+            ],
+            [
+                "cac3c7fc.fef2d8"
+            ],
+            [
+                "b60363db.e6117"
+            ],
+            [
+                "1e4aa427.f2aecc"
+            ]
+        ]
+    },
+    {
+        "id": "2ce6b919.c548e6",
+        "type": "function",
+        "z": "d3cdff25.7e38",
+        "name": "WEM3080",
+        "func": "let dataArr = msg.payload.Data;\n\nlet result = [];\nfor(var item in dataArr) {\n    result.push({\n        payload: dataArr[item]\n    });\n}\n\nreturn result;",
+        "outputs": 5,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 668,
+        "y": 365,
+        "wires": [
+            [
+                "2c8a409d.ea6fd",
+                "5b512445.9fc61c"
+            ],
+            [
+                "7dbe541b.cf491c"
+            ],
+            [
+                "2eac0900.01bde8",
+                "6b5c615e.bf59c",
+                "a5c8ad7c.9355e"
+            ],
+            [
+                "11421a85.8f9da5",
+                "767fe81b.32b648"
+            ],
+            [
+                "c432f7f7.f5c1f8"
+            ]
+        ]
+    },
+    {
+        "id": "c49d128f.28928",
+        "type": "function",
+        "z": "d3cdff25.7e38",
+        "name": "WEM3080TA",
+        "func": "let dataArr = msg.payload.Datas[0];\n\nlet result = [];\nfor(var item in dataArr) {\n    result.push({\n        payload: dataArr[item]\n    });\n}\n\nreturn result;",
+        "outputs": 5,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 667,
+        "y": 562,
+        "wires": [
+            [
+                "8711bf95.71d24"
+            ],
+            [
+                "93d7a1a1.22831"
+            ],
+            [
+                "ef61e3f7.608d2"
+            ],
+            [
+                "d7581758.057ea8"
+            ],
+            [
+                "4dad54eb.dbcb6c"
+            ]
+        ]
+    },
+    {
+        "id": "3dc60ef2.b88b82",
+        "type": "function",
+        "z": "d3cdff25.7e38",
+        "name": "WEM3080TB",
+        "func": "let dataArr = msg.payload.Datas[1];\n\nlet result = [];\nfor(var item in dataArr) {\n    result.push({\n        payload: dataArr[item]\n    });\n}\n\nreturn result;",
+        "outputs": 5,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 665,
+        "y": 763,
+        "wires": [
+            [
+                "c532c61f.486988"
+            ],
+            [
+                "5c3a3fb.686b0c"
+            ],
+            [
+                "1bcbcfb7.59c88"
+            ],
+            [
+                "23ad147c.27414c"
+            ],
+            [
+                "ddca25cb.7bfa48"
+            ]
+        ]
+    },
+    {
+        "id": "9efa0110.ee472",
+        "type": "function",
+        "z": "d3cdff25.7e38",
+        "name": "WEM3080TC",
+        "func": "let dataArr = msg.payload.Datas[2];\n\nlet result = [];\nfor(var item in dataArr) {\n    result.push({\n        payload: dataArr[item]\n    });\n}\n\nreturn result;",
+        "outputs": 5,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 673,
+        "y": 963,
+        "wires": [
+            [
+                "a3c4aaef.2815d8"
+            ],
+            [
+                "e1307fb8.3c656"
+            ],
+            [
+                "f717196b.d0c3d8"
+            ],
+            [
+                "c0ad635.4f6cba"
+            ],
+            [
+                "e2ff4a33.e2f278"
+            ]
+        ]
+    },
+    {
+        "id": "e393add.ec73f5",
+        "type": "function",
+        "z": "d3cdff25.7e38",
+        "name": "host",
+        "func": "//iammeter IP\nmsg.host = '192.168.15.33'\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 298,
+        "y": 332,
+        "wires": [
+            [
+                "fdfb7f96.83829"
+            ]
+        ]
+    },
+    {
+        "id": "fdfb7f96.83829",
+        "type": "http request",
+        "z": "d3cdff25.7e38",
+        "name": "api",
+        "method": "GET",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "http://{{{host}}}/monitorjson",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "authType": "basic",
+        "senderr": false,
+        "credentials": {},
+        "x": 427,
+        "y": 333,
+        "wires": [
+            [
+                "da96de90.da3b5",
+                "2ce6b919.c548e6",
+                "264bf1ac.4074fe",
+                "c49d128f.28928",
+                "3dc60ef2.b88b82",
+                "9efa0110.ee472"
+            ]
+        ]
+    },
+    {
+        "id": "b6c9827e.6a018",
+        "type": "ui_text",
+        "z": "d3cdff25.7e38",
+        "group": "21ee6458.a3032c",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "name": "voltage",
+        "label": "voltage",
+        "format": "{{msg.payload}}V",
+        "layout": "row-spread",
+        "className": "",
+        "x": 855.5,
+        "y": 92,
+        "wires": []
+    },
+    {
+        "id": "7ed17cb4.385654",
+        "type": "ui_text",
+        "z": "d3cdff25.7e38",
+        "group": "21ee6458.a3032c",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "name": "current",
+        "label": "current",
+        "format": "{{msg.payload}}A",
+        "layout": "row-spread",
+        "className": "",
+        "x": 855,
+        "y": 131,
+        "wires": []
+    },
+    {
+        "id": "cac3c7fc.fef2d8",
+        "type": "ui_text",
+        "z": "d3cdff25.7e38",
+        "group": "21ee6458.a3032c",
+        "order": 4,
+        "width": 0,
+        "height": 0,
+        "name": "power",
+        "label": "power",
+        "format": "{{msg.payload}}W",
+        "layout": "row-spread",
+        "className": "",
+        "x": 846,
+        "y": 168,
+        "wires": []
+    },
+    {
+        "id": "b60363db.e6117",
+        "type": "ui_text",
+        "z": "d3cdff25.7e38",
+        "group": "21ee6458.a3032c",
+        "order": 5,
+        "width": 0,
+        "height": 0,
+        "name": "importenergy",
+        "label": "importenergy",
+        "format": "{{msg.payload}}kWh",
+        "layout": "row-spread",
+        "x": 864,
+        "y": 206,
+        "wires": []
+    },
+    {
+        "id": "1e4aa427.f2aecc",
+        "type": "ui_text",
+        "z": "d3cdff25.7e38",
+        "group": "21ee6458.a3032c",
+        "order": 6,
+        "width": 0,
+        "height": 0,
+        "name": "exportgrid",
+        "label": "exportgrid",
+        "format": "{{msg.payload}}kWh",
+        "layout": "row-spread",
+        "className": "",
+        "x": 856,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "2c8a409d.ea6fd",
+        "type": "ui_text",
+        "z": "d3cdff25.7e38",
+        "group": "ff6e2d23.dc38b",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "name": "voltage",
+        "label": "voltage",
+        "format": "{{msg.payload}}V",
+        "layout": "row-spread",
+        "className": "",
+        "x": 856,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "7dbe541b.cf491c",
+        "type": "ui_text",
+        "z": "d3cdff25.7e38",
+        "group": "ff6e2d23.dc38b",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "name": "current",
+        "label": "current",
+        "format": "{{msg.payload}}A",
+        "layout": "row-spread",
+        "x": 856.5,
+        "y": 334,
+        "wires": []
+    },
+    {
+        "id": "2eac0900.01bde8",
+        "type": "ui_text",
+        "z": "d3cdff25.7e38",
+        "group": "ff6e2d23.dc38b",
+        "order": 4,
+        "width": 0,
+        "height": 0,
+        "name": "power",
+        "label": "power",
+        "format": "{{msg.payload}}W",
+        "layout": "row-spread",
+        "className": "",
+        "x": 844.5,
+        "y": 371,
+        "wires": []
+    },
+    {
+        "id": "11421a85.8f9da5",
+        "type": "ui_text",
+        "z": "d3cdff25.7e38",
+        "group": "ff6e2d23.dc38b",
+        "order": 5,
+        "width": 0,
+        "height": 0,
+        "name": "importenergy",
+        "label": "importenergy",
+        "format": "{{msg.payload}}kWh",
+        "layout": "row-spread",
+        "x": 864.5,
+        "y": 405,
+        "wires": []
+    },
+    {
+        "id": "c432f7f7.f5c1f8",
+        "type": "ui_text",
+        "z": "d3cdff25.7e38",
+        "group": "ff6e2d23.dc38b",
+        "order": 6,
+        "width": 0,
+        "height": 0,
+        "name": "exportgrid",
+        "label": "exportgrid",
+        "format": "{{msg.payload}}kWh",
+        "layout": "row-spread",
+        "x": 855.5,
+        "y": 444,
+        "wires": []
+    },
+    {
+        "id": "8711bf95.71d24",
+        "type": "ui_text",
+        "z": "d3cdff25.7e38",
+        "group": "16c2f050.5800a",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "name": "voltageA",
+        "label": "voltageA",
+        "format": "{{msg.payload}}V",
+        "layout": "row-spread",
+        "className": "",
+        "x": 854,
+        "y": 492,
+        "wires": []
+    },
+    {
+        "id": "93d7a1a1.22831",
+        "type": "ui_text",
+        "z": "d3cdff25.7e38",
+        "group": "16c2f050.5800a",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "name": "currentA",
+        "label": "currentA",
+        "format": "{{msg.payload}}A",
+        "layout": "row-spread",
+        "x": 855.5,
+        "y": 531,
+        "wires": []
+    },
+    {
+        "id": "ef61e3f7.608d2",
+        "type": "ui_text",
+        "z": "d3cdff25.7e38",
+        "group": "16c2f050.5800a",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "name": "powerA",
+        "label": "powerA",
+        "format": "{{msg.payload}}W",
+        "layout": "row-spread",
+        "x": 853.5,
+        "y": 568,
+        "wires": []
+    },
+    {
+        "id": "d7581758.057ea8",
+        "type": "ui_text",
+        "z": "d3cdff25.7e38",
+        "group": "16c2f050.5800a",
+        "order": 4,
+        "width": 0,
+        "height": 0,
+        "name": "importenergyA",
+        "label": "importenergyA",
+        "format": "{{msg.payload}}kWh",
+        "layout": "row-spread",
+        "x": 873.5,
+        "y": 602,
+        "wires": []
+    },
+    {
+        "id": "4dad54eb.dbcb6c",
+        "type": "ui_text",
+        "z": "d3cdff25.7e38",
+        "group": "16c2f050.5800a",
+        "order": 5,
+        "width": 0,
+        "height": 0,
+        "name": "exportgridA",
+        "label": "exportgridA",
+        "format": "{{msg.payload}}kWh",
+        "layout": "row-spread",
+        "className": "",
+        "x": 864.5,
+        "y": 641,
+        "wires": []
+    },
+    {
+        "id": "c532c61f.486988",
+        "type": "ui_text",
+        "z": "d3cdff25.7e38",
+        "group": "72a7ac05.204694",
+        "order": 6,
+        "width": 0,
+        "height": 0,
+        "name": "voltageB",
+        "label": "voltageB",
+        "format": "{{msg.payload}}V",
+        "layout": "row-spread",
+        "className": "",
+        "x": 852,
+        "y": 693,
+        "wires": []
+    },
+    {
+        "id": "5c3a3fb.686b0c",
+        "type": "ui_text",
+        "z": "d3cdff25.7e38",
+        "group": "72a7ac05.204694",
+        "order": 7,
+        "width": 0,
+        "height": 0,
+        "name": "currentB",
+        "label": "currentB",
+        "format": "{{msg.payload}}A",
+        "layout": "row-spread",
+        "x": 853.5,
+        "y": 732,
+        "wires": []
+    },
+    {
+        "id": "1bcbcfb7.59c88",
+        "type": "ui_text",
+        "z": "d3cdff25.7e38",
+        "group": "72a7ac05.204694",
+        "order": 8,
+        "width": 0,
+        "height": 0,
+        "name": "powerB",
+        "label": "powerB",
+        "format": "{{msg.payload}}W",
+        "layout": "row-spread",
+        "x": 851.5,
+        "y": 769,
+        "wires": []
+    },
+    {
+        "id": "23ad147c.27414c",
+        "type": "ui_text",
+        "z": "d3cdff25.7e38",
+        "group": "72a7ac05.204694",
+        "order": 9,
+        "width": 0,
+        "height": 0,
+        "name": "importenergyB",
+        "label": "importenergyB",
+        "format": "{{msg.payload}}kWh",
+        "layout": "row-spread",
+        "x": 871.5,
+        "y": 803,
+        "wires": []
+    },
+    {
+        "id": "ddca25cb.7bfa48",
+        "type": "ui_text",
+        "z": "d3cdff25.7e38",
+        "group": "72a7ac05.204694",
+        "order": 10,
+        "width": 0,
+        "height": 0,
+        "name": "exportgridB",
+        "label": "exportgridB",
+        "format": "{{msg.payload}}kWh",
+        "layout": "row-spread",
+        "className": "",
+        "x": 862.5,
+        "y": 842,
+        "wires": []
+    },
+    {
+        "id": "a3c4aaef.2815d8",
+        "type": "ui_text",
+        "z": "d3cdff25.7e38",
+        "group": "9b42ebd1.3d80e8",
+        "order": 11,
+        "width": 0,
+        "height": 0,
+        "name": "voltageC",
+        "label": "voltageC",
+        "format": "{{msg.payload}}V",
+        "layout": "row-spread",
+        "className": "",
+        "x": 850,
+        "y": 893,
+        "wires": []
+    },
+    {
+        "id": "e1307fb8.3c656",
+        "type": "ui_text",
+        "z": "d3cdff25.7e38",
+        "group": "9b42ebd1.3d80e8",
+        "order": 12,
+        "width": 0,
+        "height": 0,
+        "name": "currentC",
+        "label": "currentC",
+        "format": "{{msg.payload}}A",
+        "layout": "row-spread",
+        "x": 851.5,
+        "y": 932,
+        "wires": []
+    },
+    {
+        "id": "f717196b.d0c3d8",
+        "type": "ui_text",
+        "z": "d3cdff25.7e38",
+        "group": "9b42ebd1.3d80e8",
+        "order": 13,
+        "width": 0,
+        "height": 0,
+        "name": "powerC",
+        "label": "powerC",
+        "format": "{{msg.payload}}W",
+        "layout": "row-spread",
+        "className": "",
+        "x": 849.5,
+        "y": 969,
+        "wires": []
+    },
+    {
+        "id": "c0ad635.4f6cba",
+        "type": "ui_text",
+        "z": "d3cdff25.7e38",
+        "group": "9b42ebd1.3d80e8",
+        "order": 14,
+        "width": 0,
+        "height": 0,
+        "name": "importenergyC",
+        "label": "importenergyC",
+        "format": "{{msg.payload}}kWh",
+        "layout": "row-spread",
+        "x": 869.5,
+        "y": 1003,
+        "wires": []
+    },
+    {
+        "id": "e2ff4a33.e2f278",
+        "type": "ui_text",
+        "z": "d3cdff25.7e38",
+        "group": "9b42ebd1.3d80e8",
+        "order": 15,
+        "width": 0,
+        "height": 0,
+        "name": "exportgridC",
+        "label": "exportgridC",
+        "format": "{{msg.payload}}kWh",
+        "layout": "row-spread",
+        "x": 860.5,
+        "y": 1042,
+        "wires": []
+    },
+    {
+        "id": "5b512445.9fc61c",
+        "type": "ui_gauge",
+        "z": "d3cdff25.7e38",
+        "name": "",
+        "group": "ff6e2d23.dc38b",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "voltage",
+        "label": "V",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "500",
+        "colors": [
+            "#008fd5",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "260",
+        "seg2": "280",
+        "className": "",
+        "x": 1036,
+        "y": 295,
+        "wires": []
+    },
+    {
+        "id": "6b5c615e.bf59c",
+        "type": "ui_gauge",
+        "z": "d3cdff25.7e38",
+        "name": "",
+        "group": "21ee6458.a3032c",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "power",
+        "label": "W",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "5000",
+        "colors": [
+            "#008fd5",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "3000",
+        "seg2": "4000",
+        "className": "",
+        "x": 1026,
+        "y": 361,
+        "wires": []
+    },
+    {
+        "id": "a5c8ad7c.9355e",
+        "type": "ui_chart",
+        "z": "d3cdff25.7e38",
+        "name": "",
+        "group": "6f7772ee.b5e23c",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "label": "power",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "30",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "x": 1143,
+        "y": 333,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "767fe81b.32b648",
+        "type": "ui_chart",
+        "z": "d3cdff25.7e38",
+        "name": "",
+        "group": "6f7772ee.b5e23c",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "label": "importenergy",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "30",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "x": 1164,
+        "y": 394,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "21ee6458.a3032c",
+        "type": "ui_group",
+        "name": "WEM3162",
+        "tab": "daa7105535ecee47",
+        "order": 1,
+        "disp": true,
+        "width": "6",
+        "collapse": true,
+        "className": ""
+    },
+    {
+        "id": "ff6e2d23.dc38b",
+        "type": "ui_group",
+        "name": "WEM3080",
+        "tab": "daa7105535ecee47",
+        "order": 2,
+        "disp": true,
+        "width": "6",
+        "collapse": true,
+        "className": ""
+    },
+    {
+        "id": "16c2f050.5800a",
+        "type": "ui_group",
+        "name": "WEM3080TA",
+        "tab": "daa7105535ecee47",
+        "order": 3,
+        "disp": true,
+        "width": "6",
+        "collapse": true,
+        "className": ""
+    },
+    {
+        "id": "72a7ac05.204694",
+        "type": "ui_group",
+        "name": "WEM3080TB",
+        "tab": "daa7105535ecee47",
+        "order": 4,
+        "disp": true,
+        "width": "6",
+        "collapse": true,
+        "className": ""
+    },
+    {
+        "id": "9b42ebd1.3d80e8",
+        "type": "ui_group",
+        "name": "WEM3080TC",
+        "tab": "daa7105535ecee47",
+        "order": 5,
+        "disp": true,
+        "width": "6",
+        "collapse": true,
+        "className": ""
+    },
+    {
+        "id": "6f7772ee.b5e23c",
+        "type": "ui_group",
+        "name": "Graph",
+        "tab": "daa7105535ecee47",
+        "order": 6,
+        "disp": true,
+        "width": "6",
+        "collapse": true
+    },
+    {
+        "id": "daa7105535ecee47",
+        "type": "ui_tab",
+        "name": "IamMeter",
+        "icon": "dashboard",
+        "order": 10,
+        "disabled": false,
+        "hidden": false
+    }
+]

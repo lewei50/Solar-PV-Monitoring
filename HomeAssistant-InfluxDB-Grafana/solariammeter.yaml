@@ -1,7 +1,10 @@
+##################################################################################
+## ct1(_a) on the inveter part and ct2(_b) is on the grid part, ct3(_c) not use ##
+##################################################################################
 sensor:
 #-----SolarMeter-----
   - platform: iammeter
-    host: 192.168.12.55
+    host: 192.168.1.66
     name: metert
 #-----SolarPVSystem-----
   - platform: template
@@ -11,27 +14,47 @@ sensor:
         value_template: "{{ states('sensor.metert_power_a') }}"   
       feedin_power:
         unit_of_measurement: 'W'
-        value_template: "{{ -states('sensor.metert_power_b') }}"
+        value_template: "{{ states('sensor.metert_power_b') | float * (-1.0) }}"
       load_power:
         unit_of_measurement: 'W'
         value_template: "{{ states('sensor.metert_power_a')|float + states('sensor.metert_power_b')|float }}" 
 
       grid_consumption_energy:
         unit_of_measurement: 'kWh'
-        value_template: "{{ states('sensor.metert_importenergy_b') }}" 
+        #value_template: "{{ states('sensor.metert_importenergy_b') }}" 
+        value_template: >
+          {% if states('sensor.metert_importenergy_b') | int > 0 %}
+            {{ states('sensor.metert_importenergy_b') }}
+          {% endif %}
       exported_energy:
         unit_of_measurement: 'kWh'
-        value_template: "{{ states('sensor.metert_exportgrid_b') }}"
+        #value_template: "{{ states('sensor.metert_exportgrid_b') }}"
+        value_template: >
+          {% if states('sensor.metert_exportgrid_b') | int > 0 %}
+            {{ states('sensor.metert_exportgrid_b') }}
+          {% endif %} 
       yield_energy:
         unit_of_measurement: 'kWh'
-        value_template: "{{ states('sensor.metert_importenergy_a') }}"
-        
+        #value_template: "{{ states('sensor.metert_importenergy_a') }}"
+        value_template: >
+          {% if states('sensor.metert_importenergy_a') | int > 0 %}
+            {{ states('sensor.metert_importenergy_a') }}
+          {% endif %}  
+
       selfuse_energy:
         unit_of_measurement: 'kWh'
-        value_template: "{{ states('sensor.yield_energy')|float - states('sensor.exported_energy')|float }}" 
+        #value_template: "{{ states('sensor.yield_energy')|float - states('sensor.exported_energy')|float }}" 
+        value_template: >
+          {% if ( states('sensor.yield_energy')|float - states('sensor.exported_energy')|float ) | int > 0 %}
+            {{ states('sensor.yield_energy')|float - states('sensor.exported_energy')|float }}
+          {% endif %} 
       load_energy:
         unit_of_measurement: 'kWh'
-        value_template: "{{ states('sensor.grid_consumption_energy')|float + states('sensor.yield_energy')|float - states('sensor.exported_energy')|float }}"
+        #value_template: "{{ states('sensor.grid_consumption_energy')|float + states('sensor.yield_energy')|float - states('sensor.exported_energy')|float }}"
+        value_template: >
+          {% if ( states('sensor.grid_consumption_energy')|float + states('sensor.yield_energy')|float - states('sensor.exported_energy')|float ) | int > 0 %}
+            {{ states('sensor.grid_consumption_energy')|float + states('sensor.yield_energy')|float - states('sensor.exported_energy')|float }}
+          {% endif %}
 
       self_consumption_rate_daily:
         unit_of_measurement: '%'

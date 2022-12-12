@@ -32,8 +32,6 @@ Grid Consumption: The energy consumed from grid
 
 
 
-
-
 # 3. Project introduction
 
 
@@ -79,12 +77,31 @@ Add this file [solariammeter.yaml](solariammeter.yaml) to the directory "Package
 
 ## 4.3 Store Home Assistant data in InfluxDB
 
-Replace the Default storage of Home Assistant to InfluxDB. For details of the Home Assistant integration, please refer to https://www.home-assistant.io/components/influxdb/
+Replace the Default storage of Home Assistant to InfluxDB 1.x(not support InfluxDB 2.x). For details of the Home Assistant integration, please refer to https://www.home-assistant.io/components/influxdb/
+
+add the following to your `configuration.yaml` file:
+
+```
+influxdb:
+  host: 192.168.1.6
+  port: 8086
+  database: homeassistant
+  username: homeassistant
+  password: <yourpassword>
+  max_retries: 3
+  default_measurement: state
+```
 
 ## 4.4 Display the data in Grafana
 
 You can use below Grafana template to display the data.
 [Grafana ID 13295](https://grafana.com/grafana/dashboards/13295?src=twitter.com&mdm=social&cnt=buffera6a03&camp=buffer&pg=prod-ent&plcmt=contact-banner).
+
+![image-20220919093642153](https://iammeterglobal.oss-accelerate.aliyuncs.com/img/image-20220919093642153.png)
+
+![image-20220919093716241](https://iammeterglobal.oss-accelerate.aliyuncs.com/img/image-20220919093716241.png)
+
+![image-20220919093823594](https://iammeterglobal.oss-accelerate.aliyuncs.com/img/image-20220919093823594.png)
 
 
 You need to get the following data from infixdb
