@@ -1,0 +1,301 @@
+#####---tiered---######
+#####---card1---######
+cards:
+  - cards:
+      - entity: sensor.meter_voltage
+        max: 300
+        min: 100
+        name: voltage
+        theme: default
+        type: gauge
+        needle: false
+      - entity: sensor.meter_power
+        max: 5000
+        min: 0
+        name: power
+        theme: default
+        type: gauge
+        needle: false
+    type: horizontal-stack
+  - type: custom:apexcharts-card
+    apex_config:
+      chart:
+        height: 300
+    experimental:
+      color_threshold: true
+    graph_span: 8h
+    show:
+      last_updated: true
+    header:
+      standard_format: false
+      show: true
+      show_states: true
+      colorize_states: true
+    now:
+      show: true
+      color: red
+      label: Now
+    span:
+      end: hour
+    series:
+      - entity: sensor.meter_power
+        name: Power
+        type: line
+        group_by:
+          func: avg
+          duration: 1m
+        stroke_width: 2
+        show:
+          extremas: true
+          header_color_threshold: true
+        color_threshold:
+          - value: 100
+            color: steelblue
+          - value: 800
+            color: midnightblue
+          - value: 1500
+            color: orange
+          - value: 2000
+            color: orangered
+          - value: 3000
+            color: red
+  - type: custom:apexcharts-card
+    apex_config:
+      chart:
+        height: 300
+    experimental:
+      color_threshold: true
+    graph_span: 8h
+    show:
+      last_updated: true
+    header:
+      standard_format: false
+      show: true
+      show_states: true
+      colorize_states: true
+    now:
+      show: true
+      color: red
+      label: Now
+    span:
+      end: hour
+    series:
+      - entity: sensor.meter_voltage
+        name: Voltage
+        stroke_width: 2
+        group_by:
+          func: avg
+          duration: 1min
+title: Home Energy Tiered Demo
+type: vertical-stack
+
+
+
+#####---card2---######
+cards:
+  - type: custom:apexcharts-card
+    apex_config:
+      chart:
+        height: 230
+    graph_span: 7d
+    span:
+      end: day
+    show:
+      last_updated: true
+    header:
+      show: true
+      show_states: true
+      colorize_states: true
+    series:
+      - entity: sensor.meter_energy_daily
+        type: column
+        color: darkviolet
+        group_by:
+          func: max
+          duration: 1d
+      - entity: sensor.daily_energy_tier_money
+        type: column
+        group_by:
+          func: max
+          duration: 1d
+  - type: custom:apexcharts-card
+    apex_config:
+      chart:
+        height: 230
+    graph_span: 3month
+    span:
+      end: year
+    show:
+      last_updated: true
+    header:
+      show: true
+      show_states: true
+      colorize_states: true
+    series:
+      - entity: sensor.meter_energy_monthly
+        type: column
+        color: darkviolet
+        group_by:
+          func: max
+          duration: 1month
+      - entity: sensor.monthly_energy_tier_money
+        type: column
+        color: slateblue
+        group_by:
+          func: max
+          duration: 1month
+  - type: custom:apexcharts-card
+    header:
+      show: true
+      title: tier
+      show_states: true
+      colorize_states: true
+    apex_config:
+      chart:
+        stacked: true
+      dataLabels:
+        enabled: true
+        enabledOnSeries: true
+    graph_span: 2d
+    span:
+      end: day
+    show:
+      last_updated: true
+    series:
+      - entity: sensor.monthly_energy_tier1_money
+        name: tier1
+        type: column
+        color: darkviolet
+        group_by:
+          func: max
+          duration: 1d
+      - entity: sensor.monthly_energy_tier2_money
+        name: tier2
+        type: column
+        color: slateblue
+        group_by:
+          func: max
+          duration: 1d
+      - entity: sensor.monthly_energy_tier3_money
+        name: tier3
+        type: column
+        color: orangered
+        group_by:
+          func: max
+          duration: 1d
+      - entity: sensor.monthly_energy_tier4_money
+        name: tier4
+        type: column
+        group_by:
+          func: max
+          duration: 1d
+title: Energy
+type: vertical-stack
+
+
+
+#####---card3---######
+cards:
+  - type: horizontal-stack
+    cards:
+      - animate: true
+        entities:
+          - entity: sensor.meter_voltage
+        group_by: hour
+        hour24: true
+        hours_to_show: 12
+        type: custom:mini-graph-card
+      - animate: true
+        entities:
+          - entity: sensor.meter_power
+        group_by: hour
+        hour24: true
+        hours_to_show: 12
+        type: custom:mini-graph-card
+  - type: horizontal-stack
+    cards:
+      - type: entity
+        entity: sensor.meter_energy_monthly
+        name: Current Tier
+        state_color: false
+      - type: entity
+        entity: sensor.monthly_energy_tier_money
+        name: Current Tiered Price
+        state_color: false
+        icon: mdi:currency-usd
+  - type: horizontal-stack
+    cards:
+      - type: entity
+        entity: sensor.energy_tiered_current
+        name: Current Tier
+        state_color: false
+      - type: entity
+        entity: sensor.energy_tiered_price_current
+        name: Current Tiered Price
+        state_color: false
+        icon: mdi:currency-usd
+  - type: horizontal-stack
+    cards:
+      - hours_to_show: 24
+        graph: none
+        type: sensor
+        entity: sensor.energy_tier1
+        name: Tier1
+        detail: 1
+        icon: mdi:numeric-1-box-outline
+      - type: sensor
+        entity: sensor.energy_tier2
+        name: Tier2
+        icon: mdi:numeric-2-box-outline
+      - type: sensor
+        entity: sensor.energy_tier3
+        name: Tier3
+        icon: mdi:numeric-3-box-outline
+    title: Tiered electricity price list
+  - type: horizontal-stack
+    cards:
+      - hours_to_show: 24
+        graph: none
+        type: sensor
+        entity: sensor.energy_price_tier1
+        name: Tier1
+        detail: 1
+        icon: mdi:numeric-1-box-outline
+      - type: sensor
+        entity: sensor.energy_price_tier2
+        name: Tier2
+        icon: mdi:numeric-2-box-outline
+      - type: sensor
+        entity: sensor.energy_price_tier3
+        name: Tier3
+        icon: mdi:numeric-3-box-outline
+      - type: sensor
+        entity: sensor.energy_price_tier4
+        name: Tier4
+        icon: mdi:numeric-4-box-outline
+  - type: horizontal-stack
+    cards:
+      - aggregate_func: max
+        animate: true
+        entities:
+          - entity: sensor.meter_energy_daily
+        group_by: date
+        hour24: true
+        hours_to_show: 168
+        show:
+          graph: bar
+        type: custom:mini-graph-card
+  - type: horizontal-stack
+    cards:
+      - aggregate_func: max
+        animate: true
+        entities:
+          - entity: sensor.daily_energy_tier_money
+        group_by: date
+        hour24: true
+        hours_to_show: 168
+        show:
+          graph: bar
+        type: custom:mini-graph-card
+type: vertical-stack
+

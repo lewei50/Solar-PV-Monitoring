@@ -1,0 +1,135 @@
+sensor:  
+  - platform: template
+    sensors:
+#------Tiered electricity price------#
+      energy_price_tier1:
+        friendly_name: "Tier1 Price"
+        value_template: "0.15"
+        unit_of_measurement: '$'
+
+      energy_price_tier2:
+        friendly_name: "Tier2 Price"
+        value_template: "0.19"
+        unit_of_measurement: '$'
+
+      energy_price_tier3:
+        friendly_name: "Tier3 Price"
+        value_template: "0.28"
+        unit_of_measurement: '$'
+
+      energy_price_tier4:
+        friendly_name: "Tier4 Price"
+        value_template: "0.32"
+        unit_of_measurement: '$'
+
+      energy_tier1:
+        friendly_name: "Tier1 Energy"
+        value_template: "100"
+        unit_of_measurement: 'kWh'
+
+      energy_tier2:
+        friendly_name: "Tier2 Energy"
+        value_template: "200"
+        unit_of_measurement: 'kWh'
+
+      energy_tier3:
+        friendly_name: "Tier3 Energy"
+        value_template: "300"
+        unit_of_measurement: 'kWh'
+
+      energy_tiered_price_current: 
+        friendly_name: "Current Tiered Price"
+        unit_of_measurement: '$'
+        value_template: >-
+          {% if states('sensor.meter_energy_monthly') > states('sensor.energy_tier3') %}
+            {{ states('sensor.energy_price_tier4') }}
+          {% elif states('sensor.meter_energy_monthly') > states('sensor.energy_tier2') %}
+            {{ states('sensor.energy_price_tier3') }}
+          {% elif states('sensor.meter_energy_monthly') > states('sensor.energy_tier1') %}
+            {{ states('sensor.energy_price_tier2') }}
+          {% else %}
+            {{ states('sensor.energy_price_tier1') }}
+          {% endif %}
+
+      energy_tiered_current: 
+        friendly_name: "Current Tiered"
+        value_template: >-
+          {% if states('sensor.meter_energy_monthly') > states('sensor.energy_tier3') %}
+            {{ "tier4" }}
+          {% elif states('sensor.meter_energy_monthly') > states('sensor.energy_tier2') %}
+            {{ "tier3" }}
+          {% elif states('sensor.meter_energy_monthly') > states('sensor.energy_tier1') %}
+            {{ "tier2" }}
+          {% else %}
+            {{ "tier1" }}
+          {% endif %}
+
+      daily_energy_tier_money:
+        unit_of_measurement: '$'
+        value_template: "{{ ( (states('sensor.meter_energy_daily')|float) * (states('sensor.energy_tiered_price_current')|float) ) | round(2) }}"       
+
+      monthly_energy_tier1_money:
+        unit_of_measurement: '$'
+        value_template: >-
+          {% if states('sensor.meter_energy_monthly') > states('sensor.energy_tier1') %}
+            {{ ( states('sensor.energy_tier1')|float * states('sensor.energy_price_tier1')|float ) | round(2) }}
+          {% else %}
+            {{ ( states('sensor.meter_energy_monthly')|float * states('sensor.energy_price_tier1')|float ) | round(2) }}
+          {% endif %}
+
+      monthly_energy_tier2_money:
+        unit_of_measurement: '$'
+        value_template: >-
+          {% if states('sensor.meter_energy_monthly') > states('sensor.energy_tier2') %}
+            {{ ( (states('sensor.energy_tier2')|float - states('sensor.energy_tier1')|float ) * states('sensor.energy_price_tier2')|float + states('sensor.monthly_energy_tier1_money')|float ) | round(2) }}
+          {% elif states('sensor.meter_energy_monthly') > states('sensor.energy_tier1') %}
+            {{ ( (states('sensor.meter_energy_monthly')|float -states('sensor.energy_tier1')|float ) * states('sensor.energy_price_tier2')|float + states('sensor.monthly_energy_tier1_money')|float ) | round(2) }}
+          {% else %}
+            {{ 0 }}
+          {% endif %}
+
+      monthly_energy_tier3_money:
+        unit_of_measurement: '$'
+        value_template: >-
+          {% if states('sensor.meter_energy_monthly') > states('sensor.energy_tier3') %}
+            {{ ( (states('sensor.energy_tier3')|float -states('sensor.energy_tier2')|float ) * states('sensor.energy_price_tier3')|float + states('sensor.monthly_energy_tier2_money')|float ) | round(2) }}
+          {% elif states('sensor.meter_energy_monthly') > states('sensor.energy_tier2') %}
+            {{ ( (states('sensor.meter_energy_monthly')|float -states('sensor.energy_tier2')|float ) * states('sensor.energy_price_tier3')|float + states('sensor.monthly_energy_tier2_money')|float ) | round(2) }}
+          {% else %}
+            {{ 0 }}
+          {% endif %}
+
+      monthly_energy_tier4_money:
+        unit_of_measurement: '$'
+        value_template: >-
+          {% if states('sensor.meter_energy_monthly') > states('sensor.energy_tier3') %}
+            {{ ( (states('sensor.meter_energy_monthly')|float -states('sensor.energy_tier3')|float ) * states('sensor.energy_price_tier4')|float + states('sensor.monthly_energy_tier3_money')|float ) | round(2) }}
+          {% else %}
+            {{ 0 }}
+          {% endif %}
+
+      monthly_energy_tier_money:
+        unit_of_measurement: '$'
+        value_template: "{{ (states('sensor.monthly_energy_tier1_money')|float + states('sensor.monthly_energy_tier2_money')|float + states('sensor.monthly_energy_tier3_money')|float + states('sensor.monthly_energy_tier4_money')|float)|round(2) }}"
+
+##  m1 : >100 E1 * P1
+##       else E * P1
+##  m2 : >200 (E2-E1) * P2 + m1
+##       >100 (E-E1) * P2 + m1
+##       else 0
+##  m3 : >300 (E3-E2) *P3 + m2
+##       >200 (E-E2) *P3 + m2
+##       else 0
+##  m4 :
+##       >300 (E-E3) *P4 + m3
+##       else 0
+##  m  : m1 + m2 +m3 + m4
+ 
+
+utility_meter:
+  meter_energy_daily:
+    source: sensor.meter_importenergy
+    cycle: daily
+  meter_energy_monthly:
+    source: sensor.meter_importenergy
+    cycle: monthly
