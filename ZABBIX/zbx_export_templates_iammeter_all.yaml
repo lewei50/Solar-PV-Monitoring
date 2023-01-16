@@ -1,0 +1,1707 @@
+zabbix_export:
+  version: '6.2'
+  date: '2023-01-12T13:17:54Z'
+  template_groups:
+    -
+      uuid: a571c0d144b14fd4a87a9d9b2aa9fcd6
+      name: Templates/Applications
+  templates:
+    -
+      uuid: cd7ef078b7ab46a3ae031f432a1fb32d
+      template: 'IAMMETER3 by HTTP'
+      name: 'IAMMETER3 by HTTP'
+      description: 'Get IAMMETER3 datas by HTTP agent.'
+      groups:
+        -
+          name: Templates/Applications
+      items:
+        -
+          uuid: 5c74dd21145a490c965233f9c578e657
+          name: 'IAMMETER:CURRENT_A'
+          type: DEPENDENT
+          key: iammeter.current_a
+          delay: '0'
+          history: 7d
+          value_type: FLOAT
+          units: A
+          description: 'current A'
+          preprocessing:
+            -
+              type: JSONPATH
+              parameters:
+                - '$.Datas[0][1]'
+          master_item:
+            key: iammeter.monitorjson
+          tags:
+            -
+              tag: component
+              value: application
+        -
+          uuid: f53e0537a03d4f9fa6b746f5bfff765c
+          name: 'IAMMETER:CURRENT_B'
+          type: DEPENDENT
+          key: iammeter.current_b
+          delay: '0'
+          history: 7d
+          value_type: FLOAT
+          units: A
+          description: 'current B'
+          preprocessing:
+            -
+              type: JSONPATH
+              parameters:
+                - '$.Datas[1][1]'
+          master_item:
+            key: iammeter.monitorjson
+          tags:
+            -
+              tag: component
+              value: application
+        -
+          uuid: be7c09136ce14ded99c7634f82c4e724
+          name: 'IAMMETER:CURRENT_C'
+          type: DEPENDENT
+          key: iammeter.current_c
+          delay: '0'
+          history: 7d
+          value_type: FLOAT
+          units: A
+          description: 'current C'
+          preprocessing:
+            -
+              type: JSONPATH
+              parameters:
+                - '$.Datas[2][1]'
+          master_item:
+            key: iammeter.monitorjson
+          tags:
+            -
+              tag: component
+              value: application
+        -
+          uuid: b6a07f63cc9c4ecaafe57f798eb8e996
+          name: 'IAMMETER:EXPORTGRID_A'
+          type: DEPENDENT
+          key: iammeter.exportgrid_a
+          delay: '0'
+          history: 7d
+          value_type: FLOAT
+          units: kWh
+          description: 'exportgrid A'
+          preprocessing:
+            -
+              type: JSONPATH
+              parameters:
+                - '$.Datas[0][4]'
+          master_item:
+            key: iammeter.monitorjson
+          tags:
+            -
+              tag: component
+              value: application
+        -
+          uuid: 8cab9493692c477eb83ef5bb4f6533f7
+          name: 'IAMMETER:EXPORTGRID_B'
+          type: DEPENDENT
+          key: iammeter.exportgrid_b
+          delay: '0'
+          history: 7d
+          value_type: FLOAT
+          units: kWh
+          description: 'exportgrid B'
+          preprocessing:
+            -
+              type: JSONPATH
+              parameters:
+                - '$.Datas[1][4]'
+          master_item:
+            key: iammeter.monitorjson
+          tags:
+            -
+              tag: component
+              value: application
+        -
+          uuid: 4430e131b8e244a0b6f0a437eef51f86
+          name: 'IAMMETER:EXPORTGRID_C'
+          type: DEPENDENT
+          key: iammeter.exportgrid_c
+          delay: '0'
+          history: 7d
+          value_type: FLOAT
+          units: kWh
+          description: 'exportgrid C'
+          preprocessing:
+            -
+              type: JSONPATH
+              parameters:
+                - '$.Datas[2][4]'
+          master_item:
+            key: iammeter.monitorjson
+          tags:
+            -
+              tag: component
+              value: application
+        -
+          uuid: 65c759580e5843cf81fbd3cd7b51f7b7
+          name: 'IAMMETER:FREQUENCY'
+          type: DEPENDENT
+          key: iammeter.frequency
+          delay: '0'
+          history: 7d
+          value_type: FLOAT
+          units: Hz
+          description: frequency
+          preprocessing:
+            -
+              type: JSONPATH
+              parameters:
+                - '$.Datas[0][5]'
+          master_item:
+            key: iammeter.monitorjson
+          tags:
+            -
+              tag: component
+              value: application
+        -
+          uuid: cf5dc0e6c4bc4e5db69b59d845873ad6
+          name: 'IAMMETER:IMPORTENERGY_A'
+          type: DEPENDENT
+          key: iammeter.importenergy_a
+          delay: '0'
+          history: 7d
+          value_type: FLOAT
+          units: kWh
+          description: 'importenergy A'
+          preprocessing:
+            -
+              type: JSONPATH
+              parameters:
+                - '$.Datas[0][3]'
+          master_item:
+            key: iammeter.monitorjson
+          tags:
+            -
+              tag: component
+              value: application
+        -
+          uuid: 27a15f4e0f3b4ca7921508234e894eaf
+          name: 'IAMMETER:IMPORTENERGY_B'
+          type: DEPENDENT
+          key: iammeter.importenergy_b
+          delay: '0'
+          history: 7d
+          value_type: FLOAT
+          units: kWh
+          description: 'importenergy B'
+          preprocessing:
+            -
+              type: JSONPATH
+              parameters:
+                - '$.Datas[1][3]'
+          master_item:
+            key: iammeter.monitorjson
+          tags:
+            -
+              tag: component
+              value: application
+        -
+          uuid: 6f2effca551546fd9fdc48dddd2af446
+          name: 'IAMMETER:IMPORTENERGY_C'
+          type: DEPENDENT
+          key: iammeter.importenergy_c
+          delay: '0'
+          history: 7d
+          value_type: FLOAT
+          units: kWh
+          description: 'importenergy C'
+          preprocessing:
+            -
+              type: JSONPATH
+              parameters:
+                - '$.Datas[2][3]'
+          master_item:
+            key: iammeter.monitorjson
+          tags:
+            -
+              tag: component
+              value: application
+        -
+          uuid: 72888ba07c8247dd830839e04680954e
+          name: 'IAMMETER:MAC'
+          type: DEPENDENT
+          key: iammeter.mac
+          delay: '0'
+          history: 7d
+          trends: '0'
+          value_type: CHAR
+          description: mac
+          preprocessing:
+            -
+              type: JSONPATH
+              parameters:
+                - $.mac
+            -
+              type: DISCARD_UNCHANGED_HEARTBEAT
+              parameters:
+                - 3h
+          master_item:
+            key: iammeter.monitorjson
+          tags:
+            -
+              tag: component
+              value: application
+        -
+          uuid: fd71c5921a4e4c12ae4c4d0b76f3c5a3
+          name: 'IAMMETER: MONITORJSON'
+          type: HTTP_AGENT
+          key: iammeter.monitorjson
+          history: 7d
+          trends: '0'
+          value_type: TEXT
+          authtype: BASIC
+          username: admin
+          password: admin
+          url: '{$IAMMETER.URL}/monitorjson'
+          tags:
+            -
+              tag: component
+              value: raw
+        -
+          uuid: 2a5cd80bb8c5497b9c7ef3f6e05bf85e
+          name: 'IAMMETER:PF'
+          type: DEPENDENT
+          key: iammeter.pf
+          delay: '0'
+          history: 7d
+          value_type: FLOAT
+          description: 'Power factor'
+          preprocessing:
+            -
+              type: JSONPATH
+              parameters:
+                - '$.Datas[0][6]'
+          master_item:
+            key: iammeter.monitorjson
+          tags:
+            -
+              tag: component
+              value: application
+        -
+          uuid: 0bdb3bc6b876469fb5b729a4486d9f6a
+          name: 'IAMMETER:POWER_A'
+          type: DEPENDENT
+          key: iammeter.power_a
+          delay: '0'
+          history: 7d
+          value_type: FLOAT
+          units: W
+          description: 'power A'
+          preprocessing:
+            -
+              type: JSONPATH
+              parameters:
+                - '$.Datas[0][2]'
+          master_item:
+            key: iammeter.monitorjson
+          tags:
+            -
+              tag: component
+              value: application
+        -
+          uuid: a7e9c7fa91bf420593c505900858015b
+          name: 'IAMMETER:POWER_B'
+          type: DEPENDENT
+          key: iammeter.power_b
+          delay: '0'
+          history: 7d
+          value_type: FLOAT
+          units: W
+          description: 'power B'
+          preprocessing:
+            -
+              type: JSONPATH
+              parameters:
+                - '$.Datas[1][2]'
+          master_item:
+            key: iammeter.monitorjson
+          tags:
+            -
+              tag: component
+              value: application
+        -
+          uuid: fc15a606bfbf429da1946108bcfee674
+          name: 'IAMMETER:POWER_C'
+          type: DEPENDENT
+          key: iammeter.power_c
+          delay: '0'
+          history: 7d
+          value_type: FLOAT
+          units: W
+          description: 'power C'
+          preprocessing:
+            -
+              type: JSONPATH
+              parameters:
+                - '$.Datas[2][2]'
+          master_item:
+            key: iammeter.monitorjson
+          tags:
+            -
+              tag: component
+              value: application
+        -
+          uuid: 309a9c5291de42f5a1d761674d7b3093
+          name: 'IAMMETER:SN'
+          type: DEPENDENT
+          key: iammeter.sn
+          delay: '0'
+          history: 7d
+          trends: '0'
+          value_type: CHAR
+          description: SN
+          preprocessing:
+            -
+              type: JSONPATH
+              parameters:
+                - $.SN
+            -
+              type: DISCARD_UNCHANGED_HEARTBEAT
+              parameters:
+                - 3h
+          master_item:
+            key: iammeter.monitorjson
+          tags:
+            -
+              tag: component
+              value: application
+        -
+          uuid: f9f91a9d9daa4af0b552c659a223cd41
+          name: 'IAMMETER:VERSION'
+          type: DEPENDENT
+          key: iammeter.version
+          delay: '0'
+          history: 7d
+          trends: '0'
+          value_type: CHAR
+          description: mac
+          preprocessing:
+            -
+              type: JSONPATH
+              parameters:
+                - $.version
+            -
+              type: DISCARD_UNCHANGED_HEARTBEAT
+              parameters:
+                - 3h
+          master_item:
+            key: iammeter.monitorjson
+          tags:
+            -
+              tag: component
+              value: application
+        -
+          uuid: 99a2f98d84e248478474796f4359f072
+          name: 'IAMMETER:VOLTAGE_A'
+          type: DEPENDENT
+          key: iammeter.voltage_a
+          delay: '0'
+          history: 7d
+          value_type: FLOAT
+          units: V
+          description: 'voltage A'
+          preprocessing:
+            -
+              type: JSONPATH
+              parameters:
+                - '$.Datas[0][0]'
+          master_item:
+            key: iammeter.monitorjson
+          tags:
+            -
+              tag: component
+              value: application
+        -
+          uuid: 91c5103939fa4673a9a9f2639f4b9d76
+          name: 'IAMMETER:VOLTAGE_B'
+          type: DEPENDENT
+          key: iammeter.voltage_b
+          delay: '0'
+          history: 7d
+          value_type: FLOAT
+          units: V
+          description: 'voltage B'
+          preprocessing:
+            -
+              type: JSONPATH
+              parameters:
+                - '$.Datas[1][0]'
+          master_item:
+            key: iammeter.monitorjson
+          tags:
+            -
+              tag: component
+              value: application
+        -
+          uuid: d3003c9df025426bb4ba711a9b774044
+          name: 'IAMMETER:VOLTAGE_C'
+          type: DEPENDENT
+          key: iammeter.voltage_c
+          delay: '0'
+          history: 7d
+          value_type: FLOAT
+          units: V
+          description: 'voltage C'
+          preprocessing:
+            -
+              type: JSONPATH
+              parameters:
+                - '$.Datas[2][0]'
+          master_item:
+            key: iammeter.monitorjson
+          tags:
+            -
+              tag: component
+              value: application
+      tags:
+        -
+          tag: class
+          value: application
+        -
+          tag: target
+          value: iammeter
+      macros:
+        -
+          macro: '{$IAMMETER.URL}'
+          value: 'http://192.168.1.6:80'
+          description: 'URL of a IAMMETER instance.'
+      dashboards:
+        -
+          uuid: 35aaa10261384828bcdba0950d705adb
+          name: Dashboard1
+          pages:
+            -
+              widgets:
+                -
+                  type: CLOCK
+                  x: '12'
+                  width: '5'
+                  height: '4'
+                  hide_header: 'YES'
+                  fields:
+                    -
+                      type: INTEGER
+                      name: clock_type
+                      value: '1'
+                    -
+                      type: INTEGER
+                      name: show
+                      value: '2'
+                    -
+                      type: INTEGER
+                      name: show
+                      value: '3'
+                    -
+                      type: INTEGER
+                      name: adv_conf
+                      value: '1'
+                    -
+                      type: INTEGER
+                      name: time_size
+                      value: '35'
+                    -
+                      type: INTEGER
+                      name: tzone_size
+                      value: '25'
+                    -
+                      type: STRING
+                      name: bg_color
+                      value: 0D47A1
+                    -
+                      type: STRING
+                      name: time_color
+                      value: FFFFFF
+                    -
+                      type: STRING
+                      name: tzone_color
+                      value: FFFFFF
+                -
+                  type: PLAIN_TEXT
+                  x: '17'
+                  width: '7'
+                  height: '4'
+                  fields:
+                    -
+                      type: INTEGER
+                      name: show_as_html
+                      value: '1'
+                    -
+                      type: ITEM
+                      name: itemids
+                      value:
+                        host: 'IAMMETER3 by HTTP'
+                        key: iammeter.sn
+                    -
+                      type: ITEM
+                      name: itemids
+                      value:
+                        host: 'IAMMETER3 by HTTP'
+                        key: iammeter.mac
+                    -
+                      type: ITEM
+                      name: itemids
+                      value:
+                        host: 'IAMMETER3 by HTTP'
+                        key: iammeter.version
+                    -
+                      type: ITEM
+                      name: itemids
+                      value:
+                        host: 'IAMMETER3 by HTTP'
+                        key: iammeter.frequency
+                    -
+                      type: ITEM
+                      name: itemids
+                      value:
+                        host: 'IAMMETER3 by HTTP'
+                        key: iammeter.pf
+                    -
+                      type: ITEM
+                      name: itemids
+                      value:
+                        host: 'IAMMETER3 by HTTP'
+                        key: iammeter.voltage_a
+                    -
+                      type: ITEM
+                      name: itemids
+                      value:
+                        host: 'IAMMETER3 by HTTP'
+                        key: iammeter.voltage_b
+                    -
+                      type: ITEM
+                      name: itemids
+                      value:
+                        host: 'IAMMETER3 by HTTP'
+                        key: iammeter.voltage_c
+                    -
+                      type: ITEM
+                      name: itemids
+                      value:
+                        host: 'IAMMETER3 by HTTP'
+                        key: iammeter.current_a
+                    -
+                      type: ITEM
+                      name: itemids
+                      value:
+                        host: 'IAMMETER3 by HTTP'
+                        key: iammeter.current_b
+                    -
+                      type: ITEM
+                      name: itemids
+                      value:
+                        host: 'IAMMETER3 by HTTP'
+                        key: iammeter.current_c
+                    -
+                      type: ITEM
+                      name: itemids
+                      value:
+                        host: 'IAMMETER3 by HTTP'
+                        key: iammeter.power_a
+                    -
+                      type: ITEM
+                      name: itemids
+                      value:
+                        host: 'IAMMETER3 by HTTP'
+                        key: iammeter.power_b
+                    -
+                      type: ITEM
+                      name: itemids
+                      value:
+                        host: 'IAMMETER3 by HTTP'
+                        key: iammeter.power_c
+                    -
+                      type: ITEM
+                      name: itemids
+                      value:
+                        host: 'IAMMETER3 by HTTP'
+                        key: iammeter.importenergy_a
+                    -
+                      type: ITEM
+                      name: itemids
+                      value:
+                        host: 'IAMMETER3 by HTTP'
+                        key: iammeter.importenergy_b
+                    -
+                      type: ITEM
+                      name: itemids
+                      value:
+                        host: 'IAMMETER3 by HTTP'
+                        key: iammeter.importenergy_c
+                    -
+                      type: ITEM
+                      name: itemids
+                      value:
+                        host: 'IAMMETER3 by HTTP'
+                        key: iammeter.exportgrid_a
+                    -
+                      type: ITEM
+                      name: itemids
+                      value:
+                        host: 'IAMMETER3 by HTTP'
+                        key: iammeter.exportgrid_b
+                    -
+                      type: ITEM
+                      name: itemids
+                      value:
+                        host: 'IAMMETER3 by HTTP'
+                        key: iammeter.exportgrid_c
+                -
+                  type: GRAPH_CLASSIC
+                  'y': '4'
+                  width: '12'
+                  height: '5'
+                  fields:
+                    -
+                      type: GRAPH
+                      name: graphid
+                      value:
+                        host: 'IAMMETER3 by HTTP'
+                        name: 'IAMMETER:Power'
+                -
+                  type: GRAPH_CLASSIC
+                  x: '12'
+                  'y': '4'
+                  width: '12'
+                  height: '5'
+                  fields:
+                    -
+                      type: GRAPH
+                      name: graphid
+                      value:
+                        host: 'IAMMETER3 by HTTP'
+                        name: 'IAMMETER:Voltage'
+                -
+                  type: GRAPH_CLASSIC
+                  'y': '9'
+                  width: '12'
+                  height: '5'
+                  fields:
+                    -
+                      type: GRAPH
+                      name: graphid
+                      value:
+                        host: 'IAMMETER3 by HTTP'
+                        name: 'IAMMETER:Importenergy'
+                -
+                  type: GRAPH_CLASSIC
+                  x: '12'
+                  'y': '9'
+                  width: '12'
+                  height: '5'
+                  fields:
+                    -
+                      type: GRAPH
+                      name: graphid
+                      value:
+                        host: 'IAMMETER3 by HTTP'
+                        name: 'IAMMETER:Exportgrid'
+                -
+                  type: ITEM
+                  x: '4'
+                  width: '4'
+                  hide_header: 'YES'
+                  fields:
+                    -
+                      type: INTEGER
+                      name: show
+                      value: '1'
+                    -
+                      type: INTEGER
+                      name: show
+                      value: '2'
+                    -
+                      type: INTEGER
+                      name: show
+                      value: '4'
+                    -
+                      type: INTEGER
+                      name: adv_conf
+                      value: '1'
+                    -
+                      type: INTEGER
+                      name: decimal_size
+                      value: '25'
+                    -
+                      type: INTEGER
+                      name: value_size
+                      value: '35'
+                    -
+                      type: INTEGER
+                      name: units_size
+                      value: '25'
+                    -
+                      type: STRING
+                      name: desc_color
+                      value: FFFFFF
+                    -
+                      type: STRING
+                      name: value_color
+                      value: FFFFFF
+                    -
+                      type: STRING
+                      name: units_color
+                      value: FFFFFF
+                    -
+                      type: STRING
+                      name: bg_color
+                      value: 1565C0
+                    -
+                      type: ITEM
+                      name: itemid
+                      value:
+                        host: 'IAMMETER3 by HTTP'
+                        key: iammeter.voltage_b
+                -
+                  type: ITEM
+                  x: '4'
+                  'y': '2'
+                  width: '4'
+                  hide_header: 'YES'
+                  fields:
+                    -
+                      type: INTEGER
+                      name: show
+                      value: '1'
+                    -
+                      type: INTEGER
+                      name: show
+                      value: '2'
+                    -
+                      type: INTEGER
+                      name: show
+                      value: '4'
+                    -
+                      type: INTEGER
+                      name: adv_conf
+                      value: '1'
+                    -
+                      type: INTEGER
+                      name: decimal_size
+                      value: '25'
+                    -
+                      type: INTEGER
+                      name: value_size
+                      value: '35'
+                    -
+                      type: INTEGER
+                      name: units_size
+                      value: '25'
+                    -
+                      type: STRING
+                      name: desc_color
+                      value: FFFFFF
+                    -
+                      type: STRING
+                      name: value_color
+                      value: FFFFFF
+                    -
+                      type: STRING
+                      name: units_color
+                      value: FFFFFF
+                    -
+                      type: STRING
+                      name: bg_color
+                      value: 0D47A1
+                    -
+                      type: ITEM
+                      name: itemid
+                      value:
+                        host: 'IAMMETER3 by HTTP'
+                        key: iammeter.power_b
+                -
+                  type: ITEM
+                  x: '8'
+                  width: '4'
+                  hide_header: 'YES'
+                  fields:
+                    -
+                      type: INTEGER
+                      name: show
+                      value: '1'
+                    -
+                      type: INTEGER
+                      name: show
+                      value: '2'
+                    -
+                      type: INTEGER
+                      name: show
+                      value: '4'
+                    -
+                      type: INTEGER
+                      name: adv_conf
+                      value: '1'
+                    -
+                      type: INTEGER
+                      name: decimal_size
+                      value: '25'
+                    -
+                      type: INTEGER
+                      name: value_size
+                      value: '35'
+                    -
+                      type: INTEGER
+                      name: units_size
+                      value: '25'
+                    -
+                      type: STRING
+                      name: desc_color
+                      value: FFFFFF
+                    -
+                      type: STRING
+                      name: value_color
+                      value: FFFFFF
+                    -
+                      type: STRING
+                      name: units_color
+                      value: FFFFFF
+                    -
+                      type: STRING
+                      name: bg_color
+                      value: 1565C0
+                    -
+                      type: ITEM
+                      name: itemid
+                      value:
+                        host: 'IAMMETER3 by HTTP'
+                        key: iammeter.voltage_c
+                -
+                  type: ITEM
+                  x: '8'
+                  'y': '2'
+                  width: '4'
+                  hide_header: 'YES'
+                  fields:
+                    -
+                      type: INTEGER
+                      name: show
+                      value: '1'
+                    -
+                      type: INTEGER
+                      name: show
+                      value: '2'
+                    -
+                      type: INTEGER
+                      name: show
+                      value: '4'
+                    -
+                      type: INTEGER
+                      name: adv_conf
+                      value: '1'
+                    -
+                      type: INTEGER
+                      name: decimal_size
+                      value: '25'
+                    -
+                      type: INTEGER
+                      name: value_size
+                      value: '35'
+                    -
+                      type: INTEGER
+                      name: units_size
+                      value: '25'
+                    -
+                      type: STRING
+                      name: desc_color
+                      value: FFFFFF
+                    -
+                      type: STRING
+                      name: value_color
+                      value: FFFFFF
+                    -
+                      type: STRING
+                      name: units_color
+                      value: FFFFFF
+                    -
+                      type: STRING
+                      name: bg_color
+                      value: 0D47A1
+                    -
+                      type: ITEM
+                      name: itemid
+                      value:
+                        host: 'IAMMETER3 by HTTP'
+                        key: iammeter.power_c
+                -
+                  type: ITEM
+                  width: '4'
+                  hide_header: 'YES'
+                  fields:
+                    -
+                      type: INTEGER
+                      name: show
+                      value: '1'
+                    -
+                      type: INTEGER
+                      name: show
+                      value: '2'
+                    -
+                      type: INTEGER
+                      name: show
+                      value: '4'
+                    -
+                      type: INTEGER
+                      name: adv_conf
+                      value: '1'
+                    -
+                      type: INTEGER
+                      name: decimal_size
+                      value: '25'
+                    -
+                      type: INTEGER
+                      name: value_size
+                      value: '35'
+                    -
+                      type: INTEGER
+                      name: units_size
+                      value: '25'
+                    -
+                      type: STRING
+                      name: desc_color
+                      value: FFFFFF
+                    -
+                      type: STRING
+                      name: value_color
+                      value: FFFFFF
+                    -
+                      type: STRING
+                      name: units_color
+                      value: FFFFFF
+                    -
+                      type: STRING
+                      name: bg_color
+                      value: 1565C0
+                    -
+                      type: ITEM
+                      name: itemid
+                      value:
+                        host: 'IAMMETER3 by HTTP'
+                        key: iammeter.voltage_a
+                -
+                  type: ITEM
+                  'y': '2'
+                  width: '4'
+                  hide_header: 'YES'
+                  fields:
+                    -
+                      type: INTEGER
+                      name: show
+                      value: '1'
+                    -
+                      type: INTEGER
+                      name: show
+                      value: '2'
+                    -
+                      type: INTEGER
+                      name: show
+                      value: '4'
+                    -
+                      type: INTEGER
+                      name: adv_conf
+                      value: '1'
+                    -
+                      type: INTEGER
+                      name: decimal_size
+                      value: '25'
+                    -
+                      type: INTEGER
+                      name: value_size
+                      value: '35'
+                    -
+                      type: INTEGER
+                      name: units_size
+                      value: '25'
+                    -
+                      type: STRING
+                      name: desc_color
+                      value: FFFFFF
+                    -
+                      type: STRING
+                      name: value_color
+                      value: FFFFFF
+                    -
+                      type: STRING
+                      name: units_color
+                      value: FFFFFF
+                    -
+                      type: STRING
+                      name: bg_color
+                      value: 0D47A1
+                    -
+                      type: ITEM
+                      name: itemid
+                      value:
+                        host: 'IAMMETER3 by HTTP'
+                        key: iammeter.power_a
+    -
+      uuid: 9700cdb42ddf4456a8b92c20f7c81780
+      template: 'IAMMETER by HTTP'
+      name: 'IAMMETER by HTTP'
+      description: 'Get IAMMETER datas by HTTP agent.'
+      groups:
+        -
+          name: Templates/Applications
+      items:
+        -
+          uuid: dbc20cc320324917944e130015bc2661
+          name: 'IAMMETER:CURRENT'
+          type: DEPENDENT
+          key: iammeter.current
+          delay: '0'
+          history: 7d
+          value_type: FLOAT
+          units: A
+          description: current
+          preprocessing:
+            -
+              type: JSONPATH
+              parameters:
+                - '$.Data[1]'
+          master_item:
+            key: iammeter.monitorjson
+          tags:
+            -
+              tag: component
+              value: application
+        -
+          uuid: 854e088b6d284e439ff718702bca00e7
+          name: 'IAMMETER:EXPORTGRID'
+          type: DEPENDENT
+          key: iammeter.exportgrid
+          delay: '0'
+          history: 7d
+          value_type: FLOAT
+          units: kWh
+          description: exportgrid
+          preprocessing:
+            -
+              type: JSONPATH
+              parameters:
+                - '$.Data[4]'
+          master_item:
+            key: iammeter.monitorjson
+          tags:
+            -
+              tag: component
+              value: application
+        -
+          uuid: 3dce5c424c9947ec99193c66aba36f0b
+          name: 'IAMMETER:IMPORTENERGY'
+          type: DEPENDENT
+          key: iammeter.importenergy
+          delay: '0'
+          history: 7d
+          value_type: FLOAT
+          units: kWh
+          description: importenergy
+          preprocessing:
+            -
+              type: JSONPATH
+              parameters:
+                - '$.Data[3]'
+          master_item:
+            key: iammeter.monitorjson
+          tags:
+            -
+              tag: component
+              value: application
+        -
+          uuid: a39f23097a514312aca8f158f6323695
+          name: 'IAMMETER:MAC'
+          type: DEPENDENT
+          key: iammeter.mac
+          delay: '0'
+          history: 7d
+          trends: '0'
+          value_type: CHAR
+          description: mac
+          preprocessing:
+            -
+              type: JSONPATH
+              parameters:
+                - $.mac
+            -
+              type: DISCARD_UNCHANGED_HEARTBEAT
+              parameters:
+                - 3h
+          master_item:
+            key: iammeter.monitorjson
+          tags:
+            -
+              tag: component
+              value: application
+        -
+          uuid: 23ec66e4b654445e84a73fd4dd5a1ef9
+          name: 'IAMMETER: MONITORJSON'
+          type: HTTP_AGENT
+          key: iammeter.monitorjson
+          history: 7d
+          trends: '0'
+          value_type: TEXT
+          authtype: BASIC
+          username: admin
+          password: admin
+          url: '{$IAMMETER.URL}/monitorjson'
+          tags:
+            -
+              tag: component
+              value: raw
+        -
+          uuid: 29ac3632dc39492eb142429b7e633062
+          name: 'IAMMETER:POWER'
+          type: DEPENDENT
+          key: iammeter.power
+          delay: '0'
+          history: 7d
+          value_type: FLOAT
+          units: W
+          description: power
+          preprocessing:
+            -
+              type: JSONPATH
+              parameters:
+                - '$.Data[2]'
+          master_item:
+            key: iammeter.monitorjson
+          tags:
+            -
+              tag: component
+              value: application
+        -
+          uuid: f36b455ae88d47118dccdaf4e8113e3f
+          name: 'IAMMETER:SN'
+          type: DEPENDENT
+          key: iammeter.sn
+          delay: '0'
+          history: 7d
+          trends: '0'
+          value_type: CHAR
+          description: SN
+          preprocessing:
+            -
+              type: JSONPATH
+              parameters:
+                - $.SN
+            -
+              type: DISCARD_UNCHANGED_HEARTBEAT
+              parameters:
+                - 3h
+          master_item:
+            key: iammeter.monitorjson
+          tags:
+            -
+              tag: component
+              value: application
+        -
+          uuid: a38f71817a174bdc9e1c6eb14566cae7
+          name: 'IAMMETER:VERSION'
+          type: DEPENDENT
+          key: iammeter.version
+          delay: '0'
+          history: 7d
+          trends: '0'
+          value_type: CHAR
+          description: mac
+          preprocessing:
+            -
+              type: JSONPATH
+              parameters:
+                - $.version
+            -
+              type: DISCARD_UNCHANGED_HEARTBEAT
+              parameters:
+                - 3h
+          master_item:
+            key: iammeter.monitorjson
+          tags:
+            -
+              tag: component
+              value: application
+        -
+          uuid: c4508a0a18644ffabd35729f431bc51d
+          name: 'IAMMETER:VOLTAGE'
+          type: DEPENDENT
+          key: iammeter.voltage
+          delay: '0'
+          history: 7d
+          value_type: FLOAT
+          units: V
+          description: voltage
+          preprocessing:
+            -
+              type: JSONPATH
+              parameters:
+                - '$.Data[0]'
+          master_item:
+            key: iammeter.monitorjson
+          tags:
+            -
+              tag: component
+              value: application
+      tags:
+        -
+          tag: class
+          value: application
+        -
+          tag: target
+          value: iammeter
+      macros:
+        -
+          macro: '{$IAMMETER.URL}'
+          value: 'http://192.168.1.6:80'
+          description: 'URL of a IAMMETER instance.'
+      dashboards:
+        -
+          uuid: ebaa18c20888412796cc4125d18ca448
+          name: Dashboard1
+          pages:
+            -
+              widgets:
+                -
+                  type: ITEM
+                  width: '7'
+                  height: '3'
+                  hide_header: 'YES'
+                  fields:
+                    -
+                      type: INTEGER
+                      name: adv_conf
+                      value: '1'
+                    -
+                      type: INTEGER
+                      name: show
+                      value: '1'
+                    -
+                      type: INTEGER
+                      name: show
+                      value: '2'
+                    -
+                      type: INTEGER
+                      name: show
+                      value: '4'
+                    -
+                      type: STRING
+                      name: bg_color
+                      value: 1565C0
+                    -
+                      type: STRING
+                      name: desc_color
+                      value: FFFFFF
+                    -
+                      type: STRING
+                      name: value_color
+                      value: FFFFFF
+                    -
+                      type: STRING
+                      name: units_color
+                      value: FFFFFF
+                    -
+                      type: ITEM
+                      name: itemid
+                      value:
+                        host: 'IAMMETER by HTTP'
+                        key: iammeter.voltage
+                -
+                  type: ITEM
+                  x: '7'
+                  width: '7'
+                  height: '3'
+                  hide_header: 'YES'
+                  fields:
+                    -
+                      type: INTEGER
+                      name: show
+                      value: '1'
+                    -
+                      type: INTEGER
+                      name: show
+                      value: '2'
+                    -
+                      type: INTEGER
+                      name: show
+                      value: '4'
+                    -
+                      type: INTEGER
+                      name: adv_conf
+                      value: '1'
+                    -
+                      type: STRING
+                      name: bg_color
+                      value: 0D47A1
+                    -
+                      type: STRING
+                      name: desc_color
+                      value: FFFFFF
+                    -
+                      type: STRING
+                      name: value_color
+                      value: FFFFFF
+                    -
+                      type: STRING
+                      name: units_color
+                      value: FFFFFF
+                    -
+                      type: ITEM
+                      name: itemid
+                      value:
+                        host: 'IAMMETER by HTTP'
+                        key: iammeter.power
+                -
+                  type: GRAPH_CLASSIC
+                  'y': '3'
+                  width: '12'
+                  height: '5'
+                  fields:
+                    -
+                      type: GRAPH
+                      name: graphid
+                      value:
+                        host: 'IAMMETER by HTTP'
+                        name: 'IAMMETER:Power'
+                -
+                  type: GRAPH_CLASSIC
+                  x: '12'
+                  'y': '3'
+                  width: '12'
+                  height: '5'
+                  fields:
+                    -
+                      type: GRAPH
+                      name: graphid
+                      value:
+                        host: 'IAMMETER by HTTP'
+                        name: 'IAMMETER:Voltage'
+                -
+                  type: CLOCK
+                  x: '14'
+                  width: '4'
+                  height: '3'
+                  hide_header: 'YES'
+                  fields:
+                    -
+                      type: INTEGER
+                      name: clock_type
+                      value: '1'
+                    -
+                      type: INTEGER
+                      name: show
+                      value: '2'
+                    -
+                      type: INTEGER
+                      name: show
+                      value: '3'
+                    -
+                      type: INTEGER
+                      name: adv_conf
+                      value: '1'
+                    -
+                      type: INTEGER
+                      name: time_size
+                      value: '40'
+                    -
+                      type: INTEGER
+                      name: tzone_size
+                      value: '30'
+                    -
+                      type: STRING
+                      name: bg_color
+                      value: 0D47A1
+                    -
+                      type: STRING
+                      name: time_color
+                      value: FFFFFF
+                    -
+                      type: STRING
+                      name: tzone_color
+                      value: FFFFFF
+                -
+                  type: PLAIN_TEXT
+                  x: '18'
+                  width: '6'
+                  height: '3'
+                  hide_header: 'YES'
+                  fields:
+                    -
+                      type: INTEGER
+                      name: show_as_html
+                      value: '1'
+                    -
+                      type: ITEM
+                      name: itemids
+                      value:
+                        host: 'IAMMETER by HTTP'
+                        key: iammeter.sn
+                    -
+                      type: ITEM
+                      name: itemids
+                      value:
+                        host: 'IAMMETER by HTTP'
+                        key: iammeter.mac
+                    -
+                      type: ITEM
+                      name: itemids
+                      value:
+                        host: 'IAMMETER by HTTP'
+                        key: iammeter.version
+                    -
+                      type: ITEM
+                      name: itemids
+                      value:
+                        host: 'IAMMETER by HTTP'
+                        key: iammeter.voltage
+                    -
+                      type: ITEM
+                      name: itemids
+                      value:
+                        host: 'IAMMETER by HTTP'
+                        key: iammeter.current
+                    -
+                      type: ITEM
+                      name: itemids
+                      value:
+                        host: 'IAMMETER by HTTP'
+                        key: iammeter.power
+                    -
+                      type: ITEM
+                      name: itemids
+                      value:
+                        host: 'IAMMETER by HTTP'
+                        key: iammeter.importenergy
+                    -
+                      type: ITEM
+                      name: itemids
+                      value:
+                        host: 'IAMMETER by HTTP'
+                        key: iammeter.exportgrid
+                -
+                  type: GRAPH_CLASSIC
+                  'y': '8'
+                  width: '12'
+                  height: '5'
+                  fields:
+                    -
+                      type: GRAPH
+                      name: graphid
+                      value:
+                        host: 'IAMMETER by HTTP'
+                        name: 'IAMMETER:Importenergy'
+                -
+                  type: GRAPH_CLASSIC
+                  x: '12'
+                  'y': '8'
+                  width: '12'
+                  height: '5'
+                  fields:
+                    -
+                      type: GRAPH
+                      name: graphid
+                      value:
+                        host: 'IAMMETER by HTTP'
+                        name: 'IAMMETER:Exportgrid'
+  graphs:
+    -
+      uuid: 6c27f76ca6494b6dbff48db7e49ba1b8
+      name: 'IAMETER:Current'
+      graph_items:
+        -
+          color: 1A7C11
+          calc_fnc: ALL
+          item:
+            host: 'IAMMETER by HTTP'
+            key: iammeter.current
+    -
+      uuid: adc810313b4a463299d94e2a871850f0
+      name: 'IAMETER:Current'
+      graph_items:
+        -
+          color: 1A7C11
+          calc_fnc: ALL
+          item:
+            host: 'IAMMETER3 by HTTP'
+            key: iammeter.current_a
+        -
+          sortorder: '1'
+          color: '274482'
+          calc_fnc: ALL
+          item:
+            host: 'IAMMETER3 by HTTP'
+            key: iammeter.current_b
+        -
+          sortorder: '2'
+          color: F63100
+          calc_fnc: ALL
+          item:
+            host: 'IAMMETER3 by HTTP'
+            key: iammeter.current_c
+    -
+      uuid: 23fab15d7c604f70abcf0ad08815c005
+      name: 'IAMETER:Frequency'
+      graph_items:
+        -
+          color: 1A7C11
+          calc_fnc: ALL
+          item:
+            host: 'IAMMETER3 by HTTP'
+            key: iammeter.frequency
+    -
+      uuid: dff092e0d65e40b49504419c5a2324e3
+      name: 'IAMETER:PF'
+      graph_items:
+        -
+          color: 1A7C11
+          calc_fnc: ALL
+          item:
+            host: 'IAMMETER3 by HTTP'
+            key: iammeter.pf
+    -
+      uuid: b43974977ca647cf82a1c52b7fca1fef
+      name: 'IAMMETER:Exportgrid'
+      show_work_period: 'NO'
+      show_triggers: 'NO'
+      graph_items:
+        -
+          color: '274482'
+          calc_fnc: ALL
+          item:
+            host: 'IAMMETER by HTTP'
+            key: iammeter.exportgrid
+    -
+      uuid: 55a2434630264b36b4b5af1e2e1ed29a
+      name: 'IAMMETER:Exportgrid'
+      show_work_period: 'NO'
+      show_triggers: 'NO'
+      graph_items:
+        -
+          color: 1A7C11
+          calc_fnc: ALL
+          item:
+            host: 'IAMMETER3 by HTTP'
+            key: iammeter.exportgrid_a
+        -
+          sortorder: '1'
+          color: '274482'
+          calc_fnc: ALL
+          item:
+            host: 'IAMMETER3 by HTTP'
+            key: iammeter.exportgrid_b
+        -
+          sortorder: '2'
+          color: F63100
+          calc_fnc: ALL
+          item:
+            host: 'IAMMETER3 by HTTP'
+            key: iammeter.exportgrid_c
+    -
+      uuid: fae57411bad7483689385396f9b15a9a
+      name: 'IAMMETER:Importenergy'
+      show_work_period: 'NO'
+      show_triggers: 'NO'
+      graph_items:
+        -
+          color: 1A7C11
+          calc_fnc: MIN
+          item:
+            host: 'IAMMETER by HTTP'
+            key: iammeter.importenergy
+    -
+      uuid: 80c1fb96e154408d9bf2643dca6a4a5d
+      name: 'IAMMETER:Importenergy'
+      show_work_period: 'NO'
+      show_triggers: 'NO'
+      graph_items:
+        -
+          color: 1A7C11
+          calc_fnc: MIN
+          item:
+            host: 'IAMMETER3 by HTTP'
+            key: iammeter.importenergy_a
+        -
+          sortorder: '1'
+          color: F63100
+          calc_fnc: ALL
+          item:
+            host: 'IAMMETER3 by HTTP'
+            key: iammeter.importenergy_b
+        -
+          sortorder: '2'
+          color: 2774A4
+          calc_fnc: ALL
+          item:
+            host: 'IAMMETER3 by HTTP'
+            key: iammeter.importenergy_c
+    -
+      uuid: 1fa96eeb5c1e4df2a7cf904627145c86
+      name: 'IAMMETER:Power'
+      graph_items:
+        -
+          color: 1A7C11
+          calc_fnc: ALL
+          item:
+            host: 'IAMMETER by HTTP'
+            key: iammeter.power
+    -
+      uuid: 905796261d6e4bc78d1c7711d9e12e13
+      name: 'IAMMETER:Power'
+      graph_items:
+        -
+          color: 1A7C11
+          calc_fnc: ALL
+          item:
+            host: 'IAMMETER3 by HTTP'
+            key: iammeter.power_a
+        -
+          sortorder: '1'
+          color: '274482'
+          calc_fnc: ALL
+          item:
+            host: 'IAMMETER3 by HTTP'
+            key: iammeter.power_b
+        -
+          sortorder: '2'
+          color: F63100
+          calc_fnc: ALL
+          item:
+            host: 'IAMMETER3 by HTTP'
+            key: iammeter.power_c
+    -
+      uuid: e3a465bda06847e9ad20e62f7ce99ea2
+      name: 'IAMMETER:Voltage'
+      graph_items:
+        -
+          color: 1A7C11
+          calc_fnc: ALL
+          item:
+            host: 'IAMMETER by HTTP'
+            key: iammeter.voltage
+    -
+      uuid: afada1a41a514de8afa08d9cf25cf860
+      name: 'IAMMETER:Voltage'
+      graph_items:
+        -
+          color: '274482'
+          calc_fnc: ALL
+          item:
+            host: 'IAMMETER3 by HTTP'
+            key: iammeter.voltage_a
+        -
+          sortorder: '1'
+          color: F63100
+          calc_fnc: ALL
+          item:
+            host: 'IAMMETER3 by HTTP'
+            key: iammeter.voltage_b
+        -
+          sortorder: '2'
+          color: 2774A4
+          calc_fnc: ALL
+          item:
+            host: 'IAMMETER3 by HTTP'
+            key: iammeter.voltage_c
