@@ -1,0 +1,202 @@
+#####---Single Phase WiFi Energy Meter Card---######
+type: vertical-stack
+cards:
+  - type: horizontal-stack
+    cards:
+      - graph: line
+        type: sensor
+        entity: sensor.single_phase_wi_fi_energy_meter_voltage
+        name: Voltage
+        detail: 1
+      - graph: none
+        type: sensor
+        entity: sensor.single_phase_wi_fi_energy_meter_importenergy_daily
+        name: Today
+        detail: 1
+        hours_to_show: 8
+      - graph: none
+        type: sensor
+        entity: sensor.single_phase_wi_fi_energy_meter_importenergy_monthly
+        name: ThisMonth
+        detail: 1
+  - type: custom:apexcharts-card
+    header:
+      show: true
+      title: POWER
+      show_states: true
+      colorize_states: true
+    apex_config:
+      chart:
+        zoom:
+          type: x
+          enabled: true
+          autoScaleYaxis: false
+        toolbar:
+          show: true
+          autoSelected: zoom
+        xaxis.type: datetime
+      stroke:
+        width: 1
+        curve: smooth
+    series:
+      - entity: sensor.single_phase_wi_fi_energy_meter_power
+        group_by:
+          func: avg
+          duration: 5min
+    graph_span: 12h
+  - type: custom:apexcharts-card
+    header:
+      show: true
+      title: ENERGY
+      show_states: true
+      colorize_states: true
+    apex_config:
+      chart:
+        zoom:
+          type: x
+          enabled: true
+          autoScaleYaxis: false
+        toolbar:
+          show: true
+          autoSelected: zoom
+        xaxis.type: datetime
+    series:
+      - entity: sensor.single_phase_wi_fi_energy_meter_importenergy_daily
+        type: column
+        group_by:
+          func: max
+          duration: 24h
+    graph_span: 7d
+    span:
+      end: day
+title: Single Phase WiFi Energy Meter
+
+#####---Three Phase WiFi Energy Meter Card---######
+type: vertical-stack
+cards:
+  - type: horizontal-stack
+    cards:
+      - graph: line
+        type: sensor
+        entity: sensor.three_phase_wi_fi_energy_meter_voltage_a
+        name: Voltage A
+        detail: 1
+      - graph: line
+        type: sensor
+        entity: sensor.three_phase_wi_fi_energy_meter_voltage_b
+        name: Voltage B
+        detail: 1
+      - graph: line
+        type: sensor
+        entity: sensor.three_phase_wi_fi_energy_meter_voltage_c
+        name: Voltage C
+        detail: 1
+  - type: horizontal-stack
+    cards:
+      - graph: none
+        type: sensor
+        entity: sensor.three_phase_wi_fi_energy_meter_importenergy_a_daily
+        name: Today A
+        detail: 1
+      - graph: none
+        type: sensor
+        entity: sensor.three_phase_wi_fi_energy_meter_importenergy_b_daily
+        name: Today B
+        detail: 1
+      - graph: none
+        type: sensor
+        entity: sensor.three_phase_wi_fi_energy_meter_importenergy_c_daily
+        name: Today C
+        detail: 1
+  - type: horizontal-stack
+    cards:
+      - graph: none
+        type: sensor
+        entity: sensor.three_phase_wi_fi_energy_meter_importenergy_a_monthly
+        name: Monthly A
+        detail: 1
+      - graph: none
+        type: sensor
+        entity: sensor.three_phase_wi_fi_energy_meter_importenergy_b_monthly
+        name: Monthly B
+        detail: 1
+      - graph: none
+        type: sensor
+        entity: sensor.three_phase_wi_fi_energy_meter_importenergy_c_monthly
+        name: Monthly C
+        detail: 1
+  - type: custom:apexcharts-card
+    header:
+      show: true
+      title: POWER
+      show_states: true
+      colorize_states: true
+    apex_config:
+      chart:
+        zoom:
+          type: x
+          enabled: true
+          autoScaleYaxis: false
+        toolbar:
+          show: true
+          autoSelected: zoom
+        xaxis.type: datetime
+      stroke:
+        width: 1
+        curve: smooth
+    series:
+      - entity: sensor.three_phase_wi_fi_energy_meter_power_a
+        name: Power A
+        group_by:
+          func: avg
+          duration: 5min
+      - entity: sensor.three_phase_wi_fi_energy_meter_power_b
+        name: Power B
+        group_by:
+          func: avg
+          duration: 5min
+      - entity: sensor.three_phase_wi_fi_energy_meter_power_c
+        name: Power C
+        group_by:
+          func: avg
+          duration: 5min
+    graph_span: 12h
+  - type: custom:apexcharts-card
+    header:
+      show: true
+      title: ENERGY
+      show_states: true
+      colorize_states: true
+    apex_config:
+      chart:
+        zoom:
+          type: x
+          enabled: true
+          autoScaleYaxis: false
+        toolbar:
+          show: true
+          autoSelected: zoom
+        xaxis.type: datetime
+    series:
+      - entity: sensor.three_phase_wi_fi_energy_meter_importenergy_a_daily
+        name: Energy A
+        type: column
+        group_by:
+          func: max
+          duration: 24h
+      - entity: sensor.three_phase_wi_fi_energy_meter_importenergy_b_daily
+        name: Energy B
+        type: column
+        group_by:
+          func: max
+          duration: 24h
+      - entity: sensor.three_phase_wi_fi_energy_meter_importenergy_c_daily
+        name: Energy C
+        type: column
+        group_by:
+          func: max
+          duration: 24h
+    graph_span: 7d
+    span:
+      end: day
+title: Three Phase WiFi Energy Meter
