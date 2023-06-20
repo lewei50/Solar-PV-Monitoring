@@ -1,0 +1,179 @@
+{
+  "ruleChain": {
+    "additionalInfo": {
+      "description": ""
+    },
+    "name": "IAMMETER Rule Chain",
+    "type": "CORE",
+    "firstRuleNodeId": null,
+    "root": false,
+    "debugMode": false,
+    "configuration": null,
+    "externalId": null
+  },
+  "metadata": {
+    "firstNodeIndex": 6,
+    "nodes": [
+      {
+        "additionalInfo": {
+          "layoutX": 1186,
+          "layoutY": 160
+        },
+        "type": "org.thingsboard.rule.engine.telemetry.TbMsgTimeseriesNode",
+        "name": "Save Timeseries",
+        "debugMode": false,
+        "singletonMode": false,
+        "configuration": {
+          "defaultTTL": 0
+        },
+        "externalId": null
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 902,
+          "layoutY": 53
+        },
+        "type": "org.thingsboard.rule.engine.telemetry.TbMsgAttributesNode",
+        "name": "Save Client Attributes",
+        "debugMode": false,
+        "singletonMode": false,
+        "configuration": {
+          "scope": "CLIENT_SCOPE",
+          "notifyDevice": "false"
+        },
+        "externalId": null
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 424,
+          "layoutY": 150
+        },
+        "type": "org.thingsboard.rule.engine.filter.TbMsgTypeSwitchNode",
+        "name": "Message Type Switch",
+        "debugMode": false,
+        "singletonMode": false,
+        "configuration": {
+          "version": 0
+        },
+        "externalId": null
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 902,
+          "layoutY": 267
+        },
+        "type": "org.thingsboard.rule.engine.action.TbLogNode",
+        "name": "Log RPC from Device",
+        "debugMode": false,
+        "singletonMode": false,
+        "configuration": {
+          "scriptLang": "TBEL",
+          "jsScript": "return '\\nIncoming message:\\n' + JSON.stringify(msg) + '\\nIncoming metadata:\\n' + JSON.stringify(metadata);",
+          "tbelScript": "return '\\nIncoming message:\\n' + JSON.stringify(msg) + '\\nIncoming metadata:\\n' + JSON.stringify(metadata);"
+        },
+        "externalId": null
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 902,
+          "layoutY": 380
+        },
+        "type": "org.thingsboard.rule.engine.action.TbLogNode",
+        "name": "Log Other",
+        "debugMode": false,
+        "singletonMode": false,
+        "configuration": {
+          "scriptLang": "TBEL",
+          "jsScript": "return '\\nIncoming message:\\n' + JSON.stringify(msg) + '\\nIncoming metadata:\\n' + JSON.stringify(metadata);",
+          "tbelScript": "return '\\nIncoming message:\\n' + JSON.stringify(msg) + '\\nIncoming metadata:\\n' + JSON.stringify(metadata);"
+        },
+        "externalId": null
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 902,
+          "layoutY": 469
+        },
+        "type": "org.thingsboard.rule.engine.rpc.TbSendRPCRequestNode",
+        "name": "RPC Call Request",
+        "debugMode": false,
+        "singletonMode": false,
+        "configuration": {
+          "timeoutInSeconds": 60
+        },
+        "externalId": null
+      },
+      {
+        "additionalInfo": {
+          "description": "Process incoming messages from devices with the alarm rules defined in the device profile. Dispatch all incoming messages with \"Success\" relation type.",
+          "layoutX": 233,
+          "layoutY": 247
+        },
+        "type": "org.thingsboard.rule.engine.profile.TbDeviceProfileNode",
+        "name": "Device Profile Node",
+        "debugMode": false,
+        "singletonMode": false,
+        "configuration": {
+          "persistAlarmRulesState": false,
+          "fetchAlarmRulesStateOnStart": false
+        },
+        "externalId": null
+      },
+      {
+        "additionalInfo": {
+          "description": "",
+          "layoutX": 899,
+          "layoutY": 160
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "Data processing",
+        "debugMode": false,
+        "singletonMode": false,
+        "configuration": {
+          "scriptLang": "JS",
+          "jsScript": "if (typeof msg.Datas !== 'undefined'){\n    msg.Voltage_a = msg.Datas[0][0];\n    msg.Current_a = msg.Datas[0][1];\n    msg.Power_a = msg.Datas[0][2];\n    msg.ImportEnergy_a = msg.Datas[0][3];\n    msg.ExportGrid_a = msg.Datas[0][4];\n    msg.power_factor_a = msg.Datas[0][6];\n    msg.Frequency = msg.Datas[0][5];\n    \n    msg.Voltage_b = msg.Datas[1][0];\n    msg.Current_b = msg.Datas[1][1];\n    msg.Power_b = msg.Datas[1][2];\n    msg.ImportEnergy_b = msg.Datas[1][3];\n    msg.ExportGrid_b = msg.Datas[1][4];\n    msg.power_factor_b = msg.Datas[1][6];\n\n    msg.Voltage_c = msg.Datas[2][0];\n    msg.Current_c = msg.Datas[2][1];\n    msg.Power_c = msg.Datas[2][2];\n    msg.ImportEnergy_c = msg.Datas[2][3];\n    msg.ExportGrid_c = msg.Datas[2][4];\n    msg.power_factor_c = msg.Datas[2][6];    \n}\n\nif (typeof msg.Data !== 'undefined'){\n    msg.Voltage = msg.Data[0];\n    msg.Current = msg.Data[1];\n    msg.Power = msg.Data[2];\n    msg.ImportEnergy = msg.Data[3];\n    msg.ExportGrid = msg.Data[4];\n}\n\nreturn {msg: msg, metadata: metadata, msgType: msgType};",
+          "tbelScript": "return {msg: msg, metadata: metadata, msgType: msgType};"
+        },
+        "externalId": null
+      }
+    ],
+    "connections": [
+      {
+        "fromIndex": 2,
+        "toIndex": 1,
+        "type": "Post attributes"
+      },
+      {
+        "fromIndex": 2,
+        "toIndex": 3,
+        "type": "RPC Request from Device"
+      },
+      {
+        "fromIndex": 2,
+        "toIndex": 4,
+        "type": "Other"
+      },
+      {
+        "fromIndex": 2,
+        "toIndex": 5,
+        "type": "RPC Request to Device"
+      },
+      {
+        "fromIndex": 2,
+        "toIndex": 7,
+        "type": "Post telemetry"
+      },
+      {
+        "fromIndex": 6,
+        "toIndex": 2,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 7,
+        "toIndex": 0,
+        "type": "Success"
+      }
+    ],
+    "ruleChainConnections": null
+  }
+}

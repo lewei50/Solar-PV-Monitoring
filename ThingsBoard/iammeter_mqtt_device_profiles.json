@@ -1,0 +1,46 @@
+{
+  "name": "IAMMETER-MQTT",
+  "description": "",
+  "image": null,
+  "type": "DEFAULT",
+  "transportType": "MQTT",
+  "provisionType": "DISABLED",
+  "defaultRuleChainId": {
+    "entityType": "RULE_CHAIN",
+    "id": "2f929910-0eff-11ee-9b6a-bdbaff9b23d1"
+  },
+  "defaultDashboardId": null,
+  "defaultQueueName": null,
+  "profileData": {
+    "configuration": {
+      "type": "DEFAULT"
+    },
+    "transportConfiguration": {
+      "type": "MQTT",
+      "deviceTelemetryTopic": "device/+/realtime",
+      "deviceAttributesTopic": "v1/devices/me/attributes",
+      "deviceAttributesSubscribeTopic": "device/+/realtime",
+      "transportPayloadTypeConfiguration": {
+        "transportPayloadType": "JSON"
+      },
+      "sparkplug": false,
+      "sparkplugAttributesMetricNames": [
+        "Properties/*",
+        "Device Control/*",
+        "Node Control/*"
+      ],
+      "sendAckOnValidationException": true
+    },
+    "provisionConfiguration": {
+      "type": "DISABLED",
+      "provisionDeviceSecret": null
+    },
+    "alarms": null
+  },
+  "provisionDeviceKey": null,
+  "firmwareId": null,
+  "softwareId": null,
+  "defaultEdgeRuleChainId": null,
+  "externalId": null,
+  "default": false
+}
