@@ -12,7 +12,6 @@ modbus:
         unit_of_measurement: V
         device_class: voltage
         state_class: measurement
-        count: 1
         scale: 0.01
         offset: 0
         precision: 1
@@ -24,7 +23,6 @@ modbus:
         unit_of_measurement: A
         device_class: current
         state_class: measurement
-        count: 1
         scale: 0.01
         offset: 0
         precision: 1
@@ -36,7 +34,6 @@ modbus:
         unit_of_measurement: W
         device_class: power
         state_class: measurement
-        count: 2
         scale: 1
         offset: 0
         precision: 0
@@ -48,7 +45,6 @@ modbus:
         unit_of_measurement: kWh
         device_class: energy
         state_class: total_increasing
-        count: 2
         scale: 0.0003125
         offset: 0
         precision: 3
@@ -60,7 +56,6 @@ modbus:
         unit_of_measurement: kWh
         device_class: energy
         state_class: total_increasing
-        count: 2
         scale: 0.0003125
         offset: 0
         precision: 3
