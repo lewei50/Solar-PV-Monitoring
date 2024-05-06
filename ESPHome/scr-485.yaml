@@ -1,0 +1,181 @@
+esphome:
+  name: scr-485
+  friendly_name: scr_485
+  platformio_options:
+    # platform: https://github.com/platformio/platform-espressif32.git#feature/arduino-upstream
+    board_build.flash_mode: dio
+
+esp32:
+  board: esp32-c3-devkitm-1
+  framework:
+    type: arduino
+
+# Enable logging
+logger:
+  level: DEBUG
+
+# Enable Home Assistant API
+api:
+  # encryption:
+  #   key: "sgCuRJxLsye8p+zn6/0+TaijdeinqqayDoHTboX6TlQ="
+  reboot_timeout: 0s
+
+ota:
+  # password: "279ec37f5bec6c4097b63bf9af78d375"
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Scr-485"
+    # password: "12345678"
+
+web_server:
+  port: 80   
+  local: true
+
+time:
+  - platform: sntp
+    id: sntp_time
+    servers: ntp5.aliyun.com #NTP服务器地址
+    timezone: Asia/Shanghai
+
+captive_portal:
+
+globals:
+  - id: auto_mode
+    type: bool
+    restore_value: true
+    initial_value: 'false'
+
+http_request:
+  useragent: esphome/device
+  timeout: 10s
+  id: http_request_data
+
+uart:
+  id: mod_bus
+  tx_pin: 0
+  rx_pin: 1
+  baud_rate: 9600
+  stop_bits: 1
+
+modbus:
+  # flow_control_pin: 8
+  id: modbus1
+
+modbus_controller:
+- id: modbus_device
+  address: 0x01   ## address of the Modbus slave device on the bus
+  modbus_id: modbus1
+  setup_priority: -10
+  update_interval: 10s
+
+sensor:
+  - platform: modbus_controller
+    modbus_controller_id: modbus_device
+    name: "scr_485_adc_read"
+    id: im1266_voltage
+    register_type: holding
+    address: 0x0001
+    # unit_of_measurement: "ADC"
+    value_type: U_WORD
+    # accuracy_decimals: 4
+    # filters:
+    #   - multiply: 0.0001
+
+number:
+  - platform: modbus_controller
+    modbus_controller_id: modbus_device
+    id: scr_485_set_adc
+    name: "scr_485_set_adc"
+    address: 0x0002
+    value_type: U_WORD
+    # multiply: 1.0
+    min_value: 0
+    max_value: 4096
+
+  - platform: template
+    id: max_power
+    name: "Max Power"
+    optimistic: true
+    min_value: 1
+    max_value: 3000
+    step: 1
+    initial_value: 3000
+    unit_of_measurement: "W"
+    
+  - platform: template
+    id: set_power
+    name: "Set Power"
+    unit_of_measurement: "W"
+    optimistic: true
+    min_value: 0
+    max_value: 3000
+    step: 1
+    # initial_value: 1500
+    on_value:
+      then:
+        - number.set:
+            id: scr_485_set_adc
+            value: !lambda |-
+                uint16_t input_val = id(set_power).state;
+                uint16_t output_val = 0; 
+
+                uint16_t max_power_val = id(max_power).state;
+                if (input_val <= 0){
+                  output_val = 0;
+                }else if (input_val <= max_power_val) {
+                  output_val = 1450 + (input_val - 0) * (4096 - 1450) / (max_power_val - 0);
+                }else{
+                  output_val = 4096;
+                }
+
+                return output_val;
+
+interval:
+  - interval: 5s
+    then:
+      - if:
+          condition:
+            lambda: 'return id(auto_mode);'
+          then:
+            - http_request.get:
+                url: "http://10.10.30.33/monitorjson"
+                headers:
+                  Content-Type: "application/json"
+                verify_ssl: false
+                on_response:
+                  then:
+                    - logger.log:
+                        format: "Response status: %d, Duration: %u ms"
+                        args:
+                          - status_code
+                          - duration_ms
+                    - lambda: |-
+                        json::parse_json(id(http_request_data).get_string(), [](JsonObject root) {
+                            if (root.containsKey("Data") && root["Data"].is<JsonArray>() && root["Data"].size() > 2) {
+                                int16_t power_value = root["Data"][2];
+                                ESP_LOGD("HTTP", "Parsed Data[2]: %d", power_value);
+                                if (id(auto_mode)) {
+                                    id(set_power).publish_state(power_value);
+                                }
+                            }
+                        });
+                        
+switch:
+  - platform: template
+    name: "Auto Mode Switch"
+    id: auto_mode_switch
+    turn_on_action:
+      - globals.set:
+          id: auto_mode
+          value: 'true'
+    turn_off_action:
+      - globals.set:
+          id: auto_mode
+          value: 'false'
+    lambda: |-
+      return id(auto_mode);
