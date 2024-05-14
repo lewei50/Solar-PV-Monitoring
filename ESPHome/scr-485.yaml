@@ -159,8 +159,10 @@ interval:
                             if (root.containsKey("Data") && root["Data"].is<JsonArray>() && root["Data"].size() > 2) {
                                 int16_t power_value = root["Data"][2];
                                 ESP_LOGD("HTTP", "Parsed Data[2]: %d", power_value);
+                                int16_t power_value_tmp = (power_value > 50) ? (power_value - 50) : 0;
+                                ESP_LOGD("HTTP", "Calculated power_value_tmp: %d", power_value_tmp);
                                 if (id(auto_mode)) {
-                                    id(set_power).publish_state(power_value);
+                                    id(set_power).publish_state(power_value_tmp);
                                 }
                             }
                         });
@@ -177,5 +179,8 @@ switch:
       - globals.set:
           id: auto_mode
           value: 'false'
+      - number.set:
+          id: set_power
+          value: '0.0'
     lambda: |-
       return id(auto_mode);
