@@ -71,7 +71,7 @@ modbus_controller:
   address: 0x01   ## address of the Modbus slave device on the bus
   modbus_id: modbus1
   setup_priority: -10
-  update_interval: 10s
+  update_interval: 1s
 
 sensor:
   - platform: modbus_controller
@@ -85,6 +85,16 @@ sensor:
     # accuracy_decimals: 4
     # filters:
     #   - multiply: 0.0001
+  - platform: template
+    name: "Grid Power"
+    id: grid_power
+    unit_of_measurement: "W"
+    update_interval: 1s
+  - platform: template
+    name: "Grid Power REV"
+    id: grid_power_rev
+    unit_of_measurement: "W"
+    update_interval: 1s
 
 number:
   - platform: modbus_controller
@@ -146,7 +156,7 @@ number:
                 return output_val;
 
 interval:
-  - interval: 5s
+  - interval: 1s
     then:
       - if:
           condition:
@@ -156,6 +166,7 @@ interval:
                 url: "http://10.10.30.33/monitorjson"
                 headers:
                   Content-Type: "application/json"
+                  Authorization: 'Basic YWRtaW46YWRtaW4='
                 verify_ssl: false
                 on_response:
                   then:
@@ -169,25 +180,56 @@ interval:
                             // WEM3080
                             if (root.containsKey("Data") && root["Data"].is<JsonArray>() && root["Data"].size() > 2) {
                                 int32_t grid_power_value = root["Data"][2];
+                                id(grid_power).publish_state(grid_power_value);
+                                id(grid_power_rev).publish_state(-grid_power_value);
                                 int16_t threshold_tmp = id(threshold).state;
-                                ESP_LOGD("HTTP", "Parsed Data[2]: %d", grid_power_value);
-                                int32_t grid_power_value_tmp = (grid_power_value < -threshold_tmp) ? (grid_power_value + threshold_tmp) : 0;
-                                ESP_LOGD("HTTP", "Calculated grid_power_value_tmp: %d", grid_power_value_tmp);
-                                if (id(auto_mode)) {
-                                    id(set_power).publish_state(-grid_power_value_tmp);
-                                }  
+                                int32_t grid_power_value_tmp = 0;
+                                if (grid_power_value < -threshold_tmp) {
+                                    grid_power_value_tmp = grid_power_value -id(set_power).state + (threshold_tmp/2 + 5);
+                                    if (grid_power_value_tmp > 0) {
+                                        grid_power_value_tmp = 0;
+                                    } 
+                                    if (id(auto_mode)) {
+                                        id(set_power).publish_state(-grid_power_value_tmp);
+                                    } 
+                                } 
+                                if (grid_power_value > 0) {
+                                    grid_power_value_tmp = grid_power_value -id(set_power).state - (threshold_tmp/2 - 5);
+                                    if (grid_power_value_tmp > 0) {
+                                        grid_power_value_tmp = 0;
+                                    } 
+                                  if (id(auto_mode)) {
+                                      id(set_power).publish_state(-grid_power_value_tmp);
+                                  } 
+                                } 
                             }
                             // WEM3080T/WEM3050T/WEM3046T
                             if (root.containsKey("Datas") && root["Datas"].is<JsonArray>() && root["Datas"].size() > 2) {
                                 // If your solar PV uses phase A, it is ["Datas"][0][2], if it is phase B, it is ["Datas"][1][2], if it is phase C, it is ["Datas"] [2][2]
                                 int32_t grid_power_value = root["Datas"][1][2];
+                                id(grid_power).publish_state(grid_power_value);
+                                id(grid_power_rev).publish_state(-grid_power_value);
                                 int16_t threshold_tmp = id(threshold).state;
-                                ESP_LOGD("HTTP", "Parsed Data[2]: %d", grid_power_value);
-                                int32_t grid_power_value_tmp = (grid_power_value < -threshold_tmp) ? (grid_power_value + threshold_tmp) : 0;
-                                ESP_LOGD("HTTP", "Calculated grid_power_value_tmp: %d", grid_power_value_tmp);
-                                if (id(auto_mode)) {
-                                    id(set_power).publish_state(-grid_power_value_tmp);
-                                }  
+                                int32_t grid_power_value_tmp = 0;
+                                if (grid_power_value < -threshold_tmp) {
+                                    grid_power_value_tmp = grid_power_value -id(set_power).state + (threshold_tmp/2 + 5);
+                                    if (grid_power_value_tmp > 0) {
+                                        grid_power_value_tmp = 0;
+                                    } 
+                                    if (id(auto_mode)) {
+                                        id(set_power).publish_state(-grid_power_value_tmp);
+                                    } 
+                                } 
+                                if (grid_power_value > 0) {
+                                    grid_power_value_tmp = grid_power_value -id(set_power).state - (threshold_tmp/2 - 5);
+                                    if (grid_power_value_tmp > 0) {
+                                        grid_power_value_tmp = 0;
+                                    } 
+                                  if (id(auto_mode)) {
+                                      id(set_power).publish_state(-grid_power_value_tmp);
+                                  } 
+                                } 
+ 
                             }
                         });
                         
