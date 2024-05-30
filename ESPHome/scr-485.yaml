@@ -11,8 +11,8 @@ esp32:
     type: arduino
 
 # Enable logging
-logger:
-  level: DEBUG
+# logger:
+#   level: DEBUG
 
 # Enable Home Assistant API
 api:
@@ -39,7 +39,7 @@ web_server:
 time:
   - platform: sntp
     id: sntp_time
-    servers: ntp5.aliyun.com #NTP服务器地址
+    servers: ntp5.aliyun.com #NTP server address
     timezone: Asia/Shanghai
 
 captive_portal:
@@ -55,6 +55,17 @@ http_request:
   timeout: 10s
   id: http_request_data
 
+status_led:
+  pin:
+    number: GPIO08
+    inverted: true
+
+# light:
+#   - platform: status_led
+#     name: "Status Led"
+#     pin:
+#       number: GPIO08
+#       inverted: true
 uart:
   id: mod_bus
   tx_pin: 0
@@ -165,12 +176,33 @@ number:
 
                 return output_val;
 
+  - platform: template
+    id: auto_start_time
+    name: "1 Start Time"
+    optimistic: true
+    min_value: 0
+    max_value: 24
+    step: 1
+    initial_value: 9
+
+  - platform: template
+    id: auto_end_time
+    name: "2 End Time"
+    optimistic: true
+    min_value: 0
+    max_value: 24
+    step: 1
+    initial_value: 16
+
 interval:
   - interval: 1s
     then:
       - if:
           condition:
-            lambda: 'return id(auto_mode);'
+            # lambda: 'return id(auto_mode);'
+            and:
+              - lambda: 'return id(auto_mode);'
+              - lambda: 'auto time = id(sntp_time).now(); return time.hour >= id(auto_start_time).state && time.hour < id(auto_end_time).state;'
           then:
             - http_request.get:
                 url: "http://10.10.30.33/monitorjson"
@@ -274,3 +306,7 @@ switch:
           value: '0.0'
     lambda: |-
       return id(auto_mode);
+
+button:
+  - platform: restart
+    name: "Restart"
