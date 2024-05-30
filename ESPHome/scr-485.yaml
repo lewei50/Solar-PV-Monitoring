@@ -237,6 +237,9 @@ interval:
                                     if (tmp_set_power < 0) {
                                         tmp_set_power = 0;
                                     } 
+                                    if (tmp_set_power > id(max_power).state) {
+                                        tmp_set_power = id(max_power).state;
+                                    }
                                     if (id(auto_mode)) {
                                         id(set_power).publish_state(tmp_set_power);
                                     } 
@@ -246,6 +249,9 @@ interval:
                                     tmp_set_power -= abs(tmp_grid_power - tmp_threshold);
                                     if (tmp_set_power < 0) {
                                         tmp_set_power = 0;
+                                    }
+                                    if (tmp_set_power > id(max_power).state) {
+                                        tmp_set_power = id(max_power).state;
                                     }
                                     if (id(auto_mode)) {
                                         id(set_power).publish_state(tmp_set_power);
@@ -271,6 +277,9 @@ interval:
                                     if (tmp_set_power < 0) {
                                         tmp_set_power = 0;
                                     } 
+                                    if (tmp_set_power > id(max_power).state) {
+                                        tmp_set_power = id(max_power).state;
+                                    } 
                                     if (id(auto_mode)) {
                                         id(set_power).publish_state(tmp_set_power);
                                     } 
@@ -280,6 +289,9 @@ interval:
                                     tmp_set_power -= abs(tmp_grid_power - tmp_threshold);
                                     if (tmp_set_power < 0) {
                                         tmp_set_power = 0;
+                                    }
+                                    if (tmp_set_power > id(max_power).state) {
+                                        tmp_set_power = id(max_power).state;
                                     }
                                     if (id(auto_mode)) {
                                         id(set_power).publish_state(tmp_set_power);
