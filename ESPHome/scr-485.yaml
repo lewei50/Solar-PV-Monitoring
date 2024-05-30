@@ -123,9 +123,9 @@ number:
     name: "Max Power"
     optimistic: true
     min_value: 1
-    max_value: 3500
+    max_value: 3600
     step: 1
-    initial_value: 3500
+    initial_value: 3600
     unit_of_measurement: "W"
 
   - platform: template
