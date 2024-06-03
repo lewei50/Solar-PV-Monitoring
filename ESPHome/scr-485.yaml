@@ -268,7 +268,6 @@ interval:
                             if (root.containsKey("Datas") && root["Datas"].is<JsonArray>() && root["Datas"].size() > 2) {
                                 // If your solar PV uses phase A, it is ["Datas"][0][2], if it is phase B, it is ["Datas"][1][2], if it is phase C, it is ["Datas"] [2][2]
                                 int32_t tmp_grid_power = root["Datas"][1][2];
-                                tmp_grid_power = -tmp_grid_power;
                                 id(grid_power).publish_state(tmp_grid_power);
 
                                 int32_t tmp_grid_power_rev = -tmp_grid_power;
