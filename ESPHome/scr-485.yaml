@@ -1,10 +1,22 @@
+#################################################
+        ##scr-485.yaml##
+#################################################
+
+## Add in your secrets.yaml
+#  wifi_ssid: 'iammeter' 
+#  wifi_password: '12345678' 
+
+#################################################
+
 esphome:
   name: scr-485
   friendly_name: scr_485
   platformio_options:
     # platform: https://github.com/platformio/platform-espressif32.git#feature/arduino-upstream
     board_build.flash_mode: dio
-
+  on_boot:
+    then:
+      - switch.turn_on: with_battery
 esp32:
   board: esp32-c3-devkitm-1
   framework:
@@ -49,6 +61,10 @@ globals:
     type: bool
     restore_value: true
     initial_value: 'false'
+  - id: global_with_battery
+    type: bool
+    restore_value: true
+    initial_value: 'true'
 
 http_request:
   useragent: esphome/device
@@ -104,6 +120,16 @@ sensor:
   - platform: template
     name: "Grid Power REV"
     id: grid_power_rev
+    unit_of_measurement: "W"
+    update_interval: 1s
+  - platform: template
+    name: "Battery Power"
+    id: battery_power
+    unit_of_measurement: "W"
+    update_interval: 1s
+  - platform: template
+    name: "Battery Power REV"
+    id: battery_power_rev
     unit_of_measurement: "W"
     update_interval: 1s
 
@@ -210,6 +236,37 @@ interval:
               - lambda: 'return id(auto_mode);'
               - lambda: 'auto time = id(sntp_time).now(); return time.hour >= id(auto_start_time).state && time.hour < id(auto_end_time).state;'
           then:
+            #with Battery
+            - if:
+                condition:
+                  lambda: 'return !id(global_with_battery);'
+                then:
+                  - http_request.get:
+                      url: "http://10.10.30.33/monitorjson"
+                      headers:
+                        Content-Type: "application/json"
+                        Authorization: 'Basic YWRtaW46YWRtaW4='
+                      verify_ssl: false
+                      on_response:
+                        then:
+                          - logger.log:
+                              format: "Response status: %d, Duration: %u ms"
+                              args:
+                                - status_code
+                                - duration_ms
+                          - lambda: |-
+                              json::parse_json(id(http_request_data).get_string(), [](JsonObject root) {
+                                  // WEM3080
+                                  if (root.containsKey("Data") && root["Data"].is<JsonArray>() && root["Data"].size() > 2) {
+                                      int32_t tmp_battery_power = root["Data"][2];
+                                      //tmp_battery_power = -tmp_battery_power; //for test 
+                                      id(battery_power).publish_state(tmp_battery_power);
+
+                                      int32_t tmp_battery_power_rev = -tmp_battery_power;
+                                      id(battery_power_rev).publish_state(tmp_battery_power_rev);
+                                  }
+                              }); 
+     
             - http_request.get:
                 url: "http://10.10.30.38/monitorjson"
                 headers:
@@ -238,6 +295,10 @@ interval:
 
                                 int32_t tmp_set_power = id(set_power).state;
                                 
+                                if ((!id(global_with_battery))&&id(battery_power).state<0) {
+                                    tmp_grid_power = tmp_grid_power - id(battery_power).state;
+                                } 
+
                                 if (tmp_grid_power < tmp_threshold - tmp_hysteresis) {
                                     tmp_set_power += abs(tmp_grid_power - tmp_threshold);
                                     if (tmp_set_power < 0) {
@@ -268,6 +329,7 @@ interval:
                             if (root.containsKey("Datas") && root["Datas"].is<JsonArray>() && root["Datas"].size() > 2) {
                                 // If your solar PV uses phase A, it is ["Datas"][0][2], if it is phase B, it is ["Datas"][1][2], if it is phase C, it is ["Datas"] [2][2]
                                 int32_t tmp_grid_power = root["Datas"][1][2];
+                                //tmp_grid_power = -tmp_grid_power; //for test 
                                 id(grid_power).publish_state(tmp_grid_power);
 
                                 int32_t tmp_grid_power_rev = -tmp_grid_power;
@@ -278,6 +340,10 @@ interval:
 
                                 int32_t tmp_set_power = id(set_power).state;
                                 
+                                if ((!id(global_with_battery))&&id(battery_power).state<0) {
+                                    tmp_grid_power = tmp_grid_power - id(battery_power).state;
+                                } 
+
                                 if (tmp_grid_power < tmp_threshold - tmp_hysteresis) {
                                     tmp_set_power += abs(tmp_grid_power - tmp_threshold);
                                     if (tmp_set_power < 0) {
@@ -309,7 +375,7 @@ interval:
                         
 switch:
   - platform: template
-    name: "Auto Mode Switch"
+    name: "3 Auto Mode Switch"
     id: auto_mode_switch
     turn_on_action:
       - globals.set:
@@ -324,6 +390,19 @@ switch:
           value: '0.0'
     lambda: |-
       return id(auto_mode);
+  - platform: template
+    name: "3 With Battery"
+    id: with_battery
+    turn_on_action:
+      - globals.set:
+          id: global_with_battery
+          value: 'true'
+    turn_off_action:
+      - globals.set:
+          id: global_with_battery
+          value: 'false'
+    lambda: |-
+      return id(global_with_battery);
 
 button:
   - platform: restart
