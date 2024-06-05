@@ -14,9 +14,9 @@ esphome:
   platformio_options:
     # platform: https://github.com/platformio/platform-espressif32.git#feature/arduino-upstream
     board_build.flash_mode: dio
-  on_boot:
-    then:
-      - switch.turn_on: with_battery
+  # on_boot:
+  #   then:
+  #     - switch.turn_on: with_battery
 esp32:
   board: esp32-c3-devkitm-1
   framework:
@@ -64,7 +64,7 @@ globals:
   - id: global_with_battery
     type: bool
     restore_value: true
-    initial_value: 'true'
+    initial_value: 'false'
   - id: interval_flag
     type: bool
     restore_value: true
@@ -268,7 +268,7 @@ interval:
             # with Battery
             - if:
                 condition:
-                  lambda: 'return !id(global_with_battery);'
+                  lambda: 'return id(global_with_battery);'
                 then:
                   - http_request.get: # IP of the meter that measures the battery power.
                       url: "http://10.10.30.33/monitorjson"
@@ -324,7 +324,7 @@ interval:
 
                                 int32_t tmp_set_power = id(set_power).state;
                                 
-                                if ((!id(global_with_battery))&&id(battery_power).state<0) {
+                                if ((id(global_with_battery))&&id(battery_power).state<0) {
                                     tmp_grid_power = tmp_grid_power - id(battery_power).state;
                                 } 
 
@@ -369,7 +369,7 @@ interval:
 
                                 int32_t tmp_set_power = id(set_power).state;
                                 
-                                if ((!id(global_with_battery))&&id(battery_power).state<0) {
+                                if ((id(global_with_battery))&&id(battery_power).state<0) {
                                     tmp_grid_power = tmp_grid_power - id(battery_power).state;
                                 } 
 
