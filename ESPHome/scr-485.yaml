@@ -236,12 +236,12 @@ interval:
               - lambda: 'return id(auto_mode);'
               - lambda: 'auto time = id(sntp_time).now(); return time.hour >= id(auto_start_time).state && time.hour < id(auto_end_time).state;'
           then:
-            #with Battery
+            # with Battery, 
             - if:
                 condition:
                   lambda: 'return !id(global_with_battery);'
                 then:
-                  - http_request.get:
+                  - http_request.get: # IP of the meter that measures the battery power.
                       url: "http://10.10.30.33/monitorjson"
                       headers:
                         Content-Type: "application/json"
@@ -267,7 +267,7 @@ interval:
                                   }
                               }); 
      
-            - http_request.get:
+            - http_request.get: # IP of the meter that measures the grid power.
                 url: "http://10.10.30.38/monitorjson"
                 headers:
                   Content-Type: "application/json"
