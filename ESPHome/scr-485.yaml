@@ -65,6 +65,10 @@ globals:
     type: bool
     restore_value: true
     initial_value: 'true'
+  - id: interval_flag
+    type: bool
+    restore_value: true
+    initial_value: 'false'
 
 http_request:
   useragent: esphome/device
@@ -98,7 +102,7 @@ modbus_controller:
   address: 0x01   ## address of the Modbus slave device on the bus
   modbus_id: modbus1
   setup_priority: -10
-  update_interval: 1s
+  update_interval: 3s
 
 sensor:
   - platform: modbus_controller
@@ -116,22 +120,22 @@ sensor:
     name: "Grid Power"
     id: grid_power
     unit_of_measurement: "W"
-    update_interval: 1s
+    update_interval: 3s
   - platform: template
     name: "Grid Power REV"
     id: grid_power_rev
     unit_of_measurement: "W"
-    update_interval: 1s
+    update_interval: 3s
   - platform: template
     name: "Battery Power"
     id: battery_power
     unit_of_measurement: "W"
-    update_interval: 1s
+    update_interval: 3s
   - platform: template
     name: "Battery Power REV"
     id: battery_power_rev
     unit_of_measurement: "W"
-    update_interval: 1s
+    update_interval: 3s
 
 number:
   - platform: modbus_controller
@@ -226,17 +230,42 @@ number:
     initial_value: 16
     restore_value: True
 
+  - platform: template
+    id: interval_seconds
+    name: "4 Interval Seconds"
+    unit_of_measurement: "s"
+    optimistic: true
+    min_value: 1
+    max_value: 30
+    step: 1
+    initial_value: 3
+    restore_value: True
+
 interval:
-  - interval: 3s
+  - interval: 1s
+    then:
+      lambda: |-
+        static int counter = 0;
+        counter++;
+        if (counter >= id(interval_seconds).state) {
+          counter = 0;
+          id(interval_flag) = true;     
+          ESP_LOGI("main", "Interval triggered");
+        }
+  - interval: 1s
     then:
       - if:
           condition:
             # lambda: 'return id(auto_mode);'
             and:
+              - lambda: 'return id(interval_flag);'
               - lambda: 'return id(auto_mode);'
               - lambda: 'auto time = id(sntp_time).now(); return time.hour >= id(auto_start_time).state && time.hour < id(auto_end_time).state;'
           then:
-            # with Battery, 
+            - lambda: |-
+                id(interval_flag) = false; 
+                ESP_LOGI("main", "interval_flag");
+            # with Battery
             - if:
                 condition:
                   lambda: 'return !id(global_with_battery);'
