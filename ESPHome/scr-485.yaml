@@ -16,6 +16,7 @@ esphome:
     board_build.flash_mode: dio
   # on_boot:
   #   then:
+  #     - switch.turn_on: auto_mode_switch
   #     - switch.turn_on: with_battery
 esp32:
   board: esp32-c3-devkitm-1
