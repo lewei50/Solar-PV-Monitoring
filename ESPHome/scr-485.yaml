@@ -70,6 +70,10 @@ globals:
     type: bool
     restore_value: true
     initial_value: 'false'
+  - id: non_pvp_flag
+    type: bool
+    restore_value: true
+    initial_value: 'false'
 
 http_request:
   useragent: esphome/device
@@ -255,6 +259,33 @@ interval:
         }
   - interval: 1s
     then:
+      # During non-PV power generation period, reset the set power to the maximum power
+      - if:
+          condition:
+            # lambda: 'return id(auto_mode);'
+            and:
+              - lambda: 'return id(interval_flag);'
+              - lambda: 'return id(auto_mode);'
+              - lambda: 'return !id(non_pvp_flag);'
+              - lambda: 'auto time = id(sntp_time).now(); return time.hour >= id(auto_end_time).state;'
+          then:
+            - lambda: |-
+                id(non_pvp_flag) = true; 
+                id(set_power).publish_state(id(max_power).state);
+                ESP_LOGI("main", "non_pvp_flag");
+      - if:
+          condition:
+            # lambda: 'return id(auto_mode);'
+            and:
+              - lambda: 'return id(interval_flag);'
+              - lambda: 'return id(auto_mode);'
+              - lambda: 'return id(non_pvp_flag);'
+              - lambda: 'auto time = id(sntp_time).now(); return time.hour >= id(auto_start_time).state && time.hour < id(auto_end_time).state;'
+          then:
+            - lambda: |-
+                id(non_pvp_flag) = false; 
+                ESP_LOGI("main", "pvp_flag");
+      # Main regulation logic
       - if:
           condition:
             # lambda: 'return id(auto_mode);'
