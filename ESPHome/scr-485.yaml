@@ -111,17 +111,17 @@ modbus_controller:
   update_interval: 3s
 
 sensor:
-  - platform: modbus_controller
-    modbus_controller_id: modbus_device
-    name: "scr_485_adc_read"
-    id: im1266_voltage
-    register_type: holding
-    address: 0x0001
-    # unit_of_measurement: "ADC"
-    value_type: U_WORD
-    # accuracy_decimals: 4
-    # filters:
-    #   - multiply: 0.0001
+  # - platform: modbus_controller
+  #   modbus_controller_id: modbus_device
+  #   name: "scr_485_adc_read"
+  #   id: im1266_voltage
+  #   register_type: holding
+  #   address: 0x0001
+  #   # unit_of_measurement: "ADC"
+  #   value_type: U_WORD
+  #   # accuracy_decimals: 4
+  #   # filters:
+  #   #   - multiply: 0.0001
   - platform: template
     name: "Grid Power"
     id: grid_power
@@ -164,6 +164,7 @@ number:
     initial_value: 3600
     restore_value: True
     unit_of_measurement: "W"
+    mode: box
 
   - platform: template
     id: threshold
@@ -175,6 +176,7 @@ number:
     initial_value: -20
     restore_value: True
     unit_of_measurement: "W"
+    mode: box
 
   - platform: template
     id: hysteresis
@@ -186,6 +188,7 @@ number:
     initial_value: 50
     restore_value: True
     unit_of_measurement: "W"
+    mode: box
     
   - platform: template
     id: set_power
@@ -197,6 +200,7 @@ number:
     step: 1
     # initial_value: 1500
     restore_value: True
+    mode: box
     on_value:
       then:
         - number.set:
@@ -225,6 +229,7 @@ number:
     step: 1
     initial_value: 9
     restore_value: True
+    mode: box
 
   - platform: template
     id: auto_end_time
@@ -235,6 +240,7 @@ number:
     step: 1
     initial_value: 16
     restore_value: True
+    mode: box
 
   - platform: template
     id: interval_seconds
@@ -246,6 +252,7 @@ number:
     step: 1
     initial_value: 3
     restore_value: True
+    mode: box
 
 interval:
   - interval: 1s
