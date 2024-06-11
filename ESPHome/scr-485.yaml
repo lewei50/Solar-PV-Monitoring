@@ -48,7 +48,7 @@ wifi:
 
 web_server:
   port: 80   
-  local: true
+  # local: true
   version: 2
 time:
   - platform: sntp
