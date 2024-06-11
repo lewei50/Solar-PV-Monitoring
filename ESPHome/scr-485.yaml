@@ -49,7 +49,7 @@ wifi:
 web_server:
   port: 80   
   local: true
-
+  version: 2
 time:
   - platform: sntp
     id: sntp_time
@@ -127,21 +127,21 @@ sensor:
     id: grid_power
     unit_of_measurement: "W"
     update_interval: 3s
-  - platform: template
-    name: "Grid Power REV"
-    id: grid_power_rev
-    unit_of_measurement: "W"
-    update_interval: 3s
+  # - platform: template
+  #   name: "Grid Power REV"
+  #   id: grid_power_rev
+  #   unit_of_measurement: "W"
+  #   update_interval: 3s
   - platform: template
     name: "Battery Power"
     id: battery_power
     unit_of_measurement: "W"
     update_interval: 3s
-  - platform: template
-    name: "Battery Power REV"
-    id: battery_power_rev
-    unit_of_measurement: "W"
-    update_interval: 3s
+  # - platform: template
+  #   name: "Battery Power REV"
+  #   id: battery_power_rev
+  #   unit_of_measurement: "W"
+  #   update_interval: 3s
 
 number:
   - platform: modbus_controller
@@ -268,7 +268,7 @@ interval:
               - lambda: 'return id(interval_flag);'
               - lambda: 'return id(auto_mode);'
               - lambda: 'return !id(non_pvp_flag);'
-              - lambda: 'auto time = id(sntp_time).now();  return time.hour < id(auto_start_time).state || time.hour >= id(auto_end_time).state;'
+              - lambda: 'auto time = id(sntp_time).now();  return (time.hour == id(auto_end_time).state) && (time.minute == 0);'
           then:
             - lambda: |-
                 id(non_pvp_flag) = true; 
@@ -324,8 +324,8 @@ interval:
                                       //tmp_battery_power = -tmp_battery_power; //for test 
                                       id(battery_power).publish_state(tmp_battery_power);
 
-                                      int32_t tmp_battery_power_rev = -tmp_battery_power;
-                                      id(battery_power_rev).publish_state(tmp_battery_power_rev);
+                                      // int32_t tmp_battery_power_rev = -tmp_battery_power;
+                                      // id(battery_power_rev).publish_state(tmp_battery_power_rev);
                                   }
                               }); 
      
@@ -349,8 +349,8 @@ interval:
                                 int32_t tmp_grid_power = root["Data"][2];
                                 id(grid_power).publish_state(tmp_grid_power);
 
-                                int32_t tmp_grid_power_rev = -tmp_grid_power;
-                                id(grid_power_rev).publish_state(tmp_grid_power_rev);
+                                // int32_t tmp_grid_power_rev = -tmp_grid_power;
+                                // id(grid_power_rev).publish_state(tmp_grid_power_rev);
 
                                 int32_t tmp_threshold = id(threshold).state;
                                 int32_t tmp_hysteresis = id(hysteresis).state;
@@ -394,8 +394,8 @@ interval:
                                 //tmp_grid_power = -tmp_grid_power; //for test 
                                 id(grid_power).publish_state(tmp_grid_power);
 
-                                int32_t tmp_grid_power_rev = -tmp_grid_power;
-                                id(grid_power_rev).publish_state(tmp_grid_power_rev);
+                                // int32_t tmp_grid_power_rev = -tmp_grid_power;
+                                // id(grid_power_rev).publish_state(tmp_grid_power_rev);
 
                                 int32_t tmp_threshold = id(threshold).state;
                                 int32_t tmp_hysteresis = id(hysteresis).state;
@@ -439,6 +439,7 @@ switch:
   - platform: template
     name: "3 Auto Mode Switch"
     id: auto_mode_switch
+    restore_mode: DISABLED 
     turn_on_action:
       - globals.set:
           id: auto_mode
@@ -447,14 +448,16 @@ switch:
       - globals.set:
           id: auto_mode
           value: 'false'
-      - number.set:
-          id: set_power
-          value: '0.0'
+      # - number.set:
+      #     id: set_power
+      #     value: '0.0'
     lambda: |-
       return id(auto_mode);
+
   - platform: template
     name: "3 With Battery"
     id: with_battery
+    restore_mode: DISABLED 
     turn_on_action:
       - globals.set:
           id: global_with_battery
