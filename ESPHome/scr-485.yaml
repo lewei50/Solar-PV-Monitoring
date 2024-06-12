@@ -7,6 +7,8 @@
 #  wifi_password: '12345678' 
 
 #################################################
+substitutions:
+  version: "1.1.6"  
 
 esphome:
   name: scr-485
@@ -55,6 +57,8 @@ time:
     id: sntp_time
     # servers: ntp5.aliyun.com #NTP server address
     # timezone: Asia/Shanghai
+    servers: au.pool.ntp.org
+    timezone: Australia/Brisbane
 
 captive_portal:
 
@@ -78,7 +82,7 @@ globals:
 
 http_request:
   useragent: esphome/device
-  timeout: 10s
+  # timeout: 10s
   id: http_request_data
 
 status_led:
@@ -127,21 +131,28 @@ sensor:
     id: grid_power
     unit_of_measurement: "W"
     update_interval: 3s
-  # - platform: template
-  #   name: "Grid Power REV"
-  #   id: grid_power_rev
-  #   unit_of_measurement: "W"
-  #   update_interval: 3s
   - platform: template
     name: "Battery Power"
     id: battery_power
     unit_of_measurement: "W"
     update_interval: 3s
-  # - platform: template
-  #   name: "Battery Power REV"
-  #   id: battery_power_rev
-  #   unit_of_measurement: "W"
-  #   update_interval: 3s
+
+text_sensor:
+  - platform: template
+    name: "X Current Time"
+    lambda: |-
+      //uint32_t dur = id(uptime_s).state;
+      auto time = id(sntp_time).now();
+      char buffer[17];
+      sprintf(buffer, "%02u:%02u", time.hour, time.minute);
+      return {buffer};
+    icon: mdi:clock-start
+    update_interval: 5s
+  - platform: template
+    name: "Version"
+    id: device_version
+    lambda: |-
+      return {"${version}"};
 
 number:
   - platform: modbus_controller
@@ -155,8 +166,20 @@ number:
     max_value: 4096
 
   - platform: template
+    id: restore_power
+    name: "6 Restore Power"
+    optimistic: true
+    min_value: 0
+    max_value: 3600
+    step: 1
+    initial_value: 0
+    restore_value: True
+    unit_of_measurement: "W"
+    mode: box
+
+  - platform: template
     id: max_power
-    name: "Max Power"
+    name: "6 Max Power"
     optimistic: true
     min_value: 1
     max_value: 3600
@@ -168,7 +191,7 @@ number:
 
   - platform: template
     id: threshold
-    name: "Threshold"
+    name: "5 Threshold"
     optimistic: true
     min_value: -200
     max_value: 200
@@ -180,7 +203,7 @@ number:
 
   - platform: template
     id: hysteresis
-    name: "Hysteresis"
+    name: "5 Hysteresis"
     optimistic: true
     min_value: 0
     max_value: 200
@@ -279,7 +302,7 @@ interval:
           then:
             - lambda: |-
                 id(non_pvp_flag) = true; 
-                id(set_power).publish_state(id(max_power).state);
+                id(set_power).publish_state(id(restore_power).state);
                 ESP_LOGI("main", "non_pvp_flag");
       - if:
           condition:
@@ -293,6 +316,7 @@ interval:
             - lambda: |-
                 id(non_pvp_flag) = false; 
                 ESP_LOGI("main", "pvp_flag");
+
       ## Main regulation logic
       - if:
           condition:
@@ -300,7 +324,6 @@ interval:
             and:
               - lambda: 'return id(interval_flag);'
               - lambda: 'return id(auto_mode);'
-              - lambda: 'auto time = id(sntp_time).now(); return time.hour >= id(auto_start_time).state && time.hour < id(auto_end_time).state;'
           then:
             - lambda: |-
                 id(interval_flag) = false; 
@@ -330,12 +353,9 @@ interval:
                                       int32_t tmp_battery_power = root["Data"][2];
                                       //tmp_battery_power = -tmp_battery_power; //for test 
                                       id(battery_power).publish_state(tmp_battery_power);
-
-                                      // int32_t tmp_battery_power_rev = -tmp_battery_power;
-                                      // id(battery_power_rev).publish_state(tmp_battery_power_rev);
                                   }
                               }); 
-     
+            # Get Grid Power
             - http_request.get: ## IP of the meter that measures the grid power.
                 url: "http://10.10.30.38/monitorjson"
                 headers:
@@ -355,92 +375,56 @@ interval:
                             if (root.containsKey("Data") && root["Data"].is<JsonArray>() && root["Data"].size() > 2) {
                                 int32_t tmp_grid_power = root["Data"][2];
                                 id(grid_power).publish_state(tmp_grid_power);
-
-                                // int32_t tmp_grid_power_rev = -tmp_grid_power;
-                                // id(grid_power_rev).publish_state(tmp_grid_power_rev);
-
-                                int32_t tmp_threshold = id(threshold).state;
-                                int32_t tmp_hysteresis = id(hysteresis).state;
-
-                                int32_t tmp_set_power = id(set_power).state;
-                                
-                                if ((id(global_with_battery))&&id(battery_power).state<0) {
-                                    tmp_grid_power = tmp_grid_power - id(battery_power).state;
-                                } 
-
-                                if (tmp_grid_power < tmp_threshold - tmp_hysteresis) {
-                                    tmp_set_power += abs(tmp_grid_power - tmp_threshold);
-                                    if (tmp_set_power < 0) {
-                                        tmp_set_power = 0;
-                                    } 
-                                    if (tmp_set_power > id(max_power).state) {
-                                        tmp_set_power = id(max_power).state;
-                                    }
-                                    if (id(auto_mode)) {
-                                        id(set_power).publish_state(tmp_set_power);
-                                    } 
-                                } 
-                                
-                                if (tmp_grid_power > tmp_threshold + tmp_hysteresis) {
-                                    tmp_set_power -= abs(tmp_grid_power - tmp_threshold);
-                                    if (tmp_set_power < 0) {
-                                        tmp_set_power = 0;
-                                    }
-                                    if (tmp_set_power > id(max_power).state) {
-                                        tmp_set_power = id(max_power).state;
-                                    }
-                                    if (id(auto_mode)) {
-                                        id(set_power).publish_state(tmp_set_power);
-                                    } 
-                                } 
                             }
                             // WEM3080T/WEM3050T/WEM3046T
                             if (root.containsKey("Datas") && root["Datas"].is<JsonArray>() && root["Datas"].size() > 2) {
                                 // If your solar PV uses phase A, it is ["Datas"][0][2], if it is phase B, it is ["Datas"][1][2], if it is phase C, it is ["Datas"] [2][2]
                                 int32_t tmp_grid_power = root["Datas"][1][2];
-                                //tmp_grid_power = -tmp_grid_power; //for test 
                                 id(grid_power).publish_state(tmp_grid_power);
-
-                                // int32_t tmp_grid_power_rev = -tmp_grid_power;
-                                // id(grid_power_rev).publish_state(tmp_grid_power_rev);
-
-                                int32_t tmp_threshold = id(threshold).state;
-                                int32_t tmp_hysteresis = id(hysteresis).state;
-
-                                int32_t tmp_set_power = id(set_power).state;
-                                
-                                if ((id(global_with_battery))&&id(battery_power).state<0) {
-                                    tmp_grid_power = tmp_grid_power - id(battery_power).state;
-                                } 
-
-                                if (tmp_grid_power < tmp_threshold - tmp_hysteresis) {
-                                    tmp_set_power += abs(tmp_grid_power - tmp_threshold);
-                                    if (tmp_set_power < 0) {
-                                        tmp_set_power = 0;
-                                    } 
-                                    if (tmp_set_power > id(max_power).state) {
-                                        tmp_set_power = id(max_power).state;
-                                    } 
-                                    if (id(auto_mode)) {
-                                        id(set_power).publish_state(tmp_set_power);
-                                    } 
-                                } 
-                                
-                                if (tmp_grid_power > tmp_threshold + tmp_hysteresis) {
-                                    tmp_set_power -= abs(tmp_grid_power - tmp_threshold);
-                                    if (tmp_set_power < 0) {
-                                        tmp_set_power = 0;
-                                    }
-                                    if (tmp_set_power > id(max_power).state) {
-                                        tmp_set_power = id(max_power).state;
-                                    }
-                                    if (id(auto_mode)) {
-                                        id(set_power).publish_state(tmp_set_power);
-                                    } 
-                                }  
- 
                             }
                         });
+            # Calculating                
+            - if:
+                condition:
+                  lambda: 'auto time = id(sntp_time).now(); return time.hour >= id(auto_start_time).state && time.hour < id(auto_end_time).state;'
+                then:
+                  - lambda: |-
+                      int32_t tmp_grid_power = id(grid_power).state;
+                      int32_t tmp_threshold = id(threshold).state;
+                      int32_t tmp_hysteresis = id(hysteresis).state;
+                      int32_t tmp_set_power = id(set_power).state;
+                      
+                      if ((id(global_with_battery))&&id(battery_power).state<0) {
+                          tmp_grid_power = tmp_grid_power - id(battery_power).state;
+                      } 
+
+                      if (tmp_grid_power < tmp_threshold - tmp_hysteresis) {
+                          tmp_set_power += abs(tmp_grid_power - tmp_threshold);
+                          if (tmp_set_power < 0) {
+                              tmp_set_power = 0;
+                          } 
+                          if (tmp_set_power > id(max_power).state) {
+                              tmp_set_power = id(max_power).state;
+                          } 
+                          if (id(auto_mode)) {
+                              id(set_power).publish_state(tmp_set_power);
+                          } 
+                      } 
+                      
+                      if (tmp_grid_power > tmp_threshold + tmp_hysteresis) {
+                          tmp_set_power -= abs(tmp_grid_power - tmp_threshold);
+                          if (tmp_set_power < 0) {
+                              tmp_set_power = 0;
+                          }
+                          if (tmp_set_power > id(max_power).state) {
+                              tmp_set_power = id(max_power).state;
+                          }
+                          if (id(auto_mode)) {
+                              id(set_power).publish_state(tmp_set_power);
+                          } 
+                      } 
+
+
                         
 switch:
   - platform: template
