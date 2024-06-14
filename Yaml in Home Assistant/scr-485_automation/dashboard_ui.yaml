@@ -1,0 +1,14 @@
+type: vertical-stack
+cards:
+  - type: entities
+    entities:
+      - entity: switch.scr_ha_with_battery
+      - entity: sensor.tmp_grid_power
+      - entity: number.scr_485_5_threshold
+      - entity: number.scr_485_5_hysteresis
+      - entity: number.scr_485_set_power
+  - type: history-graph
+    entities:
+      - entity: sensor.tmp_grid_power
+      - entity: number.scr_485_set_power
+    hours_to_show: 1

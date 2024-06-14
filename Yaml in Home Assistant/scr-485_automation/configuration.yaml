@@ -1,0 +1,33 @@
+# Example configuration.yaml entry
+switch:
+  - platform: template
+    switches:
+      scr_ha_with_battery:
+        friendly_name: "With Battery"
+        # value_template: "{{ is_state('switch.source', 'on') }}"
+        turn_on:
+          service: switch.turn_on
+          target:
+            entity_id: switch.scr_ha_with_battery_open
+        turn_off:
+          service: switch.turn_off
+          target:
+            entity_id: switch.scr_ha_with_battery_close
+            
+sensor:
+  - platform: template
+    sensors:
+      tmp_grid_power:
+        unit_of_measurement: 'W'
+        value_template: >-
+            {% if is_state('switch.scr_ha_with_battery', 'on') %}
+                {{ (states('sensor.solarpv_power_b')|float - states('sensor.battery_power_a')|float)|round(1) }}
+            {% else %}
+                {{ (states('sensor.solarpv_power_b')|float)|round(1)}}
+            {% endif %}
+      dev_threshold_hysteresis:
+        unit_of_measurement: 'W'
+        value_template: "{{ (states('number.scr_485_5_threshold')|float - states('number.scr_485_5_hysteresis')|float)|round(1) }}"
+      add_threshold_hysteresis:
+        unit_of_measurement: 'W'
+        value_template: "{{ (states('number.scr_485_5_threshold')|float + states('number.scr_485_5_hysteresis')|float)|round(1) }}"

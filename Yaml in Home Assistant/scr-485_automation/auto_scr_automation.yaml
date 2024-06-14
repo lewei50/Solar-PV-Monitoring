@@ -1,0 +1,55 @@
+alias: Auto SCR
+description: Automatically control SCR-485 via HomeAssistant
+trigger:
+  - platform: state
+    entity_id:
+      - sensor.tmp_grid_power
+condition:
+  - condition: time
+    after: "08:00:00"
+    before: "17:00:00"
+action:
+  - if:
+      - condition: numeric_state
+        entity_id: sensor.tmp_grid_power
+        below: sensor.dev_threshold_hysteresis
+    then:
+      - service: number.set_value
+        data:
+          value: >-
+            {% set tmp_set_power = (states('number.scr_485_set_power')|float +
+            (states('sensor.tmp_grid_power')|float -
+            states('number.scr_485_5_threshold')|float)|abs)|round(0) %} {% if
+            tmp_set_power < 0 %}
+              {{ 0 }}
+            {% elif tmp_set_power > states('number.scr_485_6_max_power')|float
+            %}
+              {{ states('number.scr_485_6_max_power')|float }}
+            {% else %}
+              {{ tmp_set_power }}
+            {% endif %}
+        target:
+          entity_id: number.scr_485_set_power
+  - if:
+      - condition: numeric_state
+        entity_id: sensor.tmp_grid_power
+        above: sensor.add_threshold_hysteresis
+    then:
+      - service: number.set_value
+        data:
+          value: >-
+            {% set tmp_set_power = (states('number.scr_485_set_power')|float -
+            (states('sensor.tmp_grid_power')|float -
+            states('number.scr_485_5_threshold')|float)|abs)|round(0) %} {% if
+            tmp_set_power < 0 %}
+              {{ 0 }}
+            {% elif tmp_set_power > states('number.scr_485_6_max_power')|float
+            %}
+              {{ states('number.scr_485_6_max_power')|float }}
+            {% else %}
+              {{ tmp_set_power }}
+            {% endif %}
+        target:
+          entity_id: number.scr_485_set_power
+    enabled: true
+mode: single
