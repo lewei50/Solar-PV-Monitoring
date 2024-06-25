@@ -6,6 +6,7 @@
 #  wifi_ssid: 'iammeter' 
 #  wifi_password: '12345678' 
 
+# If your esphome is before 2024.6.0, please use 1.1.6(scr-485.yaml). If your esphome is 2024.6.0 or later, please use 1.2.1 and later(scr-485-new.yaml). 
 #################################################
 substitutions:
   version: "1.1.6"  
