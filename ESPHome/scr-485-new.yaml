@@ -1,0 +1,474 @@
+#################################################
+        ##scr-485.yaml##
+#################################################
+
+## Add in your secrets.yaml
+#  wifi_ssid: 'iammeter' 
+#  wifi_password: '12345678' 
+
+# Please use ESPHome/2024.6.0 or later for version 1.2.1 and later. If your esphome is before 2024.6.0, please use 1.1.6
+#################################################
+substitutions:
+  version: "1.2.1"  
+
+esphome:
+  name: scr-485
+  friendly_name: scr_485
+  platformio_options:
+    # platform: https://github.com/platformio/platform-espressif32.git#feature/arduino-upstream
+    board_build.flash_mode: dio
+  ## If you want to use auto mode please enable auto_mode_switch below, if you have battery you can enable with_battery
+  # on_boot:
+  #   then:
+  #     - switch.turn_on: auto_mode_switch
+  #     - switch.turn_on: with_battery
+esp32:
+  board: esp32-c3-devkitm-1
+  framework:
+    type: arduino
+
+## Enable logging
+# logger:
+#   level: DEBUG
+
+## Enable Home Assistant API
+api:
+  # encryption:
+  #   key: "sgCuRJxLsye8p+zn6/0+TaijdeinqqayDoHTboX6TlQ="
+  reboot_timeout: 0s
+
+ota:
+  - platform: esphome
+    id: my_ota
+    # password: !secret ota_password
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+  ## Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Scr-485"
+    # password: "12345678"
+
+web_server:
+  port: 80   
+  # local: true
+  version: 2
+time:
+  - platform: sntp
+    id: sntp_time
+    # servers: ntp5.aliyun.com #NTP server address
+    # timezone: Asia/Shanghai
+    servers: au.pool.ntp.org
+    timezone: Australia/Brisbane
+
+captive_portal:
+
+globals:
+  - id: auto_mode
+    type: bool
+    restore_value: true
+    initial_value: 'false'
+  - id: global_with_battery
+    type: bool
+    restore_value: true
+    initial_value: 'false'
+  - id: interval_flag
+    type: bool
+    restore_value: true
+    initial_value: 'false'
+  - id: non_pvp_flag
+    type: bool
+    restore_value: true
+    initial_value: 'false'
+
+http_request:
+  useragent: esphome/device
+  verify_ssl: false
+  # timeout: 10s
+  id: http_request_data
+  # Change the watchdog timeout during connection/data transfer. 
+  # watchdog_timeout:6s 
+
+status_led:
+  pin:
+    number: GPIO08
+    inverted: true
+
+# light:
+#   - platform: status_led
+#     name: "Status Led"
+#     pin:
+#       number: GPIO08
+#       inverted: true
+uart:
+  id: mod_bus
+  tx_pin: 0
+  rx_pin: 1
+  baud_rate: 9600
+  stop_bits: 1
+
+modbus:
+  # flow_control_pin: 8
+  id: modbus1
+
+modbus_controller:
+- id: modbus_device
+  address: 0x01   ## address of the Modbus slave device on the bus
+  modbus_id: modbus1
+  setup_priority: -10
+  update_interval: 3s
+
+sensor:
+  # - platform: modbus_controller
+  #   modbus_controller_id: modbus_device
+  #   name: "scr_485_adc_read"
+  #   id: im1266_voltage
+  #   register_type: holding
+  #   address: 0x0001
+  #   # unit_of_measurement: "ADC"
+  #   value_type: U_WORD
+  #   # accuracy_decimals: 4
+  #   # filters:
+  #   #   - multiply: 0.0001
+  - platform: template
+    name: "Grid Power"
+    id: grid_power
+    unit_of_measurement: "W"
+    update_interval: 3s
+  - platform: template
+    name: "Battery Power"
+    id: battery_power
+    unit_of_measurement: "W"
+    update_interval: 3s
+
+text_sensor:
+  - platform: template
+    name: "X Current Time"
+    lambda: |-
+      //uint32_t dur = id(uptime_s).state;
+      auto time = id(sntp_time).now();
+      char buffer[17];
+      sprintf(buffer, "%02u:%02u", time.hour, time.minute);
+      return {buffer};
+    icon: mdi:clock-start
+    update_interval: 5s
+  - platform: template
+    name: "Version"
+    id: device_version
+    lambda: |-
+      return {"${version}"};
+
+number:
+  - platform: modbus_controller
+    modbus_controller_id: modbus_device
+    id: scr_485_set_adc
+    name: "scr_485_set_adc"
+    address: 0x0002
+    value_type: U_WORD
+    # multiply: 1.0
+    min_value: 0
+    max_value: 4096
+
+  - platform: template
+    id: restore_power
+    name: "6 Restore Power"
+    optimistic: true
+    min_value: 0
+    max_value: 3600
+    step: 1
+    initial_value: 0
+    restore_value: True
+    unit_of_measurement: "W"
+    mode: box
+
+  - platform: template
+    id: max_power
+    name: "6 Max Power"
+    optimistic: true
+    min_value: 1
+    max_value: 3600
+    step: 1
+    initial_value: 3600
+    restore_value: True
+    unit_of_measurement: "W"
+    mode: box
+
+  - platform: template
+    id: threshold
+    name: "5 Threshold"
+    optimistic: true
+    min_value: -200
+    max_value: 200
+    step: 0
+    initial_value: -20
+    restore_value: True
+    unit_of_measurement: "W"
+    mode: box
+
+  - platform: template
+    id: hysteresis
+    name: "5 Hysteresis"
+    optimistic: true
+    min_value: 0
+    max_value: 200
+    step: 0
+    initial_value: 50
+    restore_value: True
+    unit_of_measurement: "W"
+    mode: box
+    
+  - platform: template
+    id: set_power
+    name: "Set Power"
+    unit_of_measurement: "W"
+    optimistic: true
+    min_value: 0
+    max_value: 3600
+    step: 1
+    # initial_value: 1500
+    restore_value: True
+    mode: box
+    on_value:
+      then:
+        - number.set:
+            id: scr_485_set_adc
+            value: !lambda |-
+                uint16_t input_val = id(set_power).state;
+                uint16_t output_val = 0; 
+
+                uint16_t max_power_val = id(max_power).state;
+                if (input_val <= 0){
+                  output_val = 0;
+                }else if (input_val <= max_power_val) {
+                  output_val = 1450 + (input_val - 0) * (4096 - 1450) / (max_power_val - 0);
+                }else{
+                  output_val = 4096;
+                }
+
+                return output_val;
+
+  - platform: template
+    id: auto_start_time
+    name: "1 Start Time"
+    optimistic: true
+    min_value: 0
+    max_value: 24
+    step: 1
+    initial_value: 9
+    restore_value: True
+    mode: box
+
+  - platform: template
+    id: auto_end_time
+    name: "2 End Time"
+    optimistic: true
+    min_value: 0
+    max_value: 24
+    step: 1
+    initial_value: 16
+    restore_value: True
+    mode: box
+
+  - platform: template
+    id: interval_seconds
+    name: "4 Interval Seconds"
+    unit_of_measurement: "s"
+    optimistic: true
+    min_value: 1
+    max_value: 30
+    step: 1
+    initial_value: 3
+    restore_value: True
+    mode: box
+
+interval:
+  - interval: 1s
+    then:
+      lambda: |-
+        static int counter = 0;
+        counter++;
+        if (counter >= id(interval_seconds).state) {
+          counter = 0;
+          id(interval_flag) = true;     
+          ESP_LOGI("main", "Interval triggered");
+        }
+  - interval: 1s
+    then:
+      ## During non-PV power generation period, reset the set power to the maximum power
+      - if:
+          condition:
+            # lambda: 'return id(auto_mode);'
+            and:
+              - lambda: 'return id(interval_flag);'
+              - lambda: 'return id(auto_mode);'
+              - lambda: 'return !id(non_pvp_flag);'
+              - lambda: 'auto time = id(sntp_time).now();  return (time.hour == id(auto_end_time).state) && (time.minute == 0);'
+          then:
+            - lambda: |-
+                id(non_pvp_flag) = true; 
+                id(set_power).publish_state(id(restore_power).state);
+                ESP_LOGI("main", "non_pvp_flag");
+      - if:
+          condition:
+            # lambda: 'return id(auto_mode);'
+            and:
+              - lambda: 'return id(interval_flag);'
+              - lambda: 'return id(auto_mode);'
+              - lambda: 'return id(non_pvp_flag);'
+              - lambda: 'auto time = id(sntp_time).now(); return time.hour >= id(auto_start_time).state && time.hour < id(auto_end_time).state;'
+          then:
+            - lambda: |-
+                id(non_pvp_flag) = false; 
+                ESP_LOGI("main", "pvp_flag");
+
+      ## Main regulation logic
+      - if:
+          condition:
+            # lambda: 'return id(auto_mode);'
+            and:
+              - lambda: 'return id(interval_flag);'
+              - lambda: 'return id(auto_mode);'
+          then:
+            - lambda: |-
+                id(interval_flag) = false; 
+                ESP_LOGI("main", "interval_flag");
+            ## with Battery
+            - if:
+                condition:
+                  lambda: 'return id(global_with_battery);'
+                then:
+                  - http_request.get: ## IP of the meter that measures the battery power.
+                      url: "http://10.10.30.33/monitorjson"
+                      headers:
+                        Content-Type: "application/json"
+                        Authorization: 'Basic YWRtaW46YWRtaW4='
+                      capture_response: true
+                      on_response:
+                        then:
+                          # - logger.log:
+                          #     format: 'Response status: %d, Duration: %u ms'
+                          #     args:
+                          #       - status_code
+                          #       - duration_ms
+                          - lambda: |-
+                              json::parse_json(body, [](JsonObject root) -> bool {
+                                  // WEM3080
+                                  if (root.containsKey("Data") && root["Data"].is<JsonArray>() && root["Data"].size() > 2) {
+                                      int32_t tmp_battery_power = root["Data"][2];
+                                      //tmp_battery_power = -tmp_battery_power; //for test 
+                                      id(battery_power).publish_state(tmp_battery_power);
+                                      return true;
+                                  }
+                              });
+            # Get Grid Power
+            - http_request.get: ## IP of the meter that measures the grid power.
+                url: "http://10.10.12.19:18080/monitorjson"
+                headers:
+                  Content-Type: "application/json"
+                  Authorization: 'Basic YWRtaW46YWRtaW4='
+                capture_response: true
+                on_response:
+                  then:
+                    # - logger.log:
+                    #     format: 'Response status: %d, Duration: %u ms'
+                    #     args:
+                    #       - status_code
+                    #       - duration_ms
+                    - lambda: |-
+                        //json::parse_json(id(http_request_data).get_string(), [](JsonObject root) {
+                        json::parse_json(body, [](JsonObject root) -> bool {
+                            // WEM3080
+                            if (root.containsKey("Data") && root["Data"].is<JsonArray>() && root["Data"].size() > 2) {
+                                int32_t tmp_grid_power = root["Data"][2];
+                                id(grid_power).publish_state(tmp_grid_power);
+                            }
+                            // WEM3080T/WEM3050T/WEM3046T
+                            if (root.containsKey("Datas") && root["Datas"].is<JsonArray>() && root["Datas"].size() > 2) {
+                                // If your solar PV uses phase A, it is ["Datas"][0][2], if it is phase B, it is ["Datas"][1][2], if it is phase C, it is ["Datas"] [2][2]
+                                int32_t tmp_grid_power = root["Datas"][1][2];
+                                id(grid_power).publish_state(tmp_grid_power);
+                            }
+                            return true;
+                        });
+            # Calculating                
+            - if:
+                condition:
+                  lambda: 'auto time = id(sntp_time).now(); return time.hour >= id(auto_start_time).state && time.hour < id(auto_end_time).state;'
+                then:
+                  - lambda: |-
+                      int32_t tmp_grid_power = id(grid_power).state;
+                      int32_t tmp_threshold = id(threshold).state;
+                      int32_t tmp_hysteresis = id(hysteresis).state;
+                      int32_t tmp_set_power = id(set_power).state;
+                      
+                      if ((id(global_with_battery))&&id(battery_power).state<0) {
+                          tmp_grid_power = tmp_grid_power - id(battery_power).state;
+                      } 
+
+                      if (tmp_grid_power < tmp_threshold - tmp_hysteresis) {
+                          tmp_set_power += abs(tmp_grid_power - tmp_threshold);
+                          if (tmp_set_power < 0) {
+                              tmp_set_power = 0;
+                          } 
+                          if (tmp_set_power > id(max_power).state) {
+                              tmp_set_power = id(max_power).state;
+                          } 
+                          if (id(auto_mode)) {
+                              id(set_power).publish_state(tmp_set_power);
+                          } 
+                      } 
+                      
+                      if (tmp_grid_power > tmp_threshold + tmp_hysteresis) {
+                          tmp_set_power -= abs(tmp_grid_power - tmp_threshold);
+                          if (tmp_set_power < 0) {
+                              tmp_set_power = 0;
+                          }
+                          if (tmp_set_power > id(max_power).state) {
+                              tmp_set_power = id(max_power).state;
+                          }
+                          if (id(auto_mode)) {
+                              id(set_power).publish_state(tmp_set_power);
+                          } 
+                      } 
+
+
+                        
+switch:
+  - platform: template
+    name: "3 Auto Mode Switch"
+    id: auto_mode_switch
+    restore_mode: DISABLED 
+    turn_on_action:
+      - globals.set:
+          id: auto_mode
+          value: 'true'
+    turn_off_action:
+      - globals.set:
+          id: auto_mode
+          value: 'false'
+      # - number.set:
+      #     id: set_power
+      #     value: '0.0'
+    lambda: |-
+      return id(auto_mode);
+
+  - platform: template
+    name: "3 With Battery"
+    id: with_battery
+    restore_mode: DISABLED 
+    turn_on_action:
+      - globals.set:
+          id: global_with_battery
+          value: 'true'
+    turn_off_action:
+      - globals.set:
+          id: global_with_battery
+          value: 'false'
+    lambda: |-
+      return id(global_with_battery);
+
+button:
+  - platform: restart
+    name: "Restart"
