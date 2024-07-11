@@ -6,7 +6,11 @@ cards:
       - entity: sensor.tmp_grid_power
       - entity: number.scr_485_5_threshold
       - entity: number.scr_485_5_hysteresis
+      - entity: number.scr_485_6_restore_power
       - entity: number.scr_485_set_power
+      - entity: input_datetime.start_time
+      - entity: input_datetime.end_time
+    title: Auto control SCR via HA
   - type: history-graph
     entities:
       - entity: sensor.tmp_grid_power

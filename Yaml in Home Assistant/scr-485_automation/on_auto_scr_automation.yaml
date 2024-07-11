@@ -1,0 +1,16 @@
+alias: ON AutoSCR
+description: ""
+trigger:
+  - platform: time
+    at: input_datetime.start_time
+condition:
+  - condition: state
+    entity_id: switch.scr_485_3_auto_mode_switch
+    state: "off"
+action:
+  - service: automation.turn_on
+    metadata: {}
+    data: {}
+    target:
+      entity_id: automation.auto_scr
+mode: single

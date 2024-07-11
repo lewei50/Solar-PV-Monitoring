@@ -1,0 +1,20 @@
+alias: OFF AutoSCR
+description: ""
+trigger:
+  - platform: time
+    at: input_datetime.end_time
+condition: []
+action:
+  - service: automation.turn_off
+    metadata: {}
+    data:
+      stop_actions: true
+    target:
+      entity_id: automation.auto_scr
+  - service: number.set_value
+    metadata: {}
+    data:
+      value: "{{ states.number.scr_485_6_restore_power.state }}"
+    target:
+      entity_id: number.scr_485_set_power
+mode: single

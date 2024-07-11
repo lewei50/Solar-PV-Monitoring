@@ -6,8 +6,8 @@ trigger:
       - sensor.tmp_grid_power
 condition:
   - condition: time
-    after: "08:00:00"
-    before: "17:00:00"
+    after: input_datetime.start_time
+    before: input_datetime.end_time
 action:
   - if:
       - condition: numeric_state

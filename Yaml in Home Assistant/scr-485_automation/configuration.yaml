@@ -31,3 +31,15 @@ sensor:
       add_threshold_hysteresis:
         unit_of_measurement: 'W'
         value_template: "{{ (states('number.scr_485_5_threshold')|float + states('number.scr_485_5_hysteresis')|float)|round(1) }}"
+
+input_datetime:
+  start_time:
+    name: Start Time
+    has_date: false
+    has_time: true
+    initial:  '07:00'
+  end_time:
+    name: End Time
+    has_date: false
+    has_time: true
+    initial:  '17:00'
