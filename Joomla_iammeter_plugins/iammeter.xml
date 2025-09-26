@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="plugin" version="5.0" group="content" method="upgrade">
+    <name>plg_content_iammeter</name>
+    <author>Dein Name</author>
+    <version>1.1.0</version>
+    <description>Zeigt Iammeter Zählerdaten im Artikel an. Offsets und Tokens je Zähler konfigurierbar.</description>
+
+    <files>
+        <filename plugin="iammeter">iammeter.php</filename>
+    </files>
+
+    <config>
+        <fields name="params">
+            <fieldset name="basic" label="Grundeinstellungen">
+                
+                <field
+                    name="offset_solar"
+                    type="text"
+                    default="0"
+                    label="Offset Solarproduktion (kWh)"
+                    description="Differenzwert für den Solarzähler"
+                />
+                <field
+                    name="token_solar"
+                    type="text"
+                    default=""
+                    label="API-Token Solarproduktion"
+                    description="Token für den Solarzähler"
+                />
+
+                <field
+                    name="offset_grid"
+                    type="text"
+                    default="0"
+                    label="Offset Netzeinspeisung (kWh)"
+                    description="Differenzwert für den Netzzähler"
+                />
+                <field
+                    name="token_grid"
+                    type="text"
+                    default=""
+                    label="API-Token Netzeinspeisung"
+                    description="Token für den Netz-Zähler"
+                />
+
+            </fieldset>
+        </fields>
+    </config>
+</extension>
