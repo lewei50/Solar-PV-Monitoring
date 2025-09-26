@@ -11,7 +11,7 @@
   - [1.8. Use Cases](#18-use-cases)
 - [2. References](#2-references)
 
-> The original creator of the plugin is HofaThai (https://imeter.club/topic/802). Thanks to HofaThai for their contribution.
+> The original creator of the plugin is HofaThai (https://imeter.club/topic/802). Thanks to HofaThai for his contribution.
 
 # 1. Integrating IAMMETER-Cloud API with Joomla CMS
 
