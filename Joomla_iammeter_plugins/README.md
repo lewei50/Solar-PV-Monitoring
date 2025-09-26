@@ -1,8 +1,18 @@
 
 
-[toc]
+- [1. Integrating IAMMETER-Cloud API with Joomla CMS](#1-integrating-iammeter-cloud-api-with-joomla-cms)
+  - [1.1. Overview](#11-overview)
+  - [1.2. Deploy Joomla CMS](#12-deploy-joomla-cms)
+  - [1.3. Modify the `plg_content_iammeter` Plugin](#13-modify-the-plg_content_iammeter-plugin)
+  - [1.4. Install the Plugin in Joomla](#14-install-the-plugin-in-joomla)
+  - [1.5. Configure IAMMETER API Token](#15-configure-iammeter-api-token)
+  - [1.6. Display IAMMETER Data in Joomla Articles](#16-display-iammeter-data-in-joomla-articles)
+  - [1.7. Example Result](#17-example-result)
+  - [1.8. Use Cases](#18-use-cases)
+- [2. References](#2-references)
 
-# Integrating IAMMETER-Cloud API with Joomla CMS
+
+# 1. Integrating IAMMETER-Cloud API with Joomla CMS
 
 This guide explains how to use the **IAMMETER-Cloud API** to retrieve real-time data from your IAMMETER energy meters and display it directly inside the **Joomla CMS** through a custom plugin.
 
@@ -10,7 +20,7 @@ This guide explains how to use the **IAMMETER-Cloud API** to retrieve real-time 
 
 ------
 
-## Overview
+## 1.1. Overview
 
 By integrating IAMMETER with Joomla, you can:
 
@@ -20,7 +30,7 @@ By integrating IAMMETER with Joomla, you can:
 
 ------
 
-## 1. Deploy Joomla CMS
+## 1.2. Deploy Joomla CMS
 
 You can quickly set up Joomla CMS by following the official documentation or using Docker:
 
@@ -29,7 +39,7 @@ You can quickly set up Joomla CMS by following the official documentation or usi
 
 ------
 
-## 2. Modify the `plg_content_iammeter` Plugin
+## 1.3. Modify the `plg_content_iammeter` Plugin
 
 Unzip the `plg_content_iammeter.zip` package, which contains `iammeter.php` and `iammeter.xml`.
 
@@ -57,7 +67,7 @@ After editing, repackage the files back into `plg_content_iammeter.zip`.
 
 ------
 
-## 3. Install the Plugin in Joomla
+## 1.4. Install the Plugin in Joomla
 
 1. Log in to the Joomla admin panel.
 2. Go to **System → Install → Extensions**.
@@ -67,7 +77,7 @@ After editing, repackage the files back into `plg_content_iammeter.zip`.
 
 ------
 
-## 4. Configure IAMMETER API Token
+## 1.5. Configure IAMMETER API Token
 
 The plugin requires an API token to access IAMMETER-Cloud data.
 
@@ -78,7 +88,7 @@ Paste the token into the **API-Token** field in Joomla and set the plugin **Stat
 
 ------
 
-## 5. Display IAMMETER Data in Joomla Articles
+## 1.6. Display IAMMETER Data in Joomla Articles
 
 Once the plugin is enabled, you can use the shortcode `{iammeter}` in any Joomla article.
 
@@ -92,7 +102,7 @@ Now, when you open the article in Joomla CMS, the IAMMETER energy data will be d
 
 ------
 
-## Example Result
+## 1.7. Example Result
 
 Here is an example of how IAMMETER data is shown inside Joomla:
 
@@ -100,7 +110,7 @@ Here is an example of how IAMMETER data is shown inside Joomla:
 
 ------
 
-## Use Cases
+## 1.8. Use Cases
 
 The IAMMETER-Cloud API integration with Joomla can be applied in multiple scenarios:
 
@@ -115,7 +125,7 @@ The IAMMETER-Cloud API integration with Joomla can be applied in multiple scenar
 
 ------
 
-# References
+# 2. References
 
 - [IAMMETER-Cloud API Documentation](https://www.iammeter.com/docs/system-api)
 - [Joomla CMS Official Site](https://www.joomla.org/)
