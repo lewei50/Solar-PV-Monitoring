@@ -1,0 +1,241 @@
+/**
+ * IamMeter WordPress Plugin Styles
+ * Version: 1.0.1 - Added Three Phase Support
+ */
+
+/* 主容器样式 */
+.iammeter-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin: 20px 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    align-items: flex-start; /* 让卡片顶部对齐 */
+}
+
+/* 基础电表数据块样式 */
+.iammeter-block {
+    border: 1px solid #ccc;
+    padding: 15px;
+    margin: 0; /* 移除margin，使用gap控制间距 */
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+    color: white;
+}
+
+.iammeter-block:hover {
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    transform: translateY(-2px);
+}
+
+/* 基础电表样式已通过内联样式设置 */
+
+/* 三相表布局样式 */
+.iammeter-block.three-phase > div[style*="display: flex"] {
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+}
+
+.iammeter-block.three-phase > div[style*="display: flex"] > div {
+    border-right: 1px solid rgba(255,255,255,0.3);
+}
+
+.iammeter-block.three-phase > div[style*="display: flex"] > div:last-child {
+    border-right: none;
+}
+
+/* 标题样式 */
+.iammeter-block h3 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-size: 1.2em;
+    font-weight: bold;
+    text-align: center;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+    color: white;
+}
+
+.iammeter-block h4 {
+    margin: 0 0 10px 0;
+    color: #ffeb3b;
+    text-align: center;
+    font-size: 1.1em;
+    border-bottom: 1px solid rgba(255,255,255,0.3);
+    padding-bottom: 5px;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+}
+
+/* 数据表格样式 */
+.iammeter-data {
+    border-collapse: collapse;
+    width: 100%;
+    font-size: 0.9em;
+    color: white;
+}
+
+.iammeter-data td {
+    padding: 8px 5px;
+    border-bottom: 1px solid rgba(255,255,255,0.2);
+    vertical-align: top;
+}
+
+.iammeter-data td:first-child {
+    font-weight: bold;
+    width: 50%;
+}
+
+.iammeter-data td:last-child {
+    text-align: right;
+    font-family: 'Courier New', monospace;
+    font-weight: bold;
+}
+
+.iammeter-data tr:last-child td {
+    border-bottom: none;
+    padding-top: 15px;
+    font-style: italic;
+    opacity: 0.8;
+    font-size: 0.85em;
+}
+
+/* 三相表特殊样式 */
+.three-phase .iammeter-data {
+    font-size: 0.85em;
+}
+
+.three-phase .iammeter-data td {
+    padding: 6px 4px;
+}
+
+/* 功率值高亮 */
+.iammeter-data td[style*="color: yellow"] {
+    background: rgba(255,235,59,0.1);
+    border-radius: 3px;
+    padding: 8px 5px !important;
+}
+
+/* 错误信息样式 */
+.iammeter-error {
+    color: #d63031;
+    background-color: #fff5f5;
+    border: 1px solid #fab1a0;
+    padding: 15px;
+    margin: 10px 0;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+/* 警告信息样式 */
+.iammeter-warning {
+    background: #fff3cd;
+    color: #856404;
+    padding: 10px;
+    border: 1px solid #ffeaa7;
+    border-radius: 5px;
+    margin: 10px 0;
+}
+
+/* 响应式设计 */
+@media screen and (max-width: 768px) {
+    .iammeter-container {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .iammeter-block.single-phase,
+    .iammeter-block.three-phase {
+        min-width: auto !important; /* 覆盖内联样式 */
+        flex: none !important; /* 覆盖内联样式 */
+    }
+    
+    .iammeter-block.three-phase {
+        padding: 10px;
+    }
+    
+    /* 三相表在移动端垂直排列 */
+    .iammeter-block.three-phase > div[style*="display: flex"] {
+        flex-direction: column !important;
+        gap: 15px !important;
+    }
+    
+    .iammeter-block.three-phase > div[style*="display: flex"] > div {
+        flex: none !important;
+        border-right: none !important;
+        border-bottom: 1px solid rgba(255,255,255,0.3) !important;
+    }
+    
+    .iammeter-block.three-phase > div[style*="display: flex"] > div:last-child {
+        border-bottom: none !important;
+    }
+    
+    .iammeter-data {
+        font-size: 0.85em;
+    }
+    
+    .iammeter-data td {
+        padding: 6px 3px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .iammeter-block {
+        padding: 10px;
+    }
+    
+    .iammeter-block h3 {
+        font-size: 1.1em;
+        margin-bottom: 10px;
+    }
+    
+    .iammeter-block h4 {
+        font-size: 1em;
+        margin-bottom: 8px;
+    }
+    
+    .iammeter-data {
+        font-size: 0.8em;
+    }
+    
+    .iammeter-data td {
+        padding: 4px 2px;
+    }
+    
+    /* 三相表在小屏幕上的优化 */
+    .iammeter-block.three-phase > div[style*="display: flex"] > div table td {
+        padding: 6px 3px !important;
+        font-size: 0.85em !important;
+    }
+}
+
+/* 动画效果 */
+.iammeter-block {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* 加载状态样式 */
+.iammeter-loading {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(255,255,255,.3);
+    border-radius: 50%;
+    border-top-color: #fff;
+    animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
