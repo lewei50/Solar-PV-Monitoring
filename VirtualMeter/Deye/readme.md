@@ -37,6 +37,8 @@ GitHub repository:
 
 This integration is compatible with Deye, Sunsynk, and other Deye-based hybrid inverters.
 
+**Special thanks to the author of this GitHub project for providing a reliable local integration method, which makes it possible to access inverter data directly without relying on cloud services.**
+
 After installation and configuration, Home Assistant will expose multiple sensors for grid, PV, battery, and inverter data.
 
 ---
