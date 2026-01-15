@@ -1,0 +1,60 @@
+# Example configuration.yaml entry
+rest_command:
+# Three phase meter
+  my_solar2iammeter:
+    url: http://open.iammeter.com/api/V1/sensor/UploadSensor
+    method: POST
+    headers:
+    #   authorization: !secret rest_headers_secret
+      accept: "application/json, text/html"
+      user-agent: 'Mozilla/5.0 {{ useragent }}'
+    content_type: 'application/json; charset=utf-8'
+    # verify_ssl: true
+    payload: >
+      {
+        "method": "uploadsn",
+        "version": "Deye_pushAPI",
+        "server": "em",
+        "SN": "your_sn",
+        "EA": {
+            "SOC": [
+                null,
+                {{ states('sensor.battery_soc') | float(0) }},
+                null
+            ]
+        },
+        "Datas": [
+          [
+            {{ states('sensor.grid_voltage_l1') | float(0) }},
+            0,
+            {{ states('sensor.total_grid_power') | float(0) }},
+            {{ states('sensor.total_energy_bought') | float(0) }},
+            {{ states('sensor.total_energy_sold') | float(0) }}
+          ],
+          [
+            {{ states('sensor.battery_voltage') | float(0) }},
+            {{ states('sensor.battery_current') | float(0) }},
+            {{ states('sensor.battery_power') | float(0) }},
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            {{ states('sensor.total_power') | float(0) }},
+            {{ states('sensor.total_grid_production') | float(0) }},
+            0
+          ]
+        ]
+      }
+automation:
+  - id: '3666938222668'
+    alias: "Post Sensor Data"
+    description: ''
+    trigger:
+      platform: time_pattern
+      seconds: 59
+    condition: []
+    action:
+    - service: rest_command.my_solar2iammeter
+    mode: single

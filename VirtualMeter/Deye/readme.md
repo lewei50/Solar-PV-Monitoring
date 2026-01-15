@@ -10,7 +10,7 @@ This solution is suitable for users who want to:
 - Combine grid, battery, and inverter data into a unified energy model
 - Visualize and analyze energy flows in IAMMETER-Cloud
 
-------
+---
 
 ## Architecture Overview
 
@@ -24,7 +24,7 @@ Deye Hybrid Inverter
 
 Home Assistant acts as the data collector and protocol adapter, while IAMMETER-Cloud provides long-term storage, visualization, and energy analysis.
 
-------
+---
 
 ## Step 1: Retrieve Deye Inverter Data in Home Assistant
 
@@ -39,7 +39,7 @@ This integration is compatible with Deye, Sunsynk, and other Deye-based hybrid i
 
 After installation and configuration, Home Assistant will expose multiple sensors for grid, PV, battery, and inverter data.
 
-------
+---
 
 ### 1.2 Available Sensors in Home Assistant
 
@@ -55,8 +55,8 @@ The table below lists example sensors retrieved from the Deye inverter and their
 | Total Energy Sold (kWh)      | 0             | A     | 5     | Datas[0][4]   | total_energy_sold      |
 | Daily Load Consumption (kWh) | 1.2           |       |       |               | daily_load_consumption |
 | Total Load Consumption (kWh) | 0             |       |       |               | total_load_consumption |
-| DC Temperature (°C)          | 149.5         |       |       |               | dc_temperature         |
-| AC Temperature (°C)          | 152.1         |       |       |               | ac_temperature         |
+| DC Temperature (°C)         | 149.5         |       |       |               | dc_temperature         |
+| AC Temperature (°C)         | 152.1         |       |       |               | ac_temperature         |
 | Total Production (kWh)       | 0             |       |       |               | total_production       |
 | Daily Production (kWh)       | 16.9          |       |       |               | daily_production       |
 | PV1 Voltage (V)              | 342.2         |       |       |               | pv1_voltage            |
@@ -72,7 +72,7 @@ The table below lists example sensors retrieved from the Deye inverter and their
 IAMMETER JSON format reference:
  https://www.iammeter.com/newsshow/energy-meter-json-value
 
-------
+---
 
 ## Step 2: Map and Convert Data to IAMMETER Format
 
@@ -89,7 +89,7 @@ In this tutorial, the phases are defined as:
 Each phase supports voltage, current, power, and energy values.
  Battery SOC is transmitted separately via the `EA` field.
 
-------
+---
 
 ### 2.2 Mapping Home Assistant Sensors to IAMMETER Phases
 
@@ -109,7 +109,7 @@ Each phase supports voltage, current, power, and energy values.
 | --------- | ------- | ----------- | ------- |
 | SOC       |         | battery_soc |         |
 
-------
+---
 
 ### 2.3 JSON Payload Structure Explanation
 
@@ -125,29 +125,29 @@ Battery SOC is included in:
 
 EA.SOC = [Phase A, Phase B, Phase C]
 
-------
+---
 
 ## Step 3: Upload Data to IAMMETER-Cloud
 
 ### 3.1 Create a Virtual Meter (SN) in IAMMETER-Cloud
 
 1. Create a new **Virtual Meter**
-    ![img](https://iammeterglobal.oss-accelerate.aliyuncs.com/img/image-20240124093300622.png)
+   ![img](https://iammeterglobal.oss-accelerate.aliyuncs.com/img/image-20240124093300622.png)
 2. Set **Data Source** to **PushApi** and save
-    ![img](https://iammeterglobal.oss-accelerate.aliyuncs.com/img/image-20240124095458969.png)
+   ![img](https://iammeterglobal.oss-accelerate.aliyuncs.com/img/image-20240124095458969.png)
 3. After saving, a **Serial Number (SN)** will be generated
-    ![img](https://iammeterglobal.oss-accelerate.aliyuncs.com/img/image-20240124095851393.png)
+   ![img](https://iammeterglobal.oss-accelerate.aliyuncs.com/img/image-20240124095851393.png)
 
-------
+---
 
 ### 3.2 Configure Place and Meter Roles
 
 1. Create a **New Place**
-    ![img](https://iammeterglobal.oss-accelerate.aliyuncs.com/img/image-20240124101230225.png)
+   ![img](https://iammeterglobal.oss-accelerate.aliyuncs.com/img/image-20240124101230225.png)
 2. Add the SN and required information
-    ![img](https://iammeterglobal.oss-accelerate.aliyuncs.com/img/image-20240124101730280.png)
+   ![img](https://iammeterglobal.oss-accelerate.aliyuncs.com/img/image-20240124101730280.png)
 3. Set the meter **Type** to **Three Phase**
-    ![img](https://iammeterglobal.oss-accelerate.aliyuncs.com/img/image-20240124102754092.png)
+   ![img](https://iammeterglobal.oss-accelerate.aliyuncs.com/img/image-20240124102754092.png)
 4. Assign meter roles:
 
 | SN   | Type     |
@@ -158,13 +158,13 @@ EA.SOC = [Phase A, Phase B, Phase C]
 
 ![img](https://iammeterglobal.oss-accelerate.aliyuncs.com/img/image-20240124102939966.png)
 
-------
+---
 
 ### 3.3 Configure Home Assistant REST Command
 
 Add the following configuration to `configuration.yaml`:
 
-
+[`configuration.yaml`](configuration.yaml)
 
 > your_sn: iammeter cloud creat the sn
 >
@@ -173,15 +173,14 @@ Add the following configuration to `configuration.yaml`:
 > array definition: [voltage, current, power, Forward Kwh, Reverse Kwh]
 >
 > Other sensors can be added according to your own needs.
->
 
-------
+---
 
 ### 3.4 Automate Periodic Data Upload
 
 Use a time-based automation to upload data every minute using the REST command.
 
-------
+---
 
 ## Verification and Result
 
@@ -189,7 +188,7 @@ Once data is uploaded successfully, IAMMETER-Cloud will correctly display grid, 
 
 ![img](https://iammeterglobal.oss-accelerate.aliyuncs.com/img/image-20240124105839330.png)
 
-------
+---
 
 ## Notes and References
 
@@ -197,6 +196,6 @@ Once data is uploaded successfully, IAMMETER-Cloud will correctly display grid, 
 - `sensor.xxx`: Replace with your actual Home Assistant sensor entity IDs
 - Array format: `[voltage, current, power, forward_kWh, reverse_kWh]`
 - IAMMETER JSON reference:
-   https://www.iammeter.com/newsshow/energy-meter-json-value
+  https://www.iammeter.com/newsshow/energy-meter-json-value
 - Deye Home Assistant integration:
-   https://github.com/jlopez77/DeyeInverter
+  https://github.com/jlopez77/DeyeInverter
