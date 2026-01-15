@@ -1,4 +1,21 @@
-[toc]
+- [Introduction](#introduction)
+- [Architecture Overview](#architecture-overview)
+- [Step 1: Retrieve Deye Inverter Data in Home Assistant](#step-1-retrieve-deye-inverter-data-in-home-assistant)
+  - [1.1 Deye Inverter Integration for Home Assistant](#11-deye-inverter-integration-for-home-assistant)
+  - [1.2 Available Sensors in Home Assistant](#12-available-sensors-in-home-assistant)
+- [Step 2: Map and Convert Data to IAMMETER Format](#step-2-map-and-convert-data-to-iammeter-format)
+  - [2.1 IAMMETER Virtual Meter Data Model](#21-iammeter-virtual-meter-data-model)
+  - [2.2 Mapping Home Assistant Sensors to IAMMETER Phases](#22-mapping-home-assistant-sensors-to-iammeter-phases)
+    - [Power and Energy Mapping](#power-and-energy-mapping)
+    - [SOC Mapping](#soc-mapping)
+  - [2.3 JSON Payload Structure Explanation](#23-json-payload-structure-explanation)
+- [Step 3: Upload Data to IAMMETER-Cloud](#step-3-upload-data-to-iammeter-cloud)
+  - [3.1 Create a Virtual Meter (SN) in IAMMETER-Cloud](#31-create-a-virtual-meter-sn-in-iammeter-cloud)
+  - [3.2 Configure Place and Meter Roles](#32-configure-place-and-meter-roles)
+  - [3.3 Configure Home Assistant REST Command](#33-configure-home-assistant-rest-command)
+  - [3.4 Automate Periodic Data Upload](#34-automate-periodic-data-upload)
+- [Verification and Result](#verification-and-result)
+- [Notes and References](#notes-and-references)
 
 ## Introduction
 
