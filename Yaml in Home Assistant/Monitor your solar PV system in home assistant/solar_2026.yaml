@@ -1,0 +1,105 @@
+##################################################################################
+## ct1(_a) on the inveter part and ct2(_b) is on the grid part, ct3(_c) not use ##
+##################################################################################
+sensor:
+#-----SolarMeter-----
+  - platform: iammeter
+    host: 10.10.30.38
+    name: metert
+#-----SolarPVSystem-----
+template:
+  - sensor:
+    - unit_of_measurement: W
+      default_entity_id: sensor.inverter_power
+      state: "{{ states('sensor.metert_power_a') | float(0) }}"
+      name: inverter_power
+    - unit_of_measurement: W
+      default_entity_id: sensor.feedin_power
+      state: "{{ states('sensor.metert_power_b') | float(0) * (-1.0) }}"
+      name: feedin_power
+    - unit_of_measurement: W
+      default_entity_id: sensor.load_power
+      state: "{{ states('sensor.metert_power_a')|float(0) + states('sensor.metert_power_b')|float(0) }}"
+      name: load_power
+
+    - unit_of_measurement: kWh
+      default_entity_id: sensor.grid_consumption_energy
+      state: "{% if states('sensor.metert_importenergy_b') | float(0) > 0 %}{{ states('sensor.metert_importenergy_b') | float(0) }}{% else %}0{% endif %}"
+      name: grid_consumption_energy
+    - unit_of_measurement: kWh
+      default_entity_id: sensor.exported_energy
+      state: "{% if states('sensor.metert_exportgrid_b') | float(0) > 0 %}{{ states('sensor.metert_exportgrid_b') | float(0) }}{% else %}0{% endif %}"
+      name: exported_energy
+    - unit_of_measurement: kWh
+      default_entity_id: sensor.yield_energy
+      state: "{% if states('sensor.metert_importenergy_a') | float(0) > 0 %}{{ states('sensor.metert_importenergy_a') | float(0) }}{% else %}0{% endif %}"
+      name: yield_energy
+    - unit_of_measurement: kWh
+      default_entity_id: sensor.selfuse_energy
+      state: "{% if ( states('sensor.yield_energy')|float(0) - states('sensor.exported_energy')|float(0) ) > 0 %}{{ states('sensor.yield_energy')|float(0) - states('sensor.exported_energy')|float(0) }}{% else %}0{% endif %}"
+      name: selfuse_energy
+    - unit_of_measurement: kWh
+      default_entity_id: sensor.load_energy
+      state: "{% if ( states('sensor.grid_consumption_energy')|float(0) + states('sensor.yield_energy')|float(0) - states('sensor.exported_energy')|float(0) ) > 0 %}{{ states('sensor.grid_consumption_energy')|float(0) + states('sensor.yield_energy')|float(0) - states('sensor.exported_energy')|float(0) }}{% else %}0{% endif %}"
+      name: load_energy
+    - unit_of_measurement: '%'
+      default_entity_id: sensor.self_consumption_rate_daily
+      state: '{{ states(''sensor.selfuse_energy_daily'')|float(0) / states(''sensor.yield_energy_daily'')|float(0.01)
+        }}'
+      name: self_consumption_rate_daily
+    - unit_of_measurement: '%'
+      default_entity_id: sensor.self_consumption_rate_monthly
+      state: '{{ states(''sensor.selfuse_energy_monthly'')|float(0) / states(''sensor.yield_energy_monthly'')|float(0.01)
+        }}'
+      name: self_consumption_rate_monthly
+
+utility_meter:
+  grid_consumption_energy_hourly:
+    source: sensor.grid_consumption_energy
+    cycle: hourly
+  grid_consumption_energy_daily:
+    source: sensor.grid_consumption_energy
+    cycle: daily
+  grid_consumption_energy_monthly:
+    source: sensor.grid_consumption_energy
+    cycle: monthly
+    
+  exported_energy_hourly:
+    source: sensor.exported_energy
+    cycle: hourly
+  exported_energy_daily:
+    source: sensor.exported_energy
+    cycle: daily
+  exported_energy_monthly:
+    source: sensor.exported_energy
+    cycle: monthly
+    
+  yield_energy_hourly:
+    source: sensor.yield_energy
+    cycle: hourly
+  yield_energy_daily:
+    source: sensor.yield_energy
+    cycle: daily
+  yield_energy_monthly:
+    source: sensor.yield_energy
+    cycle: monthly
+    
+  selfuse_energy_hourly:
+    source: sensor.selfuse_energy
+    cycle: hourly
+  selfuse_energy_daily:
+    source: sensor.selfuse_energy
+    cycle: daily
+  selfuse_energy_monthly:
+    source: sensor.selfuse_energy
+    cycle: monthly
+
+  load_energy_hourly:
+    source: sensor.load_energy
+    cycle: hourly
+  load_energy_daily:
+    source: sensor.load_energy
+    cycle: daily
+  load_energy_monthly:
+    source: sensor.load_energy
+    cycle: monthly
